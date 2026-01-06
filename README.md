@@ -1,1 +1,1 @@
-# RareTECH_hackathon_2025winter_app
+# RareTECH_hackathon_2025winter_app_main
