@@ -1,19 +1,11 @@
-<!-- 
+
 <!DOCTYPE html>
  <html lang="ja">
-    <head> -->
-
-{% extends "base.html" %}
-
-{% block title%}400エラー{% endblock %}
-
-{% block page_css%}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
-{% endblock %}
-
-{% block content %}
+    <head>
+        <link rel="stylesheet" href="400.css">
+    </head>
 <div class="img_logo">
-    <img src="{{ url_for('static', filename='img/site_logo.png') }}" alt="site_logo"title="site_logo" width="480" height="140">
+    <img src="site_logo.png" alt="site_logo"title="site_logo" width="480" height="140">
 </div>
 
  <div class="wrapper">
@@ -29,10 +21,9 @@
  </div>
 <br>
 <br>
-
-    <div class="container">
+<body>
+    <div class="conteiner">
        <button class="button" type="button" onclick="history.back()">戻る</button>
     </div>
-
+    </body>
 </div>
-{% endblock %}
