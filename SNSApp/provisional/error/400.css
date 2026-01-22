@@ -11,10 +11,18 @@
     text-align: center;
 }
 
+h2 {
+    font-size: 34px;
+}
+
 p {
     text-align: start;
     padding: -10%;
     padding-left: 20%;
+    font-size: 13px;
+    letter-spacing: ;
+    line-height: 7px;
+    font-weight: bold;
 }
 
 .conteiner {
@@ -23,10 +31,12 @@ float: right;
 
 .button {
     width: 60px;
+    height: 30px;
     background-color: #00008B;
     color: #fff;
-    font-size: 18px;
+    font-size: 13px;
     font-weight: bold;
     text-align: center;
+    margin-right: 10px;
     border-radius: 7px;
 }
