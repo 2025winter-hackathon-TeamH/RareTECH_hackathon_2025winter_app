@@ -2,21 +2,19 @@ from flask import abort
 import pymysql
 from util.DB import DB
 
-"""
+
 # 初期起動時にコネクションプールを作成し接続を確立
 db_pool = DB.init_db_pool()
-"""
+
 
 # ユーザークラス
 class User:
-    pass #暫定コメント_sai
-    """
     @classmethod
-    def create(cls, name, email, password):
+    def create(cls, name, email, password): # DB寄せ済み_@sai
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s);"
+                sql = "INSERT INTO users (user_name, email, password) VALUES (%s, %s, %s);"
                 cur.execute(sql, (name, email, password))
                 conn.commit()
                 # AUTO_INCREMENT された id を返す
@@ -56,12 +54,10 @@ class User:
             abort(500)
         finally:
             db_pool.release(conn)
-    """
+
 
 # Postsクラス
 class Post:
-    pass #暫定コメント_sai
-    """
     @classmethod
     def get_all(cls):
         conn = db_pool.get_conn()
@@ -119,12 +115,10 @@ class Post:
             abort(500)
         finally:
             db_pool.release(conn)
-    """
+
 
 # Commentクラス
 class Comment:
-    pass #暫定コメント_sai
-    """
     @classmethod
     def create(cls, user_id, post_id, content):
         conn = db_pool.get_conn()
@@ -152,4 +146,4 @@ class Comment:
             abort(500)
         finally:
             db_pool.release(conn)
-"""
+
