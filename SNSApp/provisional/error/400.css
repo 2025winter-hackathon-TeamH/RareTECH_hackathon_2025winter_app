@@ -40,3 +40,17 @@ float: right;
     margin-right: 10px;
     border-radius: 7px;
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 0;
+    width: 480px;
+    height: 24px;
+    font-size: 13px;
+    color: #fff;
+    text-align: center;
+    align-items: flex-end;
+    background-color: #00008B;
+
+}
