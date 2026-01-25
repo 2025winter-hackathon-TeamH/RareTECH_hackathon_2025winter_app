@@ -60,6 +60,11 @@ def login_prossece():
                 return redirect(url_for('post_view'))
     return redirect(url_for('login_view'))
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login_view'))
+
 
 """
 # ルートページのリダイレクト処理
