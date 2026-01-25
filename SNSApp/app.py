@@ -19,10 +19,47 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
 
-#Flask起動debug用
+#Flask起動debug用 ← 一旦残してます＠ポテ吉
 @app.route('/')
 def index():
     return "Flask is running"
+
+# ルートページのリダイレクト
+@app.route('/', methods=['GET'])
+def index():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    return redirect(url_for('post_view'))
+
+# ログインページ表示
+@app.route('/login', methods=['GET'])
+def login_view():
+    if session.get('user_id') is not None:
+        return redirect(url_for('post_view'))
+    return render_template('auth/login.html')
+
+# ログイン処理
+@app.route('/login', methods=['POST'])
+def login_prossece():
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if email =='' or password =='':
+        flash('&#9888;&#65039;メールアドレス or パスワードが空です','error')
+    else:
+        user = User.find_by_email(email)
+        if user is None:
+            flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
+        else
+            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            if hashPassword != user['password']:
+                flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
+            else:
+                session['user_id'] = user["id"]
+                return redirect(url_for('post_view'))
+    return redirect(url_for('login_view'))
+
 
 """
 # ルートページのリダイレクト処理
