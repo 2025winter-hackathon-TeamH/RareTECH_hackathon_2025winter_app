@@ -134,18 +134,19 @@ class progress_Post:
             db_pool.release(conn)
 """
     @classmethod
-    def create(cls, user_id, content):
+    def create(cls, user_id, post_id, content):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO progresses (user_id, progress_message) VALUES (%s, %s);"
-                cur.execute(sql, (user_id, content))
+                sql = "INSERT INTO progresses (user_id, post_id, progress_message) VALUES (%s, %s, %s);"
+                cur.execute(sql, (user_id, post_id, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             db_pool.release(conn)
+
 """
     # 使わない可能性大(delete機能実装予定なしのため)
     @classmethod

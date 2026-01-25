@@ -209,19 +209,19 @@ def post_progress_view(post_id):
 
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
-# 進捗投稿処理
-@app.route('/posts', methods=['POST'])
-def create_post():
+# 進捗投稿処理  --@sai
+@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
+def create_progress_post(post_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
     content = request.form.get('content', '').strip()
     if content == '':
         flash('投稿内容が空です','error')
-        return redirect(url_for('posts_view'))
-    Post.create(user_id, content)
+        return redirect(url_for('post_progress_view', post_id=post_id))
+    progress_Post.create(user_id, post_id, content)
     flash('投稿が完了しました','success')
-    return redirect(url_for('posts_view'))
+    return redirect(url_for('post_progress_view', post_id=post_id))
 
 """
 # コメント処理
