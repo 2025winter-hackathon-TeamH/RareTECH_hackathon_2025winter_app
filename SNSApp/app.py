@@ -6,7 +6,7 @@ import uuid
 import re
 import os
 
-from models import User , Post, Comment
+from models import User , Goal_post, Comment
 
 
 # 定数定義
@@ -51,7 +51,7 @@ def login_prossece():
         user = User.find_by_email(email)
         if user is None:
             flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
-        else
+        else:
             hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
             if hashPassword != user['password']:
                 flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
@@ -64,6 +64,20 @@ def login_prossece():
 def logout():
     session.clear()
     return redirect(url_for('login_view'))
+
+#目標一覧ページの表示
+@app.route('/post', methods=['GET'])
+def goals_post_view():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    else:
+        goals = Goal_post.get_all()
+        for goal in goals: 
+            goal['created_at'] = goal['created_at'].strftime('%Y-%m-%d %H:%M')
+            goal['user_name'] = User.get_name_by_id(goal['user_id'])
+
+        return render_template('post/post.html', posts=posts, user_id = user_id)
 
 
 """
@@ -160,7 +174,7 @@ def logout():
 
 
 # 投稿一覧ページの表示
-@app.route('/posts', methods=['GET'])
+@app.route('/post', methods=['GET'])
 def posts_view():
     user_id = session.get('user_id')
     if user_id is None:
