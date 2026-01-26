@@ -57,13 +57,13 @@ class User:
 
 
 # Postsクラス
-class Post:
+class Goal_post:
     @classmethod
     def get_all(cls):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM posts WHERE  deleted_at IS NULL ORDER BY created_at DESC;"
+                sql = "SELECT * FROM goals WHERE  deleted_at IS NULL ORDER BY goal_created_at DESC;"
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts
@@ -72,6 +72,7 @@ class Post:
             abort(500)
         finally:
             db_pool.release(conn)
+#↑はBDに寄せ済み＠もりりん
 
     @classmethod
     def create(cls, user_id, content):
