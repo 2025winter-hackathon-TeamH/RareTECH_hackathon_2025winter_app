@@ -18,57 +18,69 @@ USE snsapp;
 
 CREATE TABLE
     users (
-        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        name VARCHAR(255) NOT NULL,
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        user_name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
-        created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-        updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
         PRIMARY KEY (id),
+        UNIQUE KEY uq_users_user_name (user_name),
         UNIQUE KEY uq_users_email (email)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-    posts (
-        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        user_id BIGINT UNSIGNED NOT NULL,
-        content TEXT NOT NULL,
-        created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-        updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-        deleted_at DATETIME (6) DEFAULT NULL,
+    goals (
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        goal_message TEXT NOT NULL,
+        goal_created_at DATETIME (6) NOT NULL,
+        goal_deadline DATETIME (6) NOT NULL,
+        achievement_status ENUM('achievement','give_up'),
+        user_id INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
-        KEY idx_posts_user_id (user_id),
-        CONSTRAINT fk_posts_user FOREIGN KEY (user_id) REFERENCES users (id)
+        KEY idx_goals_user_id (user_id),
+        CONSTRAINT fk_goals_users FOREIGN KEY (user_id) REFERENCES users (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-    comments (
-        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        user_id BIGINT UNSIGNED NOT NULL,
-        post_id BIGINT UNSIGNED NOT NULL,
-        content TEXT NOT NULL,
-        created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-        updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    progresses (
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        progress_message TEXT NOT NULL,
+        progress_created_at DATETIME(6) NOT NULL,
+        goal_id INT UNSIGNED NOT NULL,
+        user_id INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
-        KEY idx_comments_user_id (user_id),
-        KEY idx_comments_post_id (post_id),
-        CONSTRAINT fk_comments_user FOREIGN KEY (user_id) REFERENCES users (id),
-        CONSTRAINT fk_comments_post FOREIGN KEY (post_id) REFERENCES posts (id)
+        KEY idx_progresses_goal_id (goal_id),
+        KEY idx_progresses_user_id (user_id),
+        CONSTRAINT fk_progresses_goals FOREIGN KEY (goal_id) REFERENCES goals (id),
+        CONSTRAINT fk_progresses_users FOREIGN KEY (user_id) REFERENCES users (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE
+    reactions(
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        user_id INT UNSIGNED NOT NULL,
+        goal_id INT UNSIGNED ,
+        progress_id INT UNSIGNED,
+        reaction_type_id INT UNSIGNED NOT NULL,
+        CONSTRAINT chk_not_both_null_or_not_null CHECk (
+            NOT (goal_id IS NULL AND progress_id IS NULL) --両方NULLは×
+            AND
+            NOT (goal_id IS NOT NULL AND progress_id IS NOT NULL) --両方値ありも×
+        ),
+        PRIMARY KEY (id),
+        KEY idx_reactions_user_id (user_id),
+        KEY idx_reaction_goal_id (goal_id),
+        KEY idx_reaction_progress_id (progress_id),
+        KEY idx_reaction_reaction_type_id (reaction_type_id),
+        CONSTRAINT fk_reactions_users FOREIGN KEY (user_id) REFERENCES users (id),
+        CONSTRAINT fk_reactions_goals FOREIGN KEY (goal_id) REFERENCES goals (id),
+        CONSTRAINT fk_reactions_progresses FOREIGN KEY (progress_id) REFERENCES progresses (id),
+        CONSTRAINT fk_reactions_reaction_types FOREIGN KEY (reaction_type_id) REFERENCES reaction_types (id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
-INSERT INTO users (name, email, password)
-VALUES 
-  ('山田太郎', 'taro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
-  ('鈴木二郎', 'jiro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244');
-
-INSERT INTO posts (user_id, content)
-VALUES
-  (1, 'こんにちは！初めての投稿です。'),
-  (1, '今日はとても良い天気ですね。'),
-  (1, '今日も勉強頑張ります！');
-
-
-INSERT INTO comments (user_id, post_id, content)
-VALUES
-    (2, 1, '応援しています！頑張ってください。');
+CREATE TABLE
+    reaction_types(
+        id INT UNSIGNED NOT NULL,
+        reaction_type ENUM ('goal','progress'), NOT NULL,
+        comment TEXT NOT NULL,
+        PRIMARY KEY (id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
