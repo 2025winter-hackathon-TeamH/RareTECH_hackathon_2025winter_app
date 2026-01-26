@@ -19,11 +19,6 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
 
-#Flask起動debug用 ← 一旦残してます＠ポテ吉
-@app.route('/')
-def index():
-    return "Flask is running"
-
 # ルートページのリダイレクト
 @app.route('/', methods=['GET'])
 def index():
