@@ -72,7 +72,21 @@ def goals_post_view():
             goal['created_at'] = goal['created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
 
-        return render_template('post/post.html', posts=posts, user_id = user_id)
+        return render_template('post/post.html', goals=goals, user_id = user_id)
+    
+#目標投稿処理
+@app.route('/posts', methods=['POST'])
+def create_goal_post():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    goal_message = request.form.get('goal_message', '').strip()
+    if goal_message == '':
+        flash('目標内容が空欄です','error')
+        return redirect(url_for('posts_view'))
+    Goal_post.create(user_id, goal_message)
+    flash('目標の投稿が完了しました。','success')
+    return redirect(url_for('goals_post_view'))
 
 
 """

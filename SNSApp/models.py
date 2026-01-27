@@ -75,32 +75,21 @@ class Goal_post:
 #↑はBDに寄せ済み＠もりりん
 
     @classmethod
-    def create(cls, user_id, content):
+    def create(cls, user_id, goal_message):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO posts (user_id, content) VALUES (%s, %s);"
-                cur.execute(sql, (user_id, content))
+                sql = "INSERT INTO goals (user_id, goal_message) VALUES (%s, %s);"
+                cur.execute(sql, (user_id, goal_message))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             db_pool.release(conn)
+#↑はDBに寄せ済み＠もりりん
 
-    @classmethod
-    def delete(cls, post_id):
-        conn = db_pool.get_conn()
-        try:
-            with conn.cursor() as cur:
-                sql = "UPDATE posts SET deleted_at = NOW() WHERE id = %s;"
-                cur.execute(sql, (post_id))
-                conn.commit()
-        except pymysql.Error as e:
-            print(f'エラーが発生しています：{e}')
-            abort(500)
-        finally:
-            db_pool.release(conn)
+#削除機能なしの為、削除するためのコード消去
 
     @classmethod
     def find_by_id(cls, post_id):
