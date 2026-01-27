@@ -55,10 +55,55 @@ def login_prossece():
                 return redirect(url_for('post_view'))
     return redirect(url_for('login_view'))
 
+# ログアウト
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login_view'))
+
+# 新規登録ページ
+@app.route('/signup', methods=['GET'])
+def signup_view():
+    if session.get('user_id') is not None:
+        return redirect(url_for('post_view'))
+    return render_template('auth/signup.html')
+
+# 新規登録処理
+@app.route('/signup', methods=['POST'])
+def signup_process():
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    password = request.form.get('password', '')
+    password_confirmation = request.form.get('password_confirmation', '')
+
+    # 空チェック
+    if not name or not email or not password or not password_confirmation:
+        flash("&#9888;&#65039;空のフォームがあります", 'error')
+        return redirect(url_for('signup_view'))
+    
+    # パスワード一致チェック
+    if password != password_confirmation:
+        flash("&#9888;&#65039;パスワードが一致しません", "error")
+        return redirect(url_for('signup_view'))
+    
+    # メール形式チェック
+    if re.match(EMAIL_PATTERN, email) is None:
+        flash("&#9888;&#65039;正しいメールアドレスの形式ではありません", 'error')
+        return redirect(url_for('signup_view'))
+    
+    # 既存ユーザーチェック
+    registered_user = User.find_by_email(email)
+    if registered_user is not None:
+        flash("&#9888;&#65039;既に登録済みのメールアドレスです", 'error')
+        return redirect(url_for('signup_view'))
+    
+    hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    user_id = User.create(name, email, hashed_password)
+
+    session['user_id'] = user_id
+
+    return redirect(url_for('post_view'))
 
 #目標一覧ページの表示
 @app.route('/post', methods=['GET'])
