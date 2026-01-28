@@ -72,7 +72,7 @@ class Goal_post:
             abort(500)
         finally:
             db_pool.release(conn)
-#↑はBDに寄せ済み＠もりりん
+ #↑はBDに寄せ済み＠もりりん
 
     @classmethod
     def create(cls, user_id, goal_message):
@@ -87,19 +87,19 @@ class Goal_post:
             abort(500)
         finally:
             db_pool.release(conn)
-#↑はDBに寄せ済み＠もりりん
+ #↑はDBに寄せ済み＠もりりん
 
-#削除機能なしの為、削除するためのコード消去
+ #削除機能なしの為、削除するためのコード消去
 
     @classmethod
-    def find_by_id(cls, post_id):
+    def find_by_goal_id(cls, goal_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM posts WHERE id=%s AND deleted_at IS NULL;"
-                cur.execute(sql, (post_id,))
-                post = cur.fetchone()
-            return post
+                sql = "SELECT * FROM goals WHERE id=%s AND deleted_at IS NULL;"
+                cur.execute(sql, (goal_id,))
+                goal_id = cur.fetchone()
+            return goal_id
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)

@@ -88,7 +88,7 @@ def create_goal_post():
     flash('目標の投稿が完了しました。','success')
     return redirect(url_for('goals_post_view'))
 
-
+#頑張れ！ボタン押下処理
 """
 # ルートページのリダイレクト処理
 @app.route('/', methods=['GET'])
