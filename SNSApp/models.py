@@ -55,12 +55,13 @@ class User:
 
 # Postsクラス
 class Post:
+    """
     @classmethod
     def get_all(cls):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM posts WHERE  deleted_at IS NULL ORDER BY created_at DESC;"
+                sql = "SELECT * FROM goals WHERE  deleted_at IS NULL ORDER BY created_at DESC;"
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts
@@ -69,14 +70,15 @@ class Post:
             abort(500)
         finally:
             db_pool.release(conn)
+    """
 
     @classmethod
-    def create(cls, user_id, content):
+    def create(cls, user_id, goal_message, goal_deadline):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO posts (user_id, content) VALUES (%s, %s);"
-                cur.execute(sql, (user_id, content))
+                sql = "INSERT INTO goals (user_id, goal_message, goal_deadline) VALUES (%s, %s, %s);"
+                cur.execute(sql, (user_id, goal_message, goal_deadline))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
@@ -84,12 +86,13 @@ class Post:
         finally:
             db_pool.release(conn)
 
+    """
     @classmethod
     def delete(cls, post_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE posts SET deleted_at = NOW() WHERE id = %s;"
+                sql = "UPDATE goals SET deleted_at = NOW() WHERE id = %s;"
                 cur.execute(sql, (post_id))
                 conn.commit()
         except pymysql.Error as e:
@@ -97,13 +100,14 @@ class Post:
             abort(500)
         finally:
             db_pool.release(conn)
+    """
 
     @classmethod
     def find_by_id(cls, post_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM posts WHERE id=%s AND deleted_at IS NULL;"
+                sql = "SELECT * FROM goals WHERE id=%s;"
                 cur.execute(sql, (post_id,))
                 post = cur.fetchone()
             return post
@@ -114,8 +118,8 @@ class Post:
             db_pool.release(conn)
 
 # progress_Posts(進捗投稿)クラス @sai
-class progress_Post:
-"""
+class ProgressPost:
+    """
     # 使わない可能性大(get_by_post_idで一覧取得のため)
     @classmethod
     def get_all(cls):
@@ -132,13 +136,13 @@ class progress_Post:
             abort(500)
         finally:
             db_pool.release(conn)
-"""
+    """
     @classmethod
     def create(cls, user_id, post_id, content):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO progresses (user_id, post_id, progress_message) VALUES (%s, %s, %s);"
+                sql = "INSERT INTO progresses (user_id, goal_id, progress_message) VALUES (%s, %s, %s);"
                 cur.execute(sql, (user_id, post_id, content))
                 conn.commit()
         except pymysql.Error as e:
@@ -147,7 +151,7 @@ class progress_Post:
         finally:
             db_pool.release(conn)
 
-"""
+    """
     # 使わない可能性大(delete機能実装予定なしのため)
     @classmethod
     def delete(cls, post_id): 
@@ -162,7 +166,7 @@ class progress_Post:
             abort(500)
         finally:
             db_pool.release(conn)
-"""
+
     @classmethod
     def find_by_id(cls, post_id):
         conn = db_pool.get_conn()
@@ -177,14 +181,14 @@ class progress_Post:
             abort(500)
         finally:
             db_pool.release(conn)
-
+    """
     @classmethod
-    def get_by_post_id(cls, post_id):
+    def get_by_post_id(cls, goal_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM comments WHERE post_id=%s ORDER BY created_at DESC;"
-                cur.execute(sql, (post_id,))
+                sql = "SELECT * FROM progresses WHERE goal_id=%s ORDER BY progress_created_at DESC;"
+                cur.execute(sql, (goal_id,))
                 comments = cur.fetchall()
             return comments
         except pymysql.Error as e:
@@ -192,6 +196,26 @@ class progress_Post:
             abort(500)
         finally:
             db_pool.release(conn)
+
+# Posts_reaction(goal_post+progress_post)クラス @sai
+class PostReaction:
+    @classmethod
+    def create_progress_reaction(cls, user_id, progress_id, reaction_type_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "INSERT INTO reactions (user_id, progress_id, reaction_type_id) VALUES (%s, %s, %s);"
+                cur.execute(sql, (user_id, progress_id, reaction_type_id))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+
+
 
 # Commentクラス
 class Comment:

@@ -31,9 +31,9 @@ CREATE TABLE
     goals (
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         goal_message TEXT NOT NULL,
-        goal_created_at DATETIME (6) NOT NULL,
+        goal_created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         goal_deadline DATETIME (6) NOT NULL,
-        achievement_status ENUM('achievement','give_up'),
+        achievement_status ENUM ('achievement','give_up'),
         user_id INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
         KEY idx_goals_user_id (user_id),
@@ -44,7 +44,7 @@ CREATE TABLE
     progresses (
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         progress_message TEXT NOT NULL,
-        progress_created_at DATETIME(6) NOT NULL,
+        progress_created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         goal_id INT UNSIGNED NOT NULL,
         user_id INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
@@ -80,7 +80,7 @@ CREATE TABLE
 CREATE TABLE
     reaction_types(
         id INT UNSIGNED NOT NULL,
-        reaction_type ENUM ('goal','progress'), NOT NULL,
+        reaction_type ENUM ('goal','progress') NOT NULL,
         comment TEXT NOT NULL,
         PRIMARY KEY (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

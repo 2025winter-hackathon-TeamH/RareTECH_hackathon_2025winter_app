@@ -18,12 +18,12 @@ app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
 app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
-
+"""
 #Flask起動debug用 ← 一旦残してます＠ポテ吉
 @app.route('/')
 def index():
     return "Flask is running"
-
+"""
 # ルートページのリダイレクト
 @app.route('/', methods=['GET'])
 def index():
@@ -51,7 +51,7 @@ def login_prossece():
         user = User.find_by_email(email)
         if user is None:
             flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
-        else
+        else:
             hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
             if hashPassword != user['password']:
                 flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
@@ -228,21 +228,25 @@ def post_detail_view(post_id):
 """
 
 # 進捗ページの表示  --@sai
-@app.route('/post/<int:post_id>', methods=['GET'])
-def post_progress_view(post_id):
+#@app.route('/post/<int:post_id>', methods=['GET'])
+@app.route('/goalpost/<int:goal_id>', methods=['GET'])
+def post_progress_view(goal_id):
     #目標表示(1種)
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
-    post = Post.find_by_id(post_id)
+    post = Post.find_by_id(goal_id)
     if post is None:
         abort(404)
-    post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M') #created_atから投稿日時を返す
+    post['goal_created_at'] = post['goal_created_at'].strftime('%Y-%m-%d %H:%M') #created_atから投稿日時を返す
     post['user_name'] = User.get_name_by_id(post['user_id']) #user_idから名前を返す
+
+    #目標ポストのリアクション数(2種)表示
+    #もりりんさんの実装待ち
 
     #進捗一覧表示
     #Python変数（list）= Pythonクラス（モデル）.Pythonメソッド(Python変数)
-    progress_posts = progress_Post.get_by_post_id(post_id)
+    progress_posts = ProgressPost.get_by_post_id(goal_id)
     #forでdict（1レコード分）in list を回す
     for progress_post in progress_posts:
         #Pythonの辞書['辞書のキー（DBカラム名と同名）']=Pythonの辞書['辞書のキー（DBカラム名と同名）'].Pythonの日時変換
@@ -252,7 +256,8 @@ def post_progress_view(post_id):
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
 # 進捗投稿処理  --@sai
-@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
+#@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
+@app.route('/goalpost/<int:goal_id>/progress_posts', methods=['POST'])
 def create_progress_post(post_id):
     user_id = session.get('user_id')
     if user_id is None:
@@ -261,7 +266,7 @@ def create_progress_post(post_id):
     if content == '':
         flash('投稿内容が空です','error')
         return redirect(url_for('post_progress_view', post_id=post_id))
-    progress_Post.create(user_id, post_id, content)
+    ProgressPost.create(user_id, post_id, content)
     flash('投稿が完了しました','success')
     return redirect(url_for('post_progress_view', post_id=post_id))
 
