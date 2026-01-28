@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="静的なログイン画面です">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
+    <title>ログイン画面</title>
+  </head>
+
+
+  <body>
+    <header>
+      <img src="site_logo.png" alt="背水の陣 ロゴ">
+    </header>
+
+    <main>
+      <form class="login-form" action="/login" method="post">
+        <h1 class="login-title">ログイン</h1>
+        <p class="login-desc">メールアドレスとパスワードを入力してログインしてください。</p>
+
+        <!--エラーメッセージ-->
+        <p class="error-message">&#9888;&#65039; メールアドレス or パスワードが空です </p>
+      
+
+        <div class="form-group">
+          <label class="label" for="email">メールアドレス</label>
+          <input class="login-input" type="email" name="email" id="email" placeholder="  メールアドレス" > 
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="password">パスワード </label>
+          <input class="login-input" type="password" name="password" id="password" placeholder="  パスワード"  minlength="8">
+        </div>
+
+        <button class="login-button" type="submit">ログイン</button>
+
+        <a class="signup-link" href="/signup"  style="text-decoration: none;">新規登録はこちら</a>
+      </form>
+    </main>
+
+    <footer>2026&copy ハッカソン冬の陣 チームH 背水の陣制作委員会</footer>
+  </body>
+</html>

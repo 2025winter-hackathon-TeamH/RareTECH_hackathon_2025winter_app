@@ -4,7 +4,7 @@ from pymysqlpool.pool import Pool
 
 
 class DB:
-
+#   pass #暫定コメント_sai → コメントアウトを削除_ポテ吉
    @classmethod
    def init_db_pool(cls):
        pool = Pool(
@@ -28,4 +28,3 @@ class DB:
        # コネクションプールの初期化
        pool.init()
        return pool
-

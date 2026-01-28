@@ -6,7 +6,7 @@ import uuid
 import re
 import os
 
-from models import User , Post, Comment
+from models import User , Goal_post, Comment
 
 
 # 定数定義
@@ -18,12 +18,6 @@ app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
 app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
-"""
-#Flask起動debug用 ← 一旦残してます＠ポテ吉
-@app.route('/')
-def index():
-    return "Flask is running"
-"""
 # ルートページのリダイレクト
 @app.route('/', methods=['GET'])
 def index():
@@ -60,10 +54,83 @@ def login_prossece():
                 return redirect(url_for('post_view'))
     return redirect(url_for('login_view'))
 
+# ログアウト
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login_view'))
+
+# 新規登録ページ
+@app.route('/signup', methods=['GET'])
+def signup_view():
+    if session.get('user_id') is not None:
+        return redirect(url_for('post_view'))
+    return render_template('auth/signup.html')
+
+# 新規登録処理
+@app.route('/signup', methods=['POST'])
+def signup_process():
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    password = request.form.get('password', '')
+    password_confirmation = request.form.get('password_confirmation', '')
+
+    # 空チェック
+    if not name or not email or not password or not password_confirmation:
+        flash("&#9888;&#65039;空のフォームがあります", 'error')
+        return redirect(url_for('signup_view'))
+    
+    # パスワード一致チェック
+    if password != password_confirmation:
+        flash("&#9888;&#65039;パスワードが一致しません", "error")
+        return redirect(url_for('signup_view'))
+    
+    # メール形式チェック
+    if re.match(EMAIL_PATTERN, email) is None:
+        flash("&#9888;&#65039;正しいメールアドレスの形式ではありません", 'error')
+        return redirect(url_for('signup_view'))
+    
+    # 既存ユーザーチェック
+    registered_user = User.find_by_email(email)
+    if registered_user is not None:
+        flash("&#9888;&#65039;既に登録済みのメールアドレスです", 'error')
+        return redirect(url_for('signup_view'))
+    
+    hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    user_id = User.create(name, email, hashed_password)
+
+    session['user_id'] = user_id
+
+    return redirect(url_for('post_view'))
+
+#目標一覧ページの表示
+@app.route('/post', methods=['GET'])
+def goals_post_view():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    else:
+        goals = Goal_post.get_all()
+        for goal in goals: 
+            goal['created_at'] = goal['created_at'].strftime('%Y-%m-%d %H:%M')
+            goal['user_name'] = User.get_name_by_id(goal['user_id'])
+
+        return render_template('post/post.html', goals=goals, user_id = user_id)
+    
+#目標投稿処理
+@app.route('/posts', methods=['POST'])
+def create_goal_post():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    goal_message = request.form.get('goal_message', '').strip()
+    if goal_message == '':
+        flash('目標内容が空欄です','error')
+        return redirect(url_for('posts_view'))
+    Goal_post.create(user_id, goal_message)
+    flash('目標の投稿が完了しました。','success')
+    return redirect(url_for('goals_post_view'))
 
 
 """
@@ -160,7 +227,7 @@ def logout():
 
 
 # 投稿一覧ページの表示
-@app.route('/posts', methods=['GET'])
+@app.route('/post', methods=['GET'])
 def posts_view():
     user_id = session.get('user_id')
     if user_id is None:
