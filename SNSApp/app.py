@@ -105,7 +105,7 @@ def signup_process():
     return redirect(url_for('post_view'))
 
 #目標一覧ページの表示
-@app.route('/post', methods=['GET'])
+@app.route('/goal-post', methods=['GET'])
 def goals_post_view():
     user_id = session.get('user_id')
     if user_id is None:
@@ -119,7 +119,7 @@ def goals_post_view():
         return render_template('post/post.html', goals=goals, user_id = user_id)
     
 #目標投稿処理
-@app.route('/posts', methods=['POST'])
+@app.route('/goal-posts', methods=['POST'])
 def create_goal_post():
     user_id = session.get('user_id')
     if user_id is None:
@@ -132,7 +132,7 @@ def create_goal_post():
     flash('目標の投稿が完了しました。','success')
     return redirect(url_for('goals_post_view'))
 
-
+#頑張れ！ボタン押下処理
 """
 # ルートページのリダイレクト処理
 @app.route('/', methods=['GET'])

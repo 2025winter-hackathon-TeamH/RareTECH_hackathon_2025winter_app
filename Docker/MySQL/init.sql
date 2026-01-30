@@ -31,7 +31,11 @@ CREATE TABLE
     goals (
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         goal_message TEXT NOT NULL,
+<<<<<<< HEAD
         goal_created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+=======
+        goal_created_at DATETIME (6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL ,
+>>>>>>> origin/main
         goal_deadline DATETIME (6) NOT NULL,
         achievement_status ENUM ('achievement','give_up'),
         user_id INT UNSIGNED NOT NULL,
@@ -44,7 +48,11 @@ CREATE TABLE
     progresses (
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         progress_message TEXT NOT NULL,
+<<<<<<< HEAD
         progress_created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+=======
+        progress_created_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
+>>>>>>> origin/main
         goal_id INT UNSIGNED NOT NULL,
         user_id INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
@@ -55,6 +63,14 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
+    reaction_types(
+        id INT UNSIGNED NOT NULL,
+        reaction_type ENUM ('goal','progress') NOT NULL,
+        comment TEXT NOT NULL,
+        PRIMARY KEY (id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
     reactions(
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         user_id INT UNSIGNED NOT NULL,
@@ -62,9 +78,9 @@ CREATE TABLE
         progress_id INT UNSIGNED,
         reaction_type_id INT UNSIGNED NOT NULL,
         CONSTRAINT chk_not_both_null_or_not_null CHECk (
-            NOT (goal_id IS NULL AND progress_id IS NULL) --両方NULLは×
+            NOT (goal_id IS NULL AND progress_id IS NULL) /* 両方NULLは× */
             AND
-            NOT (goal_id IS NOT NULL AND progress_id IS NOT NULL) --両方値ありも×
+            NOT (goal_id IS NOT NULL AND progress_id IS NOT NULL) /* 両方値ありも× */
         ),
         PRIMARY KEY (id),
         KEY idx_reactions_user_id (user_id),
@@ -77,6 +93,7 @@ CREATE TABLE
         CONSTRAINT fk_reactions_reaction_types FOREIGN KEY (reaction_type_id) REFERENCES reaction_types (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 CREATE TABLE
     reaction_types(
         id INT UNSIGNED NOT NULL,
@@ -84,3 +101,44 @@ CREATE TABLE
         comment TEXT NOT NULL,
         PRIMARY KEY (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+=======
+
+INSERT INTO reaction_types (id, reaction_type, comment)
+VALUES 
+  (1, 'goal', '頑張れ！'),
+  (2, 'goal', 'どうした？'),
+  (3, 'progress', '素晴らしい！'),
+  (4, 'progress', 'おい！');
+
+
+/* サンプルデータ */
+INSERT INTO users (user_name, email, password)
+VALUES 
+  ('山田太郎', 'taro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
+  ('鈴木二郎', 'jiro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
+  ('田中一郎', 'ichiro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
+  ('佐藤花子', 'hanaco@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244');
+
+INSERT INTO goals (goal_message, goal_created_at, goal_deadline, achievement_status, user_id)
+VALUES 
+  ('11月中に旅行に行く', '2025-09-03 01:03:24', '2025-11-30 00:00:00', NULL, 1),
+  ('１２月までに３キロやせる', '2025-10-10 16:11:08', '2025-12-31 00:00:00', NULL, 3),
+  ('７月までに１つ資格を取る', '2026-01-01 07:34:29', '2026-06-30 00:00:00', NULL, 1);
+
+INSERT INTO progresses (progress_message, progress_created_at, goal_id, user_id)
+VALUES 
+  ('行先選定中', '2025-09-10 20:49:02', 1, 1),
+  ('今から出発', '2025-11-15 08:11:47', 1, 1),
+  ('１キロ瘦せた', '2025-10-31 19:20:44', 2, 3),
+  ('なぜかプラス５キロ…', '2025-10-31 19:20:44', 2, 3),
+  ('さっそく資格試験に申し込んだ！', '2026-01-04 21:06:09', 3, 1);
+
+INSERT INTO reactions (user_id, goal_id, progress_id, reaction_type_id)
+VALUES 
+  (2, 1, NULL, 1),
+  (3, NULL, 1, 3),
+  (4, NULL, 2, 3),
+  (1, 2, NULL, 1),
+  (4, NULL, 4, 4),
+  (4, 2, NULL, 2);
+>>>>>>> origin/main
