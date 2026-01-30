@@ -296,17 +296,27 @@ def post_detail_view(post_id):
 
 # 進捗ページの表示  --@sai
 #@app.route('/post/<int:post_id>', methods=['GET'])
-@app.route('/goalpost/<int:goal_id>', methods=['GET'])
+@app.route('/goal-post/<int:goal_id>', methods=['GET'])
 def post_progress_view(goal_id):
+    #print(goal_id) #----debug_print(OK)
+
     #目標表示(1種)
-    user_id = session.get('user_id')
-    if user_id is None:
-        return redirect(url_for('login_view'))
-    post = Post.find_by_id(goal_id)
-    if post is None:
-        abort(404)
+    #user_id = session.get('user_id')
+    #if user_id is None:
+    #    return redirect(url_for('login_view'))
+    #post = Goal_post.find_by_id(goal_id)
+
+    #if post is None: #----debug_print(OK)
+    #    abort(404)
+
+
+    
     post['goal_created_at'] = post['goal_created_at'].strftime('%Y-%m-%d %H:%M') #created_atから投稿日時を返す
     post['user_name'] = User.get_name_by_id(post['user_id']) #user_idから名前を返す
+    print("post =", post)
+    print("type(post) =", type(post))
+    print(post['goal_created_at']) #確認未了
+    print(post['user_name']) #確認未了
 
     #目標ポストのリアクション数(2種)表示
     #もりりんさんの実装待ち
@@ -324,7 +334,7 @@ def post_progress_view(goal_id):
 
 # 進捗投稿処理  --@sai
 #@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
-@app.route('/goalpost/<int:goal_id>/progress_posts', methods=['POST'])
+@app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
 def create_progress_post(post_id):
     user_id = session.get('user_id')
     if user_id is None:
