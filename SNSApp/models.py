@@ -108,7 +108,7 @@ class Goal_post:
 
 class Reaction:
     @classmethod
-    def reaction_ganba(cls, user_id, goal_id):
+    def create_reaction_ganba(cls, user_id, goal_id):
         ganbare = 1
         reaction_type_id = ganbare
         conn = db_pool.get_conn()
@@ -124,7 +124,7 @@ class Reaction:
             db_pool.release(conn)
 
     @classmethod
-    def reaction_dousita(cls, user_id, goal_id):
+    def create_reaction_dousita(cls, user_id, goal_id):
         dousita = 2
         reaction_type_id = dousita
         conn = db_pool.get_conn()
