@@ -16,13 +16,12 @@
       <div class="pankuzu">
         <p >トップページ</p>
       </div>
-      <div btn-area>
+      <div class="btn-area">
         <a class="btn-mypage-link" href="/my-page">自分の投稿一覧</a>
-      
         <a class="btn-logaut" href="/login/">ログアウト</a>
       </div>
 
-<!--投稿ボタンを押下→飛ぶ先は同じ画面で良い？-->
+<!--投稿ボタンを押下→飛ぶ先は同じ画面にしてます-->
       <form class="post-form" action="/post" method="post" id="goal">
 
         <div>
@@ -31,10 +30,10 @@
         </div>
         <div>
           <label for="deadline">達成期日</label>
-          <input id="deadline" type="date" name="deadline">
+          <input class="deadline" id="deadline" type="date" name="deadline">
+          <button class="btn-goal" for="goal" type="submit">投稿</button>
         </div>
-        <button for="goal" type="submit">投稿</button>
-      
+
       </form>
 
       <div class="post-card">

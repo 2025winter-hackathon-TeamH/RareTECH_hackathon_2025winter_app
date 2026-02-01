@@ -3,6 +3,16 @@ html,body {
   margin: 0;
 }
 
+header {
+  display: flex;
+  justify-content: center;
+}
+
+header img {
+  width: 480px;
+  height: 140px;
+}
+
 body {
   min-height: 1024px;
   display: flex;
@@ -22,6 +32,13 @@ main {
   text-align: left;
   font-size: 12px;
   font-weight:700;
+}
+
+.btn-area {
+  width: 460px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .btn-mypage-link {
@@ -51,13 +68,51 @@ main {
 }
 
 .post-form {
-  width: 460px;
-  height: 170px;
+  width: 440px;
+  height: 160px;
   border: 1px solid #00008b;
   border-radius: 16px;
-  margin: 5px auto;
- 
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #EAF4FF;
 }
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+textarea {
+  width: 435px;
+  height: 50px;
+  border-radius: 12px;
+  padding-top: 10px;
+  
+}
+
+.deadline {
+  width: 95px;
+  height: 20px;
+  border-radius: 8px;
+  padding: 5px;
+  border: 1px solid #808080;
+}
+
+.btn-goal {
+  width: 80px;
+  height: 40px;
+  color: white;
+  background-color: #00008b;
+  border-radius: 8px;
+  margin-left: 247px;
+  border: none;
+}
+
+
 
 .post-card {
    width: 460px;
@@ -65,16 +120,6 @@ main {
   border: 1px solid #00008b;
   border-radius: 16px;
   margin: 5px auto;
-}
-
-header {
-  display: flex;
-  justify-content: center;
-}
-
-header img {
-  width: 480px;
-  height: 140px;
 }
 
 footer {
