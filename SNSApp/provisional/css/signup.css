@@ -46,7 +46,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    height: 570px;
+    height: 540px;
 }
 
 .inputField {
@@ -57,7 +57,7 @@ h1 {
 
 .inputField input {
     border: 2px solid #0000CD;
-    padding: 11px;
+    padding: 10px;
     border-radius: 15px;
     font-size: 18px;
 }
@@ -72,7 +72,7 @@ button {
     width: 420px;
     height: 45px;
     border-radius: 15px;
-    margin-top: 30px;
+    margin-top: 10px;
     border: none;
     cursor: pointer;
 }
@@ -99,5 +99,23 @@ a1 {
 a {
     text-decoration: none;
     font-weight: bold;
-    margin-top: 30px;
+    margin-top: 1px;
+}
+
+.warning div {
+    display: flex;
+    justify-content: center;
+    background-color: #FFE4E1;
+    width: 420px;
+    border-radius: 12px;
+    height: 35px;
+    margin-top: 0;
+    color: red;
+    align-items: center;
+
+}
+.warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
