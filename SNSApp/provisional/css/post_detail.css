@@ -1,0 +1,224 @@
+
+body {
+    width: 480px;
+    margin: auto;
+}
+
+.img_logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.all a {
+    margin-left: 0px;
+    text-decoration: none;
+}
+
+.menu{
+    font-size: 17px;
+    display: flex;
+    justify-content: space-between;
+}
+.menu1 {
+    display: flex;
+    margin: 2px 2px 5px 1px;
+}
+.menu2{
+    justify-content: flex-end;
+    margin: 2px 0 5px 0;
+}
+
+.my {
+    background-color: #708090; 
+    border-radius: 8px;
+    border-width: 20px;
+    justify-content: center;
+    height: 32px;
+    width: 140px;
+    text-align: center; 
+}
+
+.top {
+    background-color: #708090;
+    border-radius: 8px;
+    border-width: 20px;
+    height: 32px;
+    width: 130px;
+    text-align: center;
+    margin: 0 0 0 3px;
+}
+
+.out {
+    background-color: #708090;
+    border: none;
+    border-radius: 8px;
+    height: 32px;
+}
+
+.menu a {
+    color: #FFFFFF;
+}
+
+.total_action {
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.top_post {
+    border: 1.5px solid #00008B;
+    padding: 7px 9px 9px 15px;
+    border-radius: 10px;
+    margin: 5px 0 5px 0;
+}
+
+.username {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 0px 10px 0px;
+}
+
+.deatline {
+    padding: 9px 0 5px 0;
+}
+
+.buttons {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.action_button1 {
+    display: flex;
+    align-items: flex-end;
+}
+.ouen_button {
+    margin: 0 3px 3px 2px;
+    background-color: #B0C4DE;
+    border-radius: 5px;
+    height: 28px;
+}
+.gekirei_button {
+    margin: 0 0 3px 0;
+    background-color: #B0C4DE;
+    border-radius: 5px;
+    height: 28px;
+}
+
+.result_button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 3px 3px 0;
+}
+.tassei {
+   margin-right: 7px;
+   font-size: 18px;
+   background-color: #FF6969;
+   border-radius: 5px;
+   border: none;
+}
+
+.dannnen {
+    font-size: 18px;
+    background-color: #848484;
+    border-radius: 5px;
+    border: none;
+}
+
+.new_progress {
+    border: 1.5px solid #00008B;
+    background-color: #EAF4FF;
+    border-radius: 10px;
+}
+
+
+label {
+    font-weight: bold;
+    margin-left: 13px;
+}
+
+.message {
+    width: 470px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+}
+
+textarea {
+    width: 445px;
+    height: 80px;
+    border-radius: 6px;
+    display: block;
+    margin: auto;
+    margin-top: 8px;
+}
+
+.toukou_button {
+    display: flex;
+    justify-content: flex-end;
+    text-align: center;
+}
+
+.post_button{
+    background-color: #00008B;
+    color: #FFFFFF;
+    margin: 5px ;
+    width: 60px;
+    height: 31px;
+    text-align: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.progress_post {
+    border: 1.5px solid #00008B;
+    background-color: #EAF4FF;
+    border-radius: 10px;
+    margin-top: 5px;
+    padding: 7px 9px 9px 15px;
+}
+
+.update_day {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5px;
+}
+
+.sinchoku {
+    margin-left: 5px;
+}
+
+.action_button2 {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 15px;
+}
+
+.subara_button {
+    margin: 0 3px 3px 2px;
+    background-color: #B0C4DE;
+    border-radius: 5px;
+    height: 28px;
+}
+
+.oi_button {
+    margin: 0 0 3px 0;
+    background-color: #B0C4DE;
+    border-radius: 5px;
+    height: 28px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 0;
+    width: 480px;
+    height: 24px;
+    font-size: 13px;
+    color: #fff;
+    text-align: center;
+    align-items: flex-end;
+    background-color: #00008B;
+}
