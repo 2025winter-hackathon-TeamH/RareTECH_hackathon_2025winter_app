@@ -43,10 +43,10 @@ class User:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT name FROM users WHERE id=%s;"
+                sql = "SELECT user_name FROM users WHERE id=%s;"
                 cur.execute(sql, (user_id,))
                 user = cur.fetchone()
-            return user['name'] if user else None
+            return user['user_name'] if user else None
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)
@@ -60,7 +60,7 @@ class Goal_post:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM goals WHERE  deleted_at IS NULL ORDER BY goal_created_at DESC;"
+                sql = "SELECT * FROM goals WHERE deleted_at IS NULL ORDER BY goal_created_at DESC;"
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts
@@ -69,10 +69,7 @@ class Goal_post:
             abort(500)
         finally:
             db_pool.release(conn)
-<<<<<<< HEAD
-=======
- #↑はBDに寄せ済み＠もりりん
->>>>>>> origin/main
+#↑はBDに寄せ済み@もりりん
 
     """
     @classmethod
@@ -88,9 +85,8 @@ class Goal_post:
             abort(500)
         finally:
             db_pool.release(conn)
- #↑はDBに寄せ済み＠もりりん
+    #↑はDBに寄せ済み@もりりん
 
-<<<<<<< HEAD
     ""
     @classmethod
     def delete(cls, post_id):
@@ -171,9 +167,6 @@ class ProgressPost:
             abort(500)
         finally:
             db_pool.release(conn)
-=======
- #削除機能なしの為、削除するためのコード消去
->>>>>>> origin/main
 
     @classmethod
     def find_by_goal_id(cls, goal_id):

@@ -298,19 +298,18 @@ def post_detail_view(post_id):
 #@app.route('/post/<int:post_id>', methods=['GET'])
 @app.route('/goal-post/<int:goal_id>', methods=['GET'])
 def post_progress_view(goal_id):
-    #print(goal_id) #----debug_print(OK)
+    print(goal_id) #----debug_print(OK)
 
     #目標表示(1種)
     #user_id = session.get('user_id')
     #if user_id is None:
     #    return redirect(url_for('login_view'))
-    #post = Goal_post.find_by_id(goal_id)
+    post = Goal_post.find_by_id(goal_id)
+    #print(post) #----debug_print(OK)
 
     #if post is None: #----debug_print(OK)
     #    abort(404)
 
-
-    
     post['goal_created_at'] = post['goal_created_at'].strftime('%Y-%m-%d %H:%M') #created_atから投稿日時を返す
     post['user_name'] = User.get_name_by_id(post['user_id']) #user_idから名前を返す
     print("post =", post)
