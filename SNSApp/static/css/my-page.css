@@ -1,0 +1,94 @@
+body {
+    width: 480px;
+    margin: auto;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.top {
+    background-color: #708090;
+    border-radius: 8px;
+    border-width: 20px;
+    height: 32px;
+    width: 130px;
+    text-align: center;
+}
+
+.out {
+    background-color: #708090;
+    border-radius: 8px;
+    border-width: 20px;
+    height: 32px;
+    width: 130px;
+    text-align: center;
+}
+
+.menu a {
+    color: #FFFFFF;
+}
+
+.top_post {
+    border: 1.5px solid #00008B;
+    padding: 7px 9px 9px 15px;
+    border-radius: 10px;
+    margin: 5px 0 5px 0;
+}
+
+.username{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 9px 0;
+}
+
+.deatline {
+    padding: 9px 0 9px 0;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0 3px 0;
+}
+
+.ouen_button {
+    margin: 0 3px 3px 2px;
+    background-color: #B0C4DE;
+    border-radius: 5px;
+    height: 28px;
+}
+.gekirei_button {
+    margin: 0 0 3px 0;
+    background-color: #B0C4DE;
+    border-radius: 5px;
+    height: 28px;
+}
+
+.sinchoku {
+    border: 1.5px solid #00008B;
+    border-radius: 5px;
+    font-size: 18px;
+    align-items: center;
+    justify-content: center
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 0;
+    width: 480px;
+    height: 24px;
+    font-size: 13px;
+    color: #fff;
+    text-align: center;
+    align-items: flex-end;
+    background-color: #00008B;
+}
