@@ -16,12 +16,14 @@ body {
     text-decoration: none;
 }
 
-.menu{
+.menu{ /*menuを2つに分割して両端揃え*/
     font-size: 17px;
     display: flex;
     justify-content: space-between;
 }
-.menu1 {
+
+/*｢自分の目標一覧｣と｢トップに戻る｣を横並びにする*/
+.menu1 { 
     display: flex;
     margin: 2px 2px 5px 1px;
 }
@@ -30,16 +32,18 @@ body {
     margin: 2px 0 5px 0;
 }
 
+/*自分の目標一覧ボタンの設定*/
 .my {
     background-color: #708090; 
-    border-radius: 8px;
-    border-width: 20px;
+    border-radius: 8px; /*枠を丸く*/
+    border-width: 20px; /*以下3つ意味ない*/
     justify-content: center;
     height: 32px;
-    width: 140px;
-    text-align: center; 
+    width: 140px; /*背景の幅*/
+    text-align: center; /*文字をセンターに*/
 }
 
+/*トップに戻るボタンの設定*/
 .top {
     background-color: #708090;
     border-radius: 8px;
@@ -47,26 +51,32 @@ body {
     height: 32px;
     width: 130px;
     text-align: center;
-    margin: 0 0 0 3px;
+    margin: 0 0 0 3px; /*leftで指定するべき*/
 }
 
+/*ログアウトボタンの設定*/
 .out {
     background-color: #708090;
     border: none;
     border-radius: 8px;
     height: 32px;
+    width: 110px;
+    text-align: center;
 }
 
+/*ボタンの色設定*/
 .menu a {
     color: #FFFFFF;
 }
 
+/*応援と激励の部分を両端に分割*/
 .total_action {
     text-align: center;
     display: flex;
     justify-content: space-between;
 }
 
+/*項目を囲む箱を作成　太さ、色などの設定*/
 .top_post {
     border: 1.5px solid #00008B;
     padding: 7px 9px 9px 15px;
@@ -74,26 +84,37 @@ body {
     margin: 5px 0 5px 0;
 }
 
+/*ユーザーネームと更新日を両端に分割*/
 .username {
     display: flex;
     justify-content: space-between;
     padding: 0px 0px 10px 0px;
 }
 
+p {
+    padding: 0;
+    margin: 0;
+}
+
+/*期日の位置調整*/
 .deatline {
     padding: 9px 0 5px 0;
 }
 
+/*｢頑張れ･どうした？｣と｢達成！･断念｣の2つに分けて両端に分割*/
 .buttons {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
 }
 
+/*意味ないかも*/
 .action_button1 {
     display: flex;
     align-items: flex-end;
 }
+
+/*応援と激励ボタンの設定*/
 .ouen_button {
     margin: 0 3px 3px 2px;
     background-color: #B0C4DE;
@@ -107,6 +128,7 @@ body {
     height: 28px;
 }
 
+/*ほぼ意味のない記述　間隔をあけるだけ*/
 .result_button {
     display: flex;
     justify-content: flex-end;
@@ -127,6 +149,7 @@ body {
     border: none;
 }
 
+/*進捗入力を箱で囲う*/
 .new_progress {
     border: 1.5px solid #00008B;
     background-color: #EAF4FF;
@@ -139,6 +162,7 @@ label {
     margin-left: 13px;
 }
 
+/*メッセージボックスの設定*/
 .message {
     width: 470px;
     height: auto;
@@ -146,6 +170,7 @@ label {
     justify-content: center;
 }
 
+/*入力部分の設定*/
 textarea {
     width: 445px;
     height: 80px;
@@ -153,7 +178,7 @@ textarea {
     display: block;
     margin: auto;
     margin-top: 8px;
-}
+} 
 
 .toukou_button {
     display: flex;
@@ -161,12 +186,13 @@ textarea {
     text-align: center;
 }
 
+/*投稿ボタンの設定*/
 .post_button{
     background-color: #00008B;
     color: #FFFFFF;
     margin: 5px ;
-    width: 60px;
-    height: 31px;
+    width: 65px;
+    height: 36px;
     text-align: center;
     align-items: center;
     border-radius: 5px;
@@ -174,7 +200,6 @@ textarea {
 
 .progress_post {
     border: 1.5px solid #00008B;
-    background-color: #EAF4FF;
     border-radius: 10px;
     margin-top: 5px;
     padding: 7px 9px 9px 15px;
@@ -210,6 +235,18 @@ textarea {
     height: 28px;
 }
 
+/*自分の投稿一覧のCSS
+ほぼ同じなのでこのファイルを適用しても大丈夫なように
+進捗の設定を記述　post_detailには関係ない*/
+.sinchoku {
+    border: 1.5px solid #00008B;
+    border-radius: 5px;
+    font-size: 18px;
+    align-items: center;
+    justify-content: center
+}
+
+
 footer {
     position: fixed;
     bottom: 0;
@@ -222,3 +259,4 @@ footer {
     align-items: flex-end;
     background-color: #00008B;
 }
+
