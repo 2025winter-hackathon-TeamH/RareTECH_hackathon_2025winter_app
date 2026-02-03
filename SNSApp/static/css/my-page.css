@@ -8,6 +8,17 @@ body {
     justify-content: space-between;
     text-decoration: none;
     font-size: 17px;
+    width: 460px;
+    margin: auto;
+}
+
+.menu2 {
+    
+}
+
+.tagu {
+    margin: auto;
+    width: 460px;
 }
 
 a {
@@ -28,7 +39,7 @@ a {
     border-radius: 8px;
     border-width: 20px;
     height: 32px;
-    width: 130px;
+    width: 110px;
     text-align: center;
 }
 
@@ -38,9 +49,10 @@ a {
 
 .top_post {
     border: 1.5px solid #00008B;
-    padding: 7px 9px 9px 15px;
+    padding: 7px 9px 9px 10px;
     border-radius: 10px;
-    margin: 5px 0 5px 0;
+    margin: 5px auto;
+    width: 440px;
 }
 
 .username{
