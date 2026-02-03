@@ -6,7 +6,7 @@ import uuid
 import re
 import os
 
-from models import User , Goal_post, Comment
+from models import User , Goal_post, Comment, ProgressPost
 
 
 # 定数定義
@@ -298,53 +298,59 @@ def post_detail_view(post_id):
 #@app.route('/post/<int:post_id>', methods=['GET'])
 @app.route('/goal-post/<int:goal_id>', methods=['GET'])
 def post_progress_view(goal_id):
-    print(goal_id) #----debug_print(OK)
+    print(goal_id) #----debug_print(OK )
 
     #目標表示(1種)
-    #user_id = session.get('user_id')
-    #if user_id is None:
-    #    return redirect(url_for('login_view'))
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
     post = Goal_post.find_by_id(goal_id)
     #print(post) #----debug_print(OK)
 
-    #if post is None: #----debug_print(OK)
-    #    abort(404)
+    if post is None: #----debug_print(OK)
+        abort(404)
 
     post['goal_created_at'] = post['goal_created_at'].strftime('%Y-%m-%d %H:%M') #created_atから投稿日時を返す
     post['user_name'] = User.get_name_by_id(post['user_id']) #user_idから名前を返す
-    print("post =", post)
-    print("type(post) =", type(post))
-    print(post['goal_created_at']) #確認未了
-    print(post['user_name']) #確認未了
+    #print("post =", post) #----debug_print(OK )
+    #print("type(post) =", type(post)) #----debug_print(OK )
+    #print(post['goal_created_at']) #----debug_print(OK )
+    #print(post['user_name']) #----debug_print(OK )
 
     #目標ポストのリアクション数(2種)表示
-    #もりりんさんの実装待ち
+    #実装未了
 
     #進捗一覧表示
     #Python変数（list）= Pythonクラス（モデル）.Pythonメソッド(Python変数)
     progress_posts = ProgressPost.get_by_post_id(goal_id)
+    #print("progress_posts =", progress_posts) #----debug_print(OK )
+
     #forでdict（1レコード分）in list を回す
     for progress_post in progress_posts:
         #Pythonの辞書['辞書のキー（DBカラム名と同名）']=Pythonの辞書['辞書のキー（DBカラム名と同名）'].Pythonの日時変換
         progress_post['progress_created_at'] = progress_post['progress_created_at'].strftime('%Y-%m-%d %H:%M')
         progress_post['user_name'] = User.get_name_by_id(progress_post['user_id'])
-
+        #print("progress_post =", progress_post) #----debug_print(OK )
+        #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
+        #print(progress_post['progress_created_at']) #----debug_print(OK )
+        #print(progress_post['user_name']) #----debug_print(OK )
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
 # 進捗投稿処理  --@sai
 #@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
-def create_progress_post(post_id):
+def create_progress_post(goal_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
     content = request.form.get('content', '').strip()
     if content == '':
         flash('投稿内容が空です','error')
-        return redirect(url_for('post_progress_view', post_id=post_id))
-    ProgressPost.create(user_id, post_id, content)
+        return redirect(url_for('post_progress_view', goal_id=goal_id))
+    ProgressPost.create(user_id, goal_id, content)
     flash('投稿が完了しました','success')
-    return redirect(url_for('post_progress_view', post_id=post_id))
+    return redirect(url_for('post_progress_view', goal_id=goal_id))
+
 
 """
 # コメント処理

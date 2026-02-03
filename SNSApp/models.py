@@ -54,6 +54,7 @@ class User:
             db_pool.release(conn)
 
 # Postsクラス
+# Goal_postsクラス
 class Goal_post:
     @classmethod
     def get_all(cls):
@@ -102,7 +103,7 @@ class Goal_post:
         finally:
             db_pool.release(conn)
     """
-
+    
     @classmethod
     def find_by_id(cls, post_id):
         conn = db_pool.get_conn()
@@ -139,12 +140,12 @@ class ProgressPost:
             db_pool.release(conn)
     """
     @classmethod
-    def create(cls, user_id, post_id, content):
+    def create(cls, user_id, goal_id, content):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "INSERT INTO progresses (user_id, goal_id, progress_message) VALUES (%s, %s, %s);"
-                cur.execute(sql, (user_id, post_id, content))
+                cur.execute(sql, (user_id, goal_id, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
@@ -190,13 +191,16 @@ class ProgressPost:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM progresses WHERE goal_id=%s ORDER BY progress_created_at DESC;"
                 cur.execute(sql, (goal_id,))
-                comments = cur.fetchall()
-            return comments
+                progress_posts = cur.fetchall()
+            return progress_posts
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             db_pool.release(conn)
+
+
+
 
 # Posts_reaction(goal_post+progress_post)クラス @sai
 class PostReaction:
@@ -214,9 +218,38 @@ class PostReaction:
         finally:
             db_pool.release(conn)
 
+class Reaction:
+    @classmethod
+    def create_reaction_ganba(cls, user_id, goal_id):
+        ganbare = 1
+        reaction_type_id = ganbare
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "INSERT INTO reactions (user_id, goal_id, reaction_type_id) VALUES(%s, %s, %s);"
+                cur.execute(sql, (user_id, goal_id, reaction_type_id))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
 
-
-
+    @classmethod
+    def create_reaction_dousita(cls, user_id, goal_id):
+        dousita = 2
+        reaction_type_id = dousita
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "INSERT INTO reactions (user_id, goal_id, reaction_type_id) VALUES(%s, %s, %s);"
+                cur.execute(sql, (user_id, goal_id, reaction_type_id))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
 
 # Commentクラス
 class Comment:

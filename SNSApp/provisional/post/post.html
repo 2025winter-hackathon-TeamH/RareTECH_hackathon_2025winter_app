@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>post(トップページ)</title>
+    <link rel="stylesheet" href="post.css">
+  </head>
+  <body>
+    <header>
+      <img src="./site_logo.png" alt="背水の陣ロゴ">
+    </header>
+
+    <main>
+
+      <div class="pankuzu">
+        <p >トップページ</p>
+      </div>
+      <div class="btn-area">
+        <a class="btn-mypage-link" href="/my-page">自分の投稿一覧</a>
+        <a class="btn-logaut" href="/login/">ログアウト</a>
+      </div>
+
+<!--投稿ボタンを押下→飛ぶ先は同じ画面にしてます-->
+      <form class="post-form" action="/post" method="post" id="goal">
+
+        <div>
+          <label for="goal-input">目標入力</label>
+          <textarea id="goal-input" name="goal" placeholder="  決意表明！"></textarea>
+        </div>
+        <div>
+          <label for="deadline">達成期日</label>
+          <input class="deadline" id="deadline" type="date" name="deadline">
+          <button class="btn-goal" for="goal" type="submit">投稿</button>
+        </div>
+
+      </form>
+
+      <div class="post-card">
+        <div class="post-card-header">
+          <div class="post-name">佐藤文夏</div>
+          <div class="post-update">更新日：2026-01-12 22:20</div>
+        </div>
+        <div class="post-goal">7/20までに夏コミ用の早期入稿をする...絶対</div>
+        <div class="post-deadline">期日：2026/7/20</div>
+        <div class="post-card-footer">
+          <button class="ganbare" type="submit">頑張れ ! ：  2</button>
+          <button class="dousita" type="submit">どうした ? ：  0</button>
+          <a class="btn-progress" href=/post/[post_id]">進捗</a>  
+        </div>
+      </div>
+     
+      <div class="post-card-tassei">
+        <div class="post-card-header">
+          <div class="post-name">佐藤文夏</div>
+          <div class="post-update">更新日：2026-01-12 22:20</div>
+        </div>
+        <div class="post-goal">7/20までに夏コミ用の早期入稿をする...絶対</div>
+        <div class="post-deadline">期日：2026/7/20</div>
+        <div class="post-card-footer">
+          <button class="ganbare" type="submit">頑張れ ! ：  2</button>
+          <button class="dousita" type="submit">どうした ? ：  0</button>
+          <a class="btn-progress" href=/post/[post_id]">進捗</a>  
+        </div>
+      </div>
+      
+      <div class="post-card-dannen">
+        <div class="post-card-header">
+          <div class="post-name">佐藤文夏</div>
+          <div class="post-update">更新日：2026-01-12 22:20</div>
+        </div>
+        <div class="post-goal">7/20までに夏コミ用の早期入稿をする...絶対</div>
+        <div class="post-deadline">期日：2026/7/20</div>
+        <div class="post-card-footer">
+          <button class="ganbare" type="submit">頑張れ ! ：  2</button>
+          <button class="dousita" type="submit">どうした ? ：  0</button>
+          <a class="btn-progress" href=/post/[post_id]">進捗</a>  
+        </div>
+      </div>
+
+    </main>
+    <footer>2026&copy ハッカソン冬の陣 チームH 背水の陣制作委員会</footer>
+  </body>
+</html>
