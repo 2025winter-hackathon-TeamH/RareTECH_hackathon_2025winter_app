@@ -31,9 +31,9 @@ CREATE TABLE
     goals (
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         goal_message TEXT NOT NULL,
-        goal_created_at DATETIME (6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL ,
+        goal_created_at DATETIME (6) DEFAULT CURRENT_TIMESTAMP(6) NOT NULL,
         goal_deadline DATETIME (6) NOT NULL,
-        achievement_status ENUM('achievement','give_up'),
+        achievement_status ENUM ('achievement','give_up'),
         user_id INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
         KEY idx_goals_user_id (user_id),
@@ -54,6 +54,7 @@ CREATE TABLE
         CONSTRAINT fk_progresses_users FOREIGN KEY (user_id) REFERENCES users (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+
 CREATE TABLE
     reaction_types(
         id INT UNSIGNED NOT NULL,
@@ -62,14 +63,15 @@ CREATE TABLE
         PRIMARY KEY (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+
 CREATE TABLE
     reactions(
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         user_id INT UNSIGNED NOT NULL,
-        goal_id INT UNSIGNED ,
+        goal_id INT UNSIGNED,
         progress_id INT UNSIGNED,
         reaction_type_id INT UNSIGNED NOT NULL,
-        CONSTRAINT chk_not_both_null_or_not_null CHECk (
+        CONSTRAINT chk_not_both_null_or_not_null CHECK (
             NOT (goal_id IS NULL AND progress_id IS NULL) /* 両方NULLは× */
             AND
             NOT (goal_id IS NOT NULL AND progress_id IS NOT NULL) /* 両方値ありも× */
@@ -84,7 +86,15 @@ CREATE TABLE
         CONSTRAINT fk_reactions_progresses FOREIGN KEY (progress_id) REFERENCES progresses (id),
         CONSTRAINT fk_reactions_reaction_types FOREIGN KEY (reaction_type_id) REFERENCES reaction_types (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
+/*
+CREATE TABLE
+    reaction_types(
+        id INT UNSIGNED NOT NULL,
+        reaction_type ENUM ('goal','progress') NOT NULL,
+        comment TEXT NOT NULL,
+        PRIMARY KEY (id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+*/
 
 INSERT INTO reaction_types (id, reaction_type, comment)
 VALUES 
