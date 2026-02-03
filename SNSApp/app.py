@@ -336,7 +336,7 @@ def post_progress_view(goal_id):
         #print(progress_post['user_name']) #----debug_print(OK )
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
-# 進捗投稿処理  --@sai
+# 進捗投稿処理  --@sai_debug未了
 #@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
 def create_progress_post(goal_id):
