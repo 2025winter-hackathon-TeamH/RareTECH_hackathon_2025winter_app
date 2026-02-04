@@ -15,6 +15,7 @@ SESSION_DAYS = 30
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
+#app.config['WTF_CSRF_ENABLED'] = False #--debug用。本番ではOFF(Flask-WTFのCSRF機能そのものをOFFのため)
 app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
@@ -336,21 +337,33 @@ def post_progress_view(goal_id):
         #print(progress_post['user_name']) #----debug_print(OK )
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
-# 進捗投稿処理  --@sai_debug未了
+# 進捗投稿処理  --@sai_debugほぼ完了
 #@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
+#@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def create_progress_post(goal_id):
+    print('--- create_progress_post START ---') #----debug_print
+    print('goal_id =', goal_id) #----debug_print
+    
     user_id = session.get('user_id')
+    print('user_id =', user_id) #----debug_print
+    
     if user_id is None:
+        #user_id = 1  #debug_仮ユーザー(DBに存在するID)
         return redirect(url_for('login_view'))
+
     content = request.form.get('content', '').strip()
+    print('content =', repr(content)) #----debug_print
+    
     if content == '':
         flash('投稿内容が空です','error')
         return redirect(url_for('post_progress_view', goal_id=goal_id))
+    print('CALL ProgressPost.create') #----debug_print
     ProgressPost.create(user_id, goal_id, content)
+
+    print('CREATE SUCCESS') #----debug_print
     flash('投稿が完了しました','success')
     return redirect(url_for('post_progress_view', goal_id=goal_id))
-
 
 """
 # コメント処理
