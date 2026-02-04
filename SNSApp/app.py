@@ -19,6 +19,13 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
 
+# debug用あとで消す↓ @ポテ吉
+@app.route('/debug')
+def debug_goals():
+    rows = Goal_post.get_all()
+    return render_template('debug.html', rows=rows)
+# debug用あとで消す↑ @ポテ吉
+
 # ルートページのリダイレクト
 @app.route('/', methods=['GET'])
 def index():
@@ -34,6 +41,7 @@ def login_view():
         return redirect(url_for('post_view'))
     return render_template('auth/login.html')
 
+    
 # ログイン処理
 @app.route('/login', methods=['POST'])
 def login_prossece():
@@ -116,7 +124,6 @@ def goals_post_view():
         for goal in goals: 
             goal['created_at'] = goal['created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
-
         return render_template('post/post.html', goals=goals, user_id = user_id)
     
 #目標投稿処理
