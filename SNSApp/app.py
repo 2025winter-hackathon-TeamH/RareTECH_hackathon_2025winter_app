@@ -345,6 +345,50 @@ def post_progress_view(goal_id):
         #print(progress_post['user_name']) #----debug_print(OK )
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
+
+#goal-postに対しての達成or断念ボタン押下処理  --@sai_debug未了
+@app.route('/goal-post/<int:goal_id>/goal-post-result', methods=['POST'])
+#@csrf.exempt #--debug用(このルートだけCSRFを無効化)
+def update_goal_post_result(goal_id):
+    #print("=== route debug start ===") #----debug_print
+    #print(goal_id) #----debug_print(OK )
+
+    user_id = session.get('user_id')
+    
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    post = Goal_post.find_by_id(goal_id)
+    #print(post) #----debug_print(OK)
+    
+    if post is None: 
+        abort(404)
+
+    #print("user_id:", user_id) #----debug_print(OK)
+    #print("post_user_id:", post['user_id']) #----debug_print(OK)
+
+    #投稿者本人か比較確認
+    if post['user_id'] != user_id:
+        abort(403)
+
+    #フロントの<form>からname="result"の値("achievement" or "give_up")を取得
+    result = request.form.get('result')
+    #print("result:", result) #----debug_print(OK)
+
+    #想定外の値を弾く(フロントコードミス防止策)
+    if result not in ('achievement', 'give_up'):
+        abort(400) #400:Bad_Request(=リクエストの内容が不正)
+
+    #DB更新
+    Goal_post.update_status(goal_id, result)
+    #print("=== route end ===") #----debug_print
+
+    #リダイレクト
+    return redirect(url_for('post_progress_view', goal_id=goal_id))
+
+
+
+
 # 進捗投稿処理  --@sai_debugほぼ完了
 #@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
