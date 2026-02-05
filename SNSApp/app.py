@@ -338,7 +338,7 @@ def post_progress_view(goal_id):
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
 
-#goal-postに対しての達成or断念ボタン押下処理  --@sai
+#goal-postに対しての達成or断念ボタン押下処理  --@sai_debug未了
 @app.route('/goal-post/<int:goal_id>/goal-post-result', methods=['POST'])
 def update_goal_post_result(goal_id):
     print(goal_id) #----debug_print(OK )
