@@ -21,10 +21,16 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 csrf = CSRFProtect(app)
 
 # debug用あとで消す↓ @ポテ吉
+# @app.route('/debug')
+# def debug_goals():
+#     rows = Goal_post.get_all()
+#     return render_template('debug.html', rows=rows)
+
 @app.route('/debug')
 def debug_goals():
-    rows = Goal_post.get_all()
+    rows = Goal_post.find_by_user_id(1)
     return render_template('debug.html', rows=rows)
+
 # debug用あとで消す↑ @ポテ吉
 
 # ルートページのリダイレクト
@@ -433,6 +439,23 @@ def create_progress_post(goal_id):
     print('CREATE SUCCESS') #----debug_print
     flash('投稿が完了しました','success')
     return redirect(url_for('post_progress_view', goal_id=goal_id))
+
+# 自分の投稿一覧表示
+@app.route('/my-page', methods=['GET'])
+def my_page_view():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    myposts = Goal_post.find_by_user_id(user_id)
+    if myposts is None:
+        flash('投稿している目標はありません','notpost')
+        return render_template('my-page.html')
+    else:
+        for mypost in myposts:
+            mypost['created_at'] = mypost['created_at'].strftime('%Y-%m-%d %H:%M')
+            mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
+        return render_template('my-page.html', myposts=myposts, user_id=user_id)
+    # リアクション２種の表示はまだ
 
 """
 # コメント処理

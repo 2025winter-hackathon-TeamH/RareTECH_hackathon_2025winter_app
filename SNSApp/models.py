@@ -119,6 +119,16 @@ class Goal_post:
         finally:
             db_pool.release(conn)
 
+    @classmethod # マイページ一覧表示用 @ポテ吉
+    def find_by_user_id(cls, user_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM goals WHERE user_id=%s;"
+                cur.execute(sql, (user_id,))
+                myposts = cur.fetchall()
+            return myposts
+        except pymysql.Error as e:
     #goal_postの達成/断念ボタン押下時のDB更新処理 @sai_debugほぼ完了
     @classmethod
     def update_status(cls, goal_id, result):
@@ -137,8 +147,7 @@ class Goal_post:
         finally:
             db_pool.release(conn)
 
-
-# progress_Posts(進捗投稿)クラス
+# progress_Posts(進捗投稿)クラス @sai
 class ProgressPost:
     """
     # 使わない可能性大(get_by_post_idで一覧取得のため)
