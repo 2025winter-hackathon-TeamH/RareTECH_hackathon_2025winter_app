@@ -6,7 +6,7 @@ import uuid
 import re
 import os
 
-from models import User , Goal_post, Comment, ProgressPost
+from models import User , Goal_post, Comment, ProgressPost, Reaction
 
 
 # 定数定義
@@ -142,6 +142,23 @@ def create_goal_post():
     return redirect(url_for('goals_post_view'))
 
 #頑張れ！ボタン押下処理
+@app.route('/goal-post/<int:goal_id>/reaction-ganba',methods=['POST'])
+def reaction_ganba(goal_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    Reaction.create_reaction_ganba(user_id, goal_id)
+    return redirect(url_for('goals_post_view'))
+
+#どうしたボタン押下処理
+@app.route('/goal-post/<int:goal_id>/reaction-dousita',methods=['POST'])
+def reaction_dousita(goal_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    Reaction.create_reaction_dousita(user_id, goal_id)
+    return redirect(url_for('goals_post_view'))
+
 """
 # ルートページのリダイレクト処理
 @app.route('/', methods=['GET'])
