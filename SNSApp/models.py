@@ -129,6 +129,19 @@ class Goal_post:
                 myposts = cur.fetchall()
             return myposts
         except pymysql.Error as e:
+    #goal_postの達成/断念ボタン押下時のDB更新処理 @sai_debugほぼ完了
+    @classmethod
+    def update_status(cls, goal_id, result):
+        #print("update_status called:", goal_id, result)#----debug_print(OK)
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "UPDATE goals SET achievement_status = %s WHERE id = %s;"
+                cur.execute(sql, (result, goal_id))
+                #print("rowcount:", cur.rowcount)#----debug_print(OK)
+                conn.commit()
+        except pymysql.Error as e:
+            conn.rollback() #エラー発生時のトランザクションroll-back処理
             print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
@@ -155,7 +168,7 @@ class ProgressPost:
             db_pool.release(conn)
     """
     @classmethod
-    def create(cls, user_id, goal_id, content):
+    def create(cls, user_id, goal_id, content): #-@sai_debugほぼ完了
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
@@ -213,8 +226,6 @@ class ProgressPost:
             abort(500)
         finally:
             db_pool.release(conn)
-
-
 
 
 # Posts_reaction(goal_post+progress_post)クラス @sai
