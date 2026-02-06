@@ -129,6 +129,11 @@ class Goal_post:
                 myposts = cur.fetchall()
             return myposts
         except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
     #goal_postの達成/断念ボタン押下時のDB更新処理 @sai_debugほぼ完了
     @classmethod
     def update_status(cls, goal_id, result):
