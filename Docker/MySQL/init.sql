@@ -68,14 +68,16 @@ CREATE TABLE
     reactions(
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         user_id INT UNSIGNED NOT NULL,
-        goal_id INT UNSIGNED,
+        goal_id INT UNSIGNED NOT NULL,
         progress_id INT UNSIGNED,
         reaction_type_id INT UNSIGNED NOT NULL,
+        /*
         CONSTRAINT chk_not_both_null_or_not_null CHECK (
             NOT (goal_id IS NULL AND progress_id IS NULL) /* 両方NULLは× */
             AND
             NOT (goal_id IS NOT NULL AND progress_id IS NOT NULL) /* 両方値ありも× */
         ),
+        */
         PRIMARY KEY (id),
         KEY idx_reactions_user_id (user_id),
         KEY idx_reaction_goal_id (goal_id),
@@ -129,8 +131,8 @@ VALUES
 INSERT INTO reactions (user_id, goal_id, progress_id, reaction_type_id)
 VALUES 
   (2, 1, NULL, 1),
-  (3, NULL, 1, 3),
-  (4, NULL, 2, 3),
+  (3, 1, 1, 3),
+  (4, 1, 2, 3),
   (1, 2, NULL, 1),
-  (4, NULL, 4, 4),
+  (4, 2, 4, 4),
   (4, 2, NULL, 2);
