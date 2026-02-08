@@ -46,7 +46,7 @@ def index():
 def login_view():
     if session.get('user_id') is not None:
         return redirect(url_for('post_view'))
-    return render_template('auth/login.html')
+    return render_template('login.html')
 
     
 # ログイン処理
@@ -81,7 +81,7 @@ def logout():
 def signup_view():
     if session.get('user_id') is not None:
         return redirect(url_for('post_view'))
-    return render_template('auth/signup.html')
+    return render_template('signup.html')
 
 # 新規登録処理
 @app.route('/signup', methods=['POST'])
