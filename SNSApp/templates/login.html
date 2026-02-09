@@ -8,7 +8,6 @@
     <title>ログイン画面</title>
   </head>
 
-
   <body>
     <header>
       <img src="../static/site_logo.png" alt="背水の陣 ロゴ">
@@ -16,13 +15,21 @@
 
     <main>
       <form class="login-form" action="/login" method="post">
+         <input type="hidden" name="csrf_token" value="{{csrf_token() }}"> 
         <h1 class="login-title">ログイン</h1>
         <p class="login-desc">メールアドレスとパスワードを入力してログインしてください。</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category,message in messages %}
+          <div class="flash flash-{{ category }}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div>
 
-        <!--エラーメッセージ-->
-        <p class="error-message">&#9888;&#65039; メールアドレス or パスワードが空です </p>
-      
-
+        <!-- ==== フォームグループ ===-->
         <div class="form-group">
           <label class="label" for="email">メールアドレス</label>
           <input class="login-input" type="email" name="email" id="email" placeholder="  メールアドレス" > 
@@ -30,7 +37,7 @@
 
         <div class="form-group">
           <label class="label" for="password">パスワード </label>
-          <input class="login-input" type="password" name="password" id="password" placeholder="  パスワード"  minlength="8">
+          <input class="login-input" type="password" name="password" id="password" placeholder="  パスワード">
         </div>
 
         <button class="login-button" type="submit">ログイン</button>
