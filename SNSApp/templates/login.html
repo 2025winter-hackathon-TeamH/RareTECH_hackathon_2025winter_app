@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="静的なログイン画面です">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='/css/login.css') }}">
+    <link rel="stylesheet" href="../static/css/login.css">
     <title>ログイン画面</title>
   </head>
 
@@ -15,17 +15,19 @@
 
     <main>
       <form class="login-form" action="/login" method="post">
+         <input type="hidden" name="csrf_token" value="{{csrf_token() }}"> 
         <h1 class="login-title">ログイン</h1>
         <p class="login-desc">メールアドレスとパスワードを入力してログインしてください。</p>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        <div class="error-message">
           {% for category,message in messages %}
-          {{ message }}
-        </div>
+          <div class="flash flash-{{ category }}">
+            {{ message }}
+          </div>
           {% endfor %}
         {% endif %}
         {% endwith %}
+        <div>
 
         <!-- ==== フォームグループ ===-->
         <div class="form-group">
@@ -35,7 +37,7 @@
 
         <div class="form-group">
           <label class="label" for="password">パスワード </label>
-          <input class="login-input" type="password" name="password" id="password" placeholder="  パスワード"  minlength="8">
+          <input class="login-input" type="password" name="password" id="password" placeholder="  パスワード">
         </div>
 
         <button class="login-button" type="submit">ログイン</button>
