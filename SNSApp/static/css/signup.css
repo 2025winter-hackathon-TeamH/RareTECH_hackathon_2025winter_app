@@ -12,7 +12,6 @@
 }
 
 body {
-    overflow-y: hidden;
     justify-content: center;
     display: flex;
     align-items: center;
@@ -102,7 +101,7 @@ a {
     margin-top: 1px;
 }
 
-.warning div {
+.warning-error {
     display: flex;
     justify-content: center;
     background-color: #FFE4E1;
@@ -112,10 +111,5 @@ a {
     margin-top: 0;
     color: red;
     align-items: center;
-
-}
-.warning {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: auto;
 }
