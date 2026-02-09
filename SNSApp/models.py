@@ -217,13 +217,30 @@ class ProgressPost:
         finally:
             db_pool.release(conn)
     """
+
+    @classmethod
+    #reactionボタン押下前チェック用
+    def find_by_id_and_goal_id(cls, progress_id, goal_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM progresses WHERE id=%s AND goal_id=%s;"
+                cur.execute(sql, (progress_id, goal_id))
+                progress_post = cur.fetchone()
+            return progress_post
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+    
     @classmethod
     def get_by_post_id(cls, goal_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM progresses WHERE goal_id=%s ORDER BY progress_created_at DESC;"
-                cur.execute(sql, (goal_id,))
+                cur.execute(sql, (goal_id))
                 progress_posts = cur.fetchall()
             return progress_posts
         except pymysql.Error as e:

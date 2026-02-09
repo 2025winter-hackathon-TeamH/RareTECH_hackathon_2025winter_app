@@ -369,7 +369,7 @@ def post_progress_view(goal_id):
     return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
 
-#goal-postに対しての達成or断念ボタン押下処理  --@sai_debug未了
+#goal-postに対しての達成or断念ボタン押下処理  --@sai_debug済
 @app.route('/goal-post/<int:goal_id>/goal-post-result', methods=['POST'])
 #@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def update_goal_post_result(goal_id):
@@ -410,35 +410,88 @@ def update_goal_post_result(goal_id):
     return redirect(url_for('post_progress_view', goal_id=goal_id))
 
 
-
-
 # 進捗投稿処理  --@sai_debugほぼ完了
 #@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
 #@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def create_progress_post(goal_id):
-    print('--- create_progress_post START ---') #----debug_print
-    print('goal_id =', goal_id) #----debug_print
+    #print('--- create_progress_post START ---') #----debug_print
+    #print('goal_id =', goal_id) #----debug_print
     
     user_id = session.get('user_id')
-    print('user_id =', user_id) #----debug_print
+    #print('user_id =', user_id) #----debug_print
     
     if user_id is None:
         #user_id = 1  #debug_仮ユーザー(DBに存在するID)
         return redirect(url_for('login_view'))
 
     content = request.form.get('content', '').strip()
-    print('content =', repr(content)) #----debug_print
+    #print('content =', repr(content)) #----debug_print
     
     if content == '':
         flash('投稿内容が空です','error')
         return redirect(url_for('post_progress_view', goal_id=goal_id))
-    print('CALL ProgressPost.create') #----debug_print
+    #print('CALL ProgressPost.create') #----debug_print
     ProgressPost.create(user_id, goal_id, content)
 
-    print('CREATE SUCCESS') #----debug_print
+    #print('CREATE SUCCESS') #----debug_print
     flash('投稿が完了しました','success')
     return redirect(url_for('post_progress_view', goal_id=goal_id))
+
+
+
+
+#progress-postに対してのreactionボタン押下処理(2種)  --@sai_debug未了
+@app.route('/goal-post/<int:goal_id>/progress-post/<int:progress_id>/progress-post-reaction', methods=['POST'])
+#@csrf.exempt #--debug用(このルートだけCSRFを無効化)
+def update_progress_post_reaction(goal_id, progress_id):
+    print("=== route debug start ===") #----debug_print
+    print("goal_id = ", goal_id) #----debug_print( )
+    print("progress_id = ", progress_id) #----debug_print( )
+
+    user_id = session.get('user_id')
+    
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    #goal_idが無ければ404エラー表示
+    post = Goal_post.find_by_id(goal_id)
+    print(post) #----debug_print()
+    if post is None: 
+        abort(404)
+    
+    #progress_idが無ければ404エラー表示
+    progress_post = ProgressPost.find_by_id_and_goal_id(progress_id, goal_id)
+    print(progress_post) #----debug_print()
+    if progress_post is None: 
+        abort(404)
+
+    print("user_id:", user_id) #----debug_print()
+    print("post_user_id:", post['user_id']) #----debug_print()
+
+    #progress投稿者本人はリアクション不可
+    if progress_post['user_id'] == user_id:
+        abort(403)
+    
+    #フロント側で押下されたreaction_typeの値(3 or 4)を変数(reaction_type)に格納
+    reaction_type = request.form.get('reaction_type')
+    print("reaction_type:", reaction_type) #----debug_print()
+
+    #想定外の値を弾く(フロントコードミス防止策)
+    if reaction_type not in ('3', '4'):
+        abort(400) #400:Bad_Request(=リクエストの内容が不正)
+
+    #reaction_typeを数値(=int型)へ変換
+    reaction_type = int(reaction_type)
+
+    #DB更新
+    ProgressPost.add_reaction(progress_id, goal_id, user_id, reaction_type) 
+    print("=== route end ===") #----debug_print()
+
+    #リダイレクト
+    return redirect(url_for('post_progress_view', goal_id=goal_id))
+
+
 
 # 自分の投稿一覧表示
 @app.route('/my-page', methods=['GET'])
