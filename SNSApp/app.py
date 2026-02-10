@@ -80,7 +80,7 @@ def logout():
 @app.route('/signup', methods=['GET'])
 def signup_view():
     if session.get('user_id') is not None:
-        return redirect(url_for('post_view'))
+        return redirect(url_for('goals_post_view'))
     return render_template('signup.html')
 
 # 新規登録処理
@@ -118,7 +118,7 @@ def signup_process():
 
     session['user_id'] = user_id
 
-    return redirect(url_for('post_view'))
+    return redirect(url_for('goals_post_view'))
 
 #目標一覧ページの表示
 @app.route('/goal-post', methods=['GET'])
