@@ -61,7 +61,7 @@ class Goal_post:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM goals WHERE deleted_at IS NULL ORDER BY goal_created_at DESC;"
+                sql = "SELECT * FROM goals ORDER BY goal_created_at DESC;"
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts

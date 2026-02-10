@@ -80,7 +80,7 @@ def logout():
 @app.route('/signup', methods=['GET'])
 def signup_view():
     if session.get('user_id') is not None:
-        return redirect(url_for('post_view'))
+        return redirect(url_for('goals_post_view'))
     return render_template('signup.html')
 
 # 新規登録処理
@@ -118,7 +118,7 @@ def signup_process():
 
     session['user_id'] = user_id
 
-    return redirect(url_for('post_view'))
+    return redirect(url_for('goals_post_view'))
 
 #目標一覧ページの表示
 @app.route('/goal-post', methods=['GET'])
@@ -129,9 +129,9 @@ def goals_post_view():
     else:
         goals = Goal_post.get_all()
         for goal in goals: 
-            goal['created_at'] = goal['created_at'].strftime('%Y-%m-%d %H:%M')
+            goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
-        return render_template('post/post.html', goals=goals, user_id = user_id)
+        return render_template('post.html', goals=goals, user_id = user_id)
     
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
