@@ -129,7 +129,7 @@ def goals_post_view():
     else:
         goals = Goal_post.get_all()
         for goal in goals: 
-            goal['created_at'] = goal['created_at'].strftime('%Y-%m-%d %H:%M')
+            goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
         return render_template('post.html', goals=goals, user_id = user_id)
     
@@ -164,6 +164,8 @@ def reaction_dousita(goal_id):
         return redirect(url_for('login_view'))
     Reaction.create_reaction_dousita(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
+
+#達成総数表示
 
 """
 # ルートページのリダイレクト処理
