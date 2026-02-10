@@ -88,15 +88,7 @@ CREATE TABLE
         CONSTRAINT fk_reactions_progresses FOREIGN KEY (progress_id) REFERENCES progresses (id),
         CONSTRAINT fk_reactions_reaction_types FOREIGN KEY (reaction_type_id) REFERENCES reaction_types (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-/*
-CREATE TABLE
-    reaction_types(
-        id INT UNSIGNED NOT NULL,
-        reaction_type ENUM ('goal','progress') NOT NULL,
-        comment TEXT NOT NULL,
-        PRIMARY KEY (id)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-*/
+
 
 INSERT INTO reaction_types (id, reaction_type, comment)
 VALUES 
@@ -116,9 +108,9 @@ VALUES
 
 INSERT INTO goals (goal_message, goal_created_at, goal_deadline, achievement_status, user_id)
 VALUES 
-  ('11月中に旅行に行く', '2025-09-03 01:03:24', '2025-11-30 00:00:00', NULL, 1),
-  ('１２月までに３キロやせる', '2025-10-10 16:11:08', '2025-12-31 00:00:00', NULL, 3),
-  ('７月までに１つ資格を取る', '2026-01-01 07:34:29', '2026-06-30 00:00:00', NULL, 1);
+  ('11月中に旅行に行く', '2025-09-03 01:03:24', '2025-11-30 00:00:00', 'achievement', 1),
+  ('１２月までに３キロやせる', '2025-10-10 16:11:08', '2025-12-31 00:00:00', 'give_up', 3),
+  ('７月までに１つ資格を取る', '2026-01-01 07:34:29', '2026-06-30 00:00:00', 'achievement', 1);
 
 INSERT INTO progresses (progress_message, progress_created_at, goal_id, user_id)
 VALUES 

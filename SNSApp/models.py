@@ -70,9 +70,8 @@ class Goal_post:
             abort(500)
         finally:
             db_pool.release(conn)
-#↑はBDに寄せ済み@もりりん
 
-    """
+   
     @classmethod
     def create(cls, user_id, goal_message, goal_deadline):
         conn = db_pool.get_conn()
@@ -86,9 +85,33 @@ class Goal_post:
             abort(500)
         finally:
             db_pool.release(conn)
-    #↑はDBに寄せ済み@もりりん
 
-    ""
+    @classmethod
+    def sum_achievement(cls, user_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT SUM(achievement_status = 'achievement') AS achievement FROM goals WHERE user_id = %s;" 
+                cur.execute(sql, (user_id,))
+                row = cur.fetchone()
+                return {"achievement" : int(row["achievement"]) or 0}
+        finally:
+            db_pool.release(conn)
+            
+    @classmethod
+    def sum_give_up(cls, user_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT SUM(achievement_status = 'give_up') AS give_up FROM goals WHERE user_id = %s;" 
+                cur.execute(sql, (user_id,))
+                row = cur.fetchone()
+                return {"give_up" : int(row["give_up"]) or 0}
+        finally:
+            db_pool.release(conn)
+
+
+    """
     @classmethod
     def delete(cls, post_id):
         conn = db_pool.get_conn()
