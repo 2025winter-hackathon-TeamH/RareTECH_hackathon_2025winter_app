@@ -88,15 +88,7 @@ CREATE TABLE
         CONSTRAINT fk_reactions_progresses FOREIGN KEY (progress_id) REFERENCES progresses (id),
         CONSTRAINT fk_reactions_reaction_types FOREIGN KEY (reaction_type_id) REFERENCES reaction_types (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-/*
-CREATE TABLE
-    reaction_types(
-        id INT UNSIGNED NOT NULL,
-        reaction_type ENUM ('goal','progress') NOT NULL,
-        comment TEXT NOT NULL,
-        PRIMARY KEY (id)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-*/
+
 
 INSERT INTO reaction_types (id, reaction_type, comment)
 VALUES 
