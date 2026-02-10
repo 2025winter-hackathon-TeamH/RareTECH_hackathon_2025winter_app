@@ -108,9 +108,9 @@ VALUES
 
 INSERT INTO goals (goal_message, goal_created_at, goal_deadline, achievement_status, user_id)
 VALUES 
-  ('11月中に旅行に行く', '2025-09-03 01:03:24', '2025-11-30 00:00:00', 'achievement', 1),
-  ('１２月までに３キロやせる', '2025-10-10 16:11:08', '2025-12-31 00:00:00', 'give_up', 3),
-  ('７月までに１つ資格を取る', '2026-01-01 07:34:29', '2026-06-30 00:00:00', 'achievement', 1);
+  ('11月中に旅行に行く', '2025-09-03 01:03:24', '2025-11-30 00:00:00', NULL, 1),
+  ('１２月までに３キロやせる', '2025-10-10 16:11:08', '2025-12-31 00:00:00', NULL, 3),
+  ('７月までに１つ資格を取る', '2026-01-01 07:34:29', '2026-06-30 00:00:00', NULL, 1);
 
 INSERT INTO progresses (progress_message, progress_created_at, goal_id, user_id)
 VALUES 
