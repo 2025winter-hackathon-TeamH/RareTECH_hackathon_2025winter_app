@@ -165,7 +165,6 @@ def reaction_dousita(goal_id):
     Reaction.create_reaction_dousita(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
 
-
 """
 # ルートページのリダイレクト処理
 @app.route('/', methods=['GET'])
@@ -440,8 +439,6 @@ def create_progress_post(goal_id):
     return redirect(url_for('post_progress_view', goal_id=goal_id))
 
 
-
-
 #progress-postに対してのreactionボタン押下処理(2種)  --@sai_debug未了
 @app.route('/goal-post/<int:goal_id>/progress-post/<int:progress_id>/progress-post-reaction', methods=['POST'])
 #@csrf.exempt #--debug用(このルートだけCSRFを無効化)
@@ -474,19 +471,21 @@ def update_progress_post_reaction(goal_id, progress_id):
     if progress_post['user_id'] == user_id:
         abort(403)
     
-    #フロント側で押下されたreaction_typeの値(3 or 4)を変数(reaction_type)に格納
-    reaction_type = request.form.get('reaction_type')
-    print("reaction_type:", reaction_type) #----debug_print()
+    #フロント側で押下されたreaction_type_idのprogress値( 3 or 4)を変数(reaction_type_id)に格納
+    #reaction_type_id = 3 …素晴らしい！
+    #reaction_type_id = 4 …おい！
+    reaction_type_id = request.form.get('reaction_type_id')
+    print("reaction_type_id:", reaction_type_id) #----debug_print()
 
     #想定外の値を弾く(フロントコードミス防止策)
-    if reaction_type not in ('3', '4'):
+    if reaction_type_id not in ('3', '4'):
         abort(400) #400:Bad_Request(=リクエストの内容が不正)
 
     #reaction_typeを数値(=int型)へ変換
-    reaction_type = int(reaction_type)
+    reaction_type_id = int(reaction_type_id)
 
     #DB更新
-    ProgressPost.add_reaction(progress_id, goal_id, user_id, reaction_type) 
+    Reaction.create_progress_post(user_id, goal_id, progress_id, reaction_type_id) 
     print("=== route end ===") #----debug_print()
 
     #リダイレクト
@@ -498,8 +497,6 @@ def update_progress_post_reaction(goal_id, progress_id):
 @app.route('/my-page', methods=['GET'])
 def my_page_view():
     user_id = session.get('user_id')
-    total_achievement = Goal_post.sum_achievement
-    total_give_up = Goal_post.sum_give_up
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
@@ -510,7 +507,7 @@ def my_page_view():
         for mypost in myposts:
             mypost['created_at'] = mypost['created_at'].strftime('%Y-%m-%d %H:%M')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-        return render_template('my-page.html', myposts=myposts, user_id=user_id, tatal_achievement=total_achievement, total_give_up=total_give_up)
+        return render_template('my-page.html', myposts=myposts, user_id=user_id)
     # リアクション２種の表示はまだ
 
 """
