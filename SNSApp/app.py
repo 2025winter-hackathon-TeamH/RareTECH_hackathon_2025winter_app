@@ -143,7 +143,8 @@ def create_goal_post():
     if goal_message == '':
         flash('目標内容が空欄です','error')
         return redirect(url_for('posts_view'))
-    Goal_post.create(user_id, goal_message)
+    goal_deadline = request.form.get('goal_deadline')
+    Goal_post.create(user_id, goal_message, goal_deadline)
     flash('目標の投稿が完了しました。','success')
     return redirect(url_for('goals_post_view'))
 
