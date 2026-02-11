@@ -240,13 +240,30 @@ class ProgressPost:
         finally:
             db_pool.release(conn)
     """
+
+    @classmethod
+    #reactionボタン押下前チェック用
+    def find_by_id_and_goal_id(cls, progress_id, goal_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM progresses WHERE id=%s AND goal_id=%s;"
+                cur.execute(sql, (progress_id, goal_id))
+                progress_post = cur.fetchone()
+            return progress_post
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+    
     @classmethod
     def get_by_post_id(cls, goal_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM progresses WHERE goal_id=%s ORDER BY progress_created_at DESC;"
-                cur.execute(sql, (goal_id,))
+                cur.execute(sql, (goal_id))
                 progress_posts = cur.fetchall()
             return progress_posts
         except pymysql.Error as e:
@@ -255,22 +272,6 @@ class ProgressPost:
         finally:
             db_pool.release(conn)
 
-
-# Posts_reaction(goal_post+progress_post)クラス @sai
-class PostReaction:
-    @classmethod
-    def create_progress_reaction(cls, user_id, progress_id, reaction_type_id):
-        conn = db_pool.get_conn()
-        try:
-            with conn.cursor() as cur:
-                sql = "INSERT INTO reactions (user_id, progress_id, reaction_type_id) VALUES (%s, %s, %s);"
-                cur.execute(sql, (user_id, progress_id, reaction_type_id))
-                conn.commit()
-        except pymysql.Error as e:
-            print(f'エラーが発生しています：{e}')
-            abort(500)
-        finally:
-            db_pool.release(conn)
 
 class Reaction:
     @classmethod
@@ -304,6 +305,25 @@ class Reaction:
             abort(500)
         finally:
             db_pool.release(conn)
+
+    # Posts_reaction(progress_post)クラス @sai
+    @classmethod
+    def create_progress_post(cls, user_id, goal_id, progress_id, reaction_type_id):
+        print("create_progress_post(user_id, goal_id, progress_id, reaction_type_id):", user_id, goal_id, progress_id, reaction_type_id) #----debug_print(  )
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "INSERT INTO reactions (user_id, goal_id, progress_id, reaction_type_id) VALUES (%s, %s, %s, %s);"
+                cur.execute(sql, (user_id, goal_id, progress_id, reaction_type_id))
+                print("rowcount:", cur.rowcount) #----debug_print(  )
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
 
 # Commentクラス
 class Comment:

@@ -72,11 +72,11 @@ CREATE TABLE
         progress_id INT UNSIGNED,
         reaction_type_id INT UNSIGNED NOT NULL,
         /*
-        CONSTRAINT chk_not_both_null_or_not_null CHECK (
-            NOT (goal_id IS NULL AND progress_id IS NULL) /* 両方NULLは× */
-            AND
-            NOT (goal_id IS NOT NULL AND progress_id IS NOT NULL) /* 両方値ありも× */
-        ),
+            CONSTRAINT chk_not_both_null_or_not_null CHECK (
+                NOT (goal_id IS NULL AND progress_id IS NULL) 
+                AND
+                NOT (goal_id IS NOT NULL AND progress_id IS NOT NULL) 
+            ),
         */
         PRIMARY KEY (id),
         KEY idx_reactions_user_id (user_id),
