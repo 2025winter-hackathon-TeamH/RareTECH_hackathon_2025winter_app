@@ -309,7 +309,7 @@ class Reaction:
     # Posts_reaction(progress_post)クラス @sai
     @classmethod
     def create_progress_post(cls, user_id, goal_id, progress_id, reaction_type_id):
-        print("create_progress_post:", user_id, goal_id, progress_id, reaction_type_id) #----debug_print(  )
+        print("create_progress_post(user_id, goal_id, progress_id, reaction_type_id):", user_id, goal_id, progress_id, reaction_type_id) #----debug_print(  )
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:

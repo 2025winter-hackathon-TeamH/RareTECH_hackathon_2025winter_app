@@ -440,33 +440,36 @@ def create_progress_post(goal_id):
     return redirect(url_for('post_progress_view', goal_id=goal_id))
 
 
-#progress-postに対してのreactionボタン押下処理(2種)  --@sai_debug未了
+#progress-postに対してのreactionボタン押下処理(2種)  --@sai_debugほぼ完了
 @app.route('/goal-post/<int:goal_id>/progress-post/<int:progress_id>/progress-post-reaction', methods=['POST'])
 #@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def update_progress_post_reaction(goal_id, progress_id):
-    print("=== route debug start ===") #----debug_print
-    print("goal_id = ", goal_id) #----debug_print( )
-    print("progress_id = ", progress_id) #----debug_print( )
+    #print("=== route debug start ===") #----debug_print
+    #print("goal_id = ", goal_id) #----debug_print(OK )
+    #print("progress_id = ", progress_id) #----debug_print(OK )
 
     user_id = session.get('user_id')
     
     if user_id is None:
         return redirect(url_for('login_view'))
-    
+        #print("debug: forcing user_id=2") #----debug_print
+        #user_id = 2 #----debug_print
+
+
     #goal_idが無ければ404エラー表示
     post = Goal_post.find_by_id(goal_id)
-    print(post) #----debug_print()
+    #print(post) #----debug_print(OK)
     if post is None: 
         abort(404)
     
     #progress_idが無ければ404エラー表示
     progress_post = ProgressPost.find_by_id_and_goal_id(progress_id, goal_id)
-    print(progress_post) #----debug_print()
+    #print(progress_post) #----debug_print(OK)
     if progress_post is None: 
         abort(404)
 
-    print("user_id:", user_id) #----debug_print()
-    print("post_user_id:", post['user_id']) #----debug_print()
+    #print("user_id:", user_id) #----debug_print(OK)
+    #print("post_user_id:", post['user_id']) #----debug_print(OK)
 
     #progress投稿者本人はリアクション不可
     if progress_post['user_id'] == user_id:
@@ -476,7 +479,7 @@ def update_progress_post_reaction(goal_id, progress_id):
     #reaction_type_id = 3 …素晴らしい！
     #reaction_type_id = 4 …おい！
     reaction_type_id = request.form.get('reaction_type_id')
-    print("reaction_type_id:", reaction_type_id) #----debug_print()
+    #print("reaction_type_id:", reaction_type_id) #----debug_print(OK)
 
     #想定外の値を弾く(フロントコードミス防止策)
     if reaction_type_id not in ('3', '4'):
@@ -487,7 +490,7 @@ def update_progress_post_reaction(goal_id, progress_id):
 
     #DB更新
     Reaction.create_progress_post(user_id, goal_id, progress_id, reaction_type_id) 
-    print("=== route end ===") #----debug_print()
+    #print("=== route end ===") #----debug_print
 
     #リダイレクト
     return redirect(url_for('post_progress_view', goal_id=goal_id))
