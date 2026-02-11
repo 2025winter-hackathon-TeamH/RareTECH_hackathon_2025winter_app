@@ -142,12 +142,12 @@ class Goal_post:
         finally:
             db_pool.release(conn)
 
-    @classmethod # マイページ一覧表示用 @ポテ吉
+    @classmethod    # マイページ一覧表示用_ポテ吉
     def find_by_user_id(cls, user_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM goals WHERE user_id=%s;"
+                sql = "SELECT g.*, SUM(CASE WHEN r.reaction_type_id=1 THEN 1 ELSE 0 END) AS ganba_count, SUM(CASE WHEN r.reaction_type_id=2 THEN 1 ELSE 0 END) AS doshita_count FROM goals g LEFT JOIN reactions r ON g.id = r.goal_id WHERE g.user_id=%s GROUP BY g.id ORDER BY g.goal_created_at DESC;"
                 cur.execute(sql, (user_id,))
                 myposts = cur.fetchall()
             return myposts

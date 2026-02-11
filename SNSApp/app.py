@@ -80,7 +80,7 @@ def logout():
 @app.route('/signup', methods=['GET'])
 def signup_view():
     if session.get('user_id') is not None:
-        return redirect(url_for('post_view'))
+        return redirect(url_for('goals_post_view'))
     return render_template('signup.html')
 
 # 新規登録処理
@@ -118,7 +118,7 @@ def signup_process():
 
     session['user_id'] = user_id
 
-    return redirect(url_for('post_view'))
+    return redirect(url_for('goals_post_view'))
 
 #目標一覧ページの表示
 @app.route('/goal-post', methods=['GET'])
@@ -143,7 +143,8 @@ def create_goal_post():
     if goal_message == '':
         flash('目標内容が空欄です','error')
         return redirect(url_for('posts_view'))
-    Goal_post.create(user_id, goal_message)
+    goal_deadline = request.form.get('goal_deadline')
+    Goal_post.create(user_id, goal_message, goal_deadline)
     flash('目標の投稿が完了しました。','success')
     return redirect(url_for('goals_post_view'))
 
@@ -505,10 +506,28 @@ def my_page_view():
         return render_template('my-page.html')
     else:
         for mypost in myposts:
-            mypost['created_at'] = mypost['created_at'].strftime('%Y-%m-%d %H:%M')
+            mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-        return render_template('my-page.html', myposts=myposts, user_id=user_id)
-    # リアクション２種の表示はまだ
+        return render_template('my-page.html', myposts=myposts, user_id=user_id, tatal_achievement=total_achievement, total_give_up=total_give_up)
+
+# 頑張れ！ボタン押下処理_マイページ用
+@app.route('/my-page/reaction-ganba',methods=['POST'])
+def reaction_ganba(goal_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    Reaction.create_reaction_ganba(user_id, goal_id)
+    return redirect(url_for('my_page_view'))
+
+# どうしたボタン押下処理_マイページ用
+@app.route('/my-page/reaction-dousita',methods=['POST'])
+def reaction_dousita(goal_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    Reaction.create_reaction_dousita(user_id, goal_id)
+    return redirect(url_for('my_page_view'))
+
 
 """
 # コメント処理
