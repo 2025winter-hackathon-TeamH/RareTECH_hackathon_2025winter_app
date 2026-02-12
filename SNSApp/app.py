@@ -132,7 +132,7 @@ def goals_post_view():
             goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
         return render_template('post.html', goals=goals, user_id = user_id)
-    
+        
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
 def create_goal_post():

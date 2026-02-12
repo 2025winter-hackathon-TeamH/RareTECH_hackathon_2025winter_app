@@ -18,11 +18,23 @@
       </div>
       <div class="btn-area">
         <a class="btn-mypage-link" href="/my-page">自分の投稿一覧</a>
-        <a class="btn-logaut" href="/login/">ログアウト</a>
+        <a class="btn-logaut" href="/logout">ログアウト</a>
       </div>
+      <!--====== フラッシュメッセージ表示 ======-->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      <!--====== 新規投稿フォーム ======-->
+      <form class="post-form" action="/goal-posts" method="post" id="goal">
 
-<!--投稿ボタンを押下→飛ぶ先は同じ画面にしてます-->
-      <form class="post-form" action="/post" method="post" id="goal">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <div>
           <label for="goal-input">目標入力</label>
@@ -33,23 +45,35 @@
           <input class="deadline" id="deadline" type="date" name="goal_deadline">
           <button class="btn-goal" for="goal" type="submit">投稿</button>
         </div>
-
       </form>
 
-      <div class="post-card">
-        <div class="post-card-header">
-          <div class="post-name">佐藤文夏</div>
-          <div class="post-update">更新日：2026-01-12 22:20</div>
-        </div>
-        <div class="post-goal">7/20までに夏コミ用の早期入稿をする...絶対</div>
-        <div class="post-deadline">期日：2026/7/20</div>
-        <div class="post-card-footer">
-          <button class="ganbare" type="submit">頑張れ ! ：  2</button>
-          <button class="dousita" type="submit">どうした ? ：  0</button>
-          <a class="btn-progress" href=/post/[post_id]">進捗</a>  
-        </div>
+       <!-- ===== 投稿一覧の表示　goals　があれば表示する　===== -->
+
+      {% if goals and goals|length > 0 %}
+        {% for goal in goals %}
+          <div class="post-card">
+            <div class="post-card-header">
+              <div class="post-name">{{ goal.user_name }}</div>
+              <div class="post-update">{{ goal.goal_created_at }}</div>
+            </div>
+
+            <div class="post-goal">{{ goal.goal_message }}</div>
+            <div class="post-deadline">{{ goal.goal_deadline }}</div>
+            
+            <div class="post-card-footer">
+              <button class="ganbare" type="submit">頑張れ ! ：  2</button>
+              <button class="dousita" type="submit">どうした ? ：  0</button>
+              <a class="btn-progress" href="post_detail.html">進捗</a>  
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+      <div class="empty">
+        <p>投稿がありません。</p>
       </div>
-     
+      {% endif %}
+      
+     {#
       <div class="post-card-tassei">
         <div class="post-card-header">
           <div class="post-name">佐藤文夏</div>
@@ -60,7 +84,7 @@
         <div class="post-card-footer">
           <button class="ganbare" type="submit">頑張れ ! ：  2</button>
           <button class="dousita" type="submit">どうした ? ：  0</button>
-          <a class="btn-progress" href=/post/[post_id]">進捗</a>  
+          <a class="btn-progress" href="/goal-post/{{ goal.id }}">進捗</a>  
         </div>
       </div>
       
@@ -74,10 +98,10 @@
         <div class="post-card-footer">
           <button class="ganbare" type="submit">頑張れ ! ：  2</button>
           <button class="dousita" type="submit">どうした ? ：  0</button>
-          <a class="btn-progress" href=/post/[post_id]">進捗</a>  
+          <a class="btn-progress" href="/goal-post/{{ goal.id }}">進捗</a>  
         </div>
       </div>
-
+#}
     </main>
     <footer>2026&copy ハッカソン冬の陣 チームH 背水の陣制作委員会</footer>
   </body>
