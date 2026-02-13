@@ -154,6 +154,15 @@ def reaction_ganba(goal_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
+    
+    goal_post = Goal_post.find_by_id(goal_id)
+    
+    if goal_post is None: 
+        abort(404)
+    
+    if goal_post['user_id'] == user_id:
+        abort(403)
+
     Reaction.create_reaction_ganba(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
 
@@ -163,6 +172,15 @@ def reaction_dousita(goal_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
+    
+    goal_post = Goal_post.find_by_id(goal_id)
+    
+    if goal_post is None: 
+        abort(404)
+    
+    if goal_post['user_id'] == user_id:
+        abort(403)
+        
     Reaction.create_reaction_dousita(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
 
@@ -501,6 +519,8 @@ def update_progress_post_reaction(goal_id, progress_id):
 @app.route('/my-page', methods=['GET'])
 def my_page_view():
     user_id = session.get('user_id')
+    total_achievement = Goal_post.sum_achievement
+    total_give_up = Goal_post.sum_give_up
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
