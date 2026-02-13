@@ -61,9 +61,15 @@
             <div class="post-deadline">{{ goal.goal_deadline }}</div>
             
             <div class="post-card-footer">
-              <button class="ganbare" type="submit">頑張れ ! ：  2</button>
-              <button class="dousita" type="submit">どうした ? ：  0</button>
-              <a class="btn-progress" href="post_detail.html">進捗</a>  
+              <form action="/goal-post/{{ goal.id }}/reaction-ganba" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="ganbare" type="submit">頑張れ ! ： {{ goal</button>
+              </form>
+              <form action="/goal-post/{{ goal.id }}/reaction-dousita" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="dousita" type="submit">どうした ? ：  0</button>
+              </form>
+              <a class="btn-progress" href="/goal-post/{{ goal.id }}">進捗</a>  
             </div>
           </div>
         {% endfor %}
@@ -72,8 +78,8 @@
         <p>投稿がありません。</p>
       </div>
       {% endif %}
-      
-     {#
+<!--      
+     {# 
       <div class="post-card-tassei">
         <div class="post-card-header">
           <div class="post-name">佐藤文夏</div>
@@ -102,6 +108,7 @@
         </div>
       </div>
 #}
+-->
     </main>
     <footer>2026&copy ハッカソン冬の陣 チームH 背水の陣制作委員会</footer>
   </body>
