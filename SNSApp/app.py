@@ -39,13 +39,13 @@ def index():
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
-    return redirect(url_for('post_view'))
+    return redirect(url_for('goals_post_view'))
 
 # ログインページ表示
 @app.route('/login', methods=['GET'])
 def login_view():
     if session.get('user_id') is not None:
-        return redirect(url_for('post_view'))
+        return redirect(url_for('goals_post_view'))
     return render_template('login.html')
 
     
@@ -67,7 +67,7 @@ def login_prossece():
                 flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
             else:
                 session['user_id'] = user["id"]
-                return redirect(url_for('post_view'))
+                return redirect(url_for('goals_post_view'))
     return redirect(url_for('login_view'))
 
 # ログアウト
@@ -132,7 +132,7 @@ def goals_post_view():
             goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
         return render_template('post.html', goals=goals, user_id = user_id)
-    
+        
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
 def create_goal_post():
@@ -154,6 +154,15 @@ def reaction_ganba(goal_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
+    
+    goal_post = Goal_post.find_by_id(goal_id)
+    
+    if goal_post is None: 
+        abort(404)
+    
+    if goal_post['user_id'] == user_id:
+        abort(403)
+
     Reaction.create_reaction_ganba(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
 
@@ -163,6 +172,15 @@ def reaction_dousita(goal_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
+    
+    goal_post = Goal_post.find_by_id(goal_id)
+    
+    if goal_post is None: 
+        abort(404)
+    
+    if goal_post['user_id'] == user_id:
+        abort(403)
+        
     Reaction.create_reaction_dousita(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
 
@@ -367,7 +385,7 @@ def post_progress_view(goal_id):
         #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
         #print(progress_post['progress_created_at']) #----debug_print(OK )
         #print(progress_post['user_name']) #----debug_print(OK )
-    return render_template('post/post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
+    return render_template('post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
 
 
 #goal-postに対しての達成or断念ボタン押下処理  --@sai_debug済
@@ -501,6 +519,8 @@ def update_progress_post_reaction(goal_id, progress_id):
 @app.route('/my-page', methods=['GET'])
 def my_page_view():
     user_id = session.get('user_id')
+    total_achievement = Goal_post.sum_achievement
+    total_give_up = Goal_post.sum_give_up
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
@@ -549,15 +569,15 @@ def create_comment(post_id):
 
 @app.errorhandler(400)
 def bad_request(error):
-    return render_template('error/400.html'), 400
+    return render_template('400.html'), 400
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('error/404.html'),404
+    return render_template('404.html'),404
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return render_template('error/500.html'),500
+    return render_template('500.html'),500
 
 
 if __name__ == '__main__':

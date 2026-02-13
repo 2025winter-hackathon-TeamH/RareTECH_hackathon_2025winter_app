@@ -61,7 +61,7 @@ class Goal_post:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM goals BY goal_created_at DESC;"
+                sql = "SELECT * FROM goals ORDER BY goal_created_at DESC;" 
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts
@@ -263,7 +263,7 @@ class ProgressPost:
         try:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM progresses WHERE goal_id=%s ORDER BY progress_created_at DESC;"
-                cur.execute(sql, (goal_id))
+                cur.execute(sql, (goal_id,))
                 progress_posts = cur.fetchall()
             return progress_posts
         except pymysql.Error as e:
