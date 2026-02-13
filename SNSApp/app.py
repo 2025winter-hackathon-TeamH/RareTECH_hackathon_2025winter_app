@@ -140,13 +140,23 @@ def create_goal_post():
     if user_id is None:
         return redirect(url_for('login_view'))
     goal_message = request.form.get('goal_message', '').strip()
+    goal_deadline = request.form.get('goal_deadline', '').strip()
+    
+    has_error = False
+
     if goal_message == '':
-        flash('目標内容が空欄です','error')
-        return redirect(url_for('posts_view'))
-    goal_deadline = request.form.get('goal_deadline')
+        flash('目標内容が空欄です', 'error')
+        has_error = True
+    if goal_deadline == '':
+        flash('達成期日を選択してください', 'error')
+        has_error = True
+    if has_error:
+        return redirect(url_for('goals_post_view'))
+
     Goal_post.create(user_id, goal_message, goal_deadline)
-    flash('目標の投稿が完了しました。','success')
+    flash('目標の投稿が完了しました。', 'success')
     return redirect(url_for('goals_post_view'))
+
 
 #頑張れ！ボタン押下処理
 @app.route('/goal-post/<int:goal_id>/reaction-ganba',methods=['POST'])
