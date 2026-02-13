@@ -306,17 +306,48 @@ class Reaction:
         finally:
             db_pool.release(conn)
 
-    # Posts_reaction(progress_post)クラス @sai
+    # progress_post_reactionボタン押下用 @sai
     @classmethod
     def create_progress_post(cls, user_id, goal_id, progress_id, reaction_type_id):
-        print("create_progress_post(user_id, goal_id, progress_id, reaction_type_id):", user_id, goal_id, progress_id, reaction_type_id) #----debug_print(  )
+        #print("create_progress_post(user_id, goal_id, progress_id, reaction_type_id):", user_id, goal_id, progress_id, reaction_type_id) #----debug_print(OK )
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "INSERT INTO reactions (user_id, goal_id, progress_id, reaction_type_id) VALUES (%s, %s, %s, %s);"
                 cur.execute(sql, (user_id, goal_id, progress_id, reaction_type_id))
-                print("rowcount:", cur.rowcount) #----debug_print(  )
+                #print("rowcount:", cur.rowcount) #----debug_print(OK)
                 conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    # 各Posts_reaction(goal_post+progress_post)集計用 @sai--開発中
+    @classmethod
+    def count_posts_reactions(cls, goal_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT reaction_type_id, COUNT(*) as count FROM reactions WHERE goal_id=%s GROUP BY reaction_type_id ORDER BY reaction_type_id;"
+                cur.execute(sql, (goal_id,))
+                rows = cur.fetchall()
+            
+            #reaction値の初期化(reaction=0件対策)
+            reaction_counts = {1:0, 2:0, 3:0, 4:0}
+            
+            #DBから取得したreaction_type_id(1-4)＋カウント数をreaction_countsへ格納
+            #例：{"reaction_type_id": 1, "count": 5}
+            for row in rows:
+                reaction_counts[row["reaction_type_id"]] = row["count"]
+
+            #goal_post+progress_postの応援or激励を集計
+            sum_ouen    =  reaction_counts[1] + reaction_counts[3]
+            sum_gekirei =  reaction_counts[2] + reaction_counts[4]
+            return {
+                    "sum_ouen"    : sum_ouen,
+                    "sum_gekirei" : sum_gekirei
+            }
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)
