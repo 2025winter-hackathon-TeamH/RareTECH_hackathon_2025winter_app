@@ -144,6 +144,10 @@ def create_goal_post():
         return redirect(url_for('login_view'))
     
     goal_message = request.form.get('goal_message', '').strip()
+    goal_deadline = request.form.get('goal_deadline', '').strip()
+    
+    has_error = False
+
     if goal_message == '':
         flash('目標内容が空欄です','error')
         return redirect(url_for('goals_post_view'))
@@ -159,9 +163,18 @@ def create_goal_post():
         flash('達成期日は現在時刻より後の時間を設定してください')
         return redirect(url_for('goals_post_view'))
     
+        flash('目標内容が空欄です', 'error')
+        has_error = True
+    if goal_deadline == '':
+        flash('達成期日を選択してください', 'error')
+        has_error = True
+    if has_error:
+        return redirect(url_for('goals_post_view'))
+
     Goal_post.create(user_id, goal_message, goal_deadline)
-    flash('目標の投稿が完了しました。','success')
+    flash('目標の投稿が完了しました。', 'success')
     return redirect(url_for('goals_post_view'))
+
 
 #頑張れ！ボタン押下処理
 @app.route('/goal-post/<int:goal_id>/reaction-ganba',methods=['POST'])
@@ -364,12 +377,17 @@ def post_detail_view(post_id):
 #@app.route('/post/<int:post_id>', methods=['GET'])
 @app.route('/goal-post/<int:goal_id>', methods=['GET'])
 def post_progress_view(goal_id):
-    print(goal_id) #----debug_print(OK )
+    #print(goal_id) #----debug_print(OK )
 
-    #目標表示(1種)
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
+    
+    #debug用user_id(決め打ち)
+    #if user_id is None:
+    #    user_id = 1
+    
+    #目標表示(1種)
     post = Goal_post.find_by_id(goal_id)
     #print(post) #----debug_print(OK)
 
@@ -384,7 +402,7 @@ def post_progress_view(goal_id):
     #print(post['user_name']) #----debug_print(OK )
 
     #目標ポストのリアクション数(2種)表示
-    #実装未了
+    reaction_summary = Reaction.count_posts_reactions(goal_id)
 
     #進捗一覧表示
     #Python変数（list）= Pythonクラス（モデル）.Pythonメソッド(Python変数)
@@ -400,7 +418,9 @@ def post_progress_view(goal_id):
         #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
         #print(progress_post['progress_created_at']) #----debug_print(OK )
         #print(progress_post['user_name']) #----debug_print(OK )
-    return render_template('post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id)
+    #print("reaction_summary =", reaction_summary) #----debug_print(OK )
+    #print("type =", type(reaction_summary)) #----debug_print(OK )
+    return render_template('post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id,reaction_summary=reaction_summary)
 
 
 #goal-postに対しての達成or断念ボタン押下処理  --@sai_debug済
