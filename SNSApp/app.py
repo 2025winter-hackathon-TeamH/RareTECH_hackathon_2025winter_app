@@ -146,8 +146,6 @@ def create_goal_post():
     goal_message = request.form.get('goal_message', '').strip()
     goal_deadline = request.form.get('goal_deadline', '').strip()
     
-    has_error = False
-
     if goal_message == '':
         flash('目標内容が空欄です','error')
         return redirect(url_for('goals_post_view'))
@@ -163,14 +161,6 @@ def create_goal_post():
         flash('達成期日は現在時刻より後の時間を設定してください')
         return redirect(url_for('goals_post_view'))
     
-        flash('目標内容が空欄です', 'error')
-        has_error = True
-    if goal_deadline == '':
-        flash('達成期日を選択してください', 'error')
-        has_error = True
-    if has_error:
-        return redirect(url_for('goals_post_view'))
-
     Goal_post.create(user_id, goal_message, goal_deadline)
     flash('目標の投稿が完了しました。', 'success')
     return redirect(url_for('goals_post_view'))
