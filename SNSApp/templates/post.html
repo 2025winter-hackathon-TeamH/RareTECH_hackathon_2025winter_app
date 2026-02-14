@@ -63,11 +63,11 @@
             <div class="post-card-footer">
               <form action="/goal-post/{{ goal.id }}/reaction-ganba" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button class="ganbare" type="submit">頑張れ ! ： {{ goal</button>
+                <button class="ganbare" type="submit">頑張れ ! ： {{ goal.total_ganba }}</button>
               </form>
               <form action="/goal-post/{{ goal.id }}/reaction-dousita" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button class="dousita" type="submit">どうした ? ：  0</button>
+                <button class="dousita" type="submit">どうした ? ： {{ goal.total_dousita }}</button>
               </form>
               <a class="btn-progress" href="/goal-post/{{ goal.id }}">進捗</a>  
             </div>

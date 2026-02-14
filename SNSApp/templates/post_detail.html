@@ -1,3 +1,4 @@
+{#
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -59,6 +60,103 @@
             </div>
 
             <form action="/form.python" method="post">
+                <div class="new_progress">
+                    <label for="progress_in">進捗入力</label>
+                    <textarea id="message" placeholder="今の進み具合" name="message"></textarea>
+                    <div class="toukou_button">
+                        <button class="post_button">投稿</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="progress_post">
+                <div class="update_day">更新日 2026/02/01</div>
+                <!-- 進捗　-->
+                 <div class="content">へのへのもへじ</div>
+                <div class="action_button2">
+                    <button class="subara_button">素晴らしい！＋99</button >
+                    <button class="oi_button">おい！＋99</button >
+                </div>
+            </div>
+
+
+        </div>
+        </form>
+    <footer>
+      2026©ハッカソン冬の陣 チームH 背水の陣制作委員会️
+    </footer>
+    </body>
+</html>
+#}
+
+
+
+
+
+<!DOCTYPE html>
+
+<html lang="ja">
+    <head>
+        <title>post_detail</title>
+        <link rel="stylesheet" href="../static/css/post_detail.css">
+    </head>
+
+    <body>
+        <div class="post_detail">
+          <div class="img_logo">
+            <img src="../static/site_logo.png" alt="site_logo"title="site_logo" width="480px" height="140px">
+          </div>
+        </div>
+        
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="all">
+            <div class="tagu"><a>投稿画面　>　進捗ページ</a></div>
+            <div class="menu">
+                <div class="menu1">
+                    <div class="my"><a href="my-page.html">自分の目標一覧</a></div>
+                    <div class="top"><a href="post.html">トップに戻る</a></div>
+                </div>
+                    <div class="menu2">
+                        <div class="out"><a href="login.html">ログアウト</a></div>
+                    </div>
+            </div>
+
+            <div class="total_action">
+                <div class="action1">
+                    <img src="../static/ouen.png">
+                      <div>{{ goal_id }}</div>
+                </div>
+                <div =class="action2">
+                    <img src="../static/gekirei.png">
+                        <div>{{progress_id}}</div>
+                </div>
+            </div>
+
+            <div class="post-card-tassei">
+                <div class="username">
+                    <div>{{ post.user_name }}</div>
+                    <div>更新日 {{ post.goal_created_at }}</div>
+                </div>
+                    <div class="post_coment">{{ post.progress_created_at }}</div>
+                    <div class="deatline">期日 2026/12/31</div>
+
+                <div class="buttons">
+                <div class="action_button1">
+                    <button class="ouen_button">頑張れ！：2</button>
+                    <button class="gekirei_button">どうした？：0</button>
+                </div>
+
+                <div class="result_button">
+                    <button class="tassei">達成！</button>
+                    <button class="dannnen">断念...</button>
+                </div>
+                </div>
+
+            </div>
+
+            <form method="post">
+                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="new_progress">
                     <label for="progress_in">進捗入力</label>
                     <textarea id="message" placeholder="今の進み具合" name="message"></textarea>
