@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from flask_wtf.csrf import CSRFProtect
-from datetime import timedelta
+from datetime import timedelta, datetime
 import hashlib
 import uuid
 import re
@@ -124,6 +124,9 @@ def signup_process():
 @app.route('/goal-post', methods=['GET'])
 def goals_post_view():
     user_id = session.get('user_id')
+    total_ganba = Goal_post.sum_ganba
+    total_dousita = Goal_post.sum_dousita
+
     if user_id is None:
         return redirect(url_for('login_view'))
     else:
@@ -131,7 +134,7 @@ def goals_post_view():
         for goal in goals: 
             goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
-        return render_template('post.html', goals=goals, user_id = user_id)
+        return render_template('post.html', goals=goals, user_id = user_id, total_ganba = total_ganba, total_dousita = total_dousita)
         
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
@@ -139,12 +142,27 @@ def create_goal_post():
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
+    
     goal_message = request.form.get('goal_message', '').strip()
     goal_deadline = request.form.get('goal_deadline', '').strip()
     
     has_error = False
 
     if goal_message == '':
+        flash('目標内容が空欄です','error')
+        return redirect(url_for('goals_post_view'))
+    
+    goal_deadline = request.form.get('goal_deadline', '').strip()
+    if goal_deadline == '':
+        flash('達成期日が未入力です', 'error')
+        return redirect(url_for('goals_post_view'))
+    
+    formatted_deadline = datetime.strptime(goal_deadline, '%Y-%m-%d')
+    #HTMLからrequestで受け取った達成期限が文字列型なのでdatetime,nowのdatetime型に変換
+    if datetime.now() > formatted_deadline:
+        flash('達成期日は現在時刻より後の時間を設定してください')
+        return redirect(url_for('goals_post_view'))
+    
         flash('目標内容が空欄です', 'error')
         has_error = True
     if goal_deadline == '':
@@ -587,6 +605,10 @@ def create_comment(post_id):
 @app.errorhandler(400)
 def bad_request(error):
     return render_template('400.html'), 400
+
+@app.errorhandler(403)
+def bad_request(error):
+    return render_template('403.html'), 403
 
 @app.errorhandler(404)
 def page_not_found(error):
