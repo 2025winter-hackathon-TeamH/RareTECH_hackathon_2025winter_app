@@ -124,6 +124,9 @@ def signup_process():
 @app.route('/goal-post', methods=['GET'])
 def goals_post_view():
     user_id = session.get('user_id')
+    total_ganba = Goal_post.sum_ganba
+    total_dousita = Goal_post.sum_dousita
+
     if user_id is None:
         return redirect(url_for('login_view'))
     else:
@@ -131,7 +134,7 @@ def goals_post_view():
         for goal in goals: 
             goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
-        return render_template('post.html', goals=goals, user_id = user_id)
+        return render_template('post.html', goals=goals, user_id = user_id, total_ganba = total_ganba, total_dousita = total_dousita)
         
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
