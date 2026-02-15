@@ -15,7 +15,7 @@ SESSION_DAYS = 30
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
-#app.config['WTF_CSRF_ENABLED'] = False #--debug用。本番ではOFF(Flask-WTFのCSRF機能そのものをOFFのため)
+app.config['WTF_CSRF_ENABLED'] = False #--debug用。本番ではOFF(Flask-WTFのCSRF機能そのものをOFFのため)
 app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
@@ -348,8 +348,9 @@ def post_detail_view(post_id):
 # 進捗ページの表示  --@sai
 #@app.route('/post/<int:post_id>', methods=['GET'])
 @app.route('/goal-post/<int:goal_id>', methods=['GET'])
+@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def post_progress_view(goal_id):
-    #print(goal_id) #----debug_print(OK )
+    print("goal_id =", goal_id) #----debug_print(OK )
 
     user_id = session.get('user_id')
     if user_id is None:
