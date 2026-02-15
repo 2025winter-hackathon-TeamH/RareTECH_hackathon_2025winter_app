@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
     <head>
-        <title>my-page</title>
+        <title>背水の陣</title>
+        <meta name="description" content="背水の陣は頑張りたい人の背中を強めに押すSNSです。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../static/css/my-page.css">
     </head>
 
@@ -14,33 +16,49 @@
 
         <div class="tagu"><p>トップページ　>　自分の投稿一覧</p></div>
         <div class="menu">
-            <div class="top"><button onclick="" class="return_top">トップに戻る</button></div>
-            <div class="out"><button onclick="" class="return_top">ログアウト</button></div>                    
+            <a href="{{ url_for('goals_post_view')}}">
+                <div class="top"><button type="button" class="return_top">トップに戻る</button></div>
+            </a>
+            <a href="{{ url_for('logout')}}">
+                <div class="out"><button type="button" class="return_top">ログアウト</button></div> 
+            </a>
         </div>
-
-        <div class="post_frame">
-            <div class="top_post">
-                <div class="username">
-                    <div class="name_at">ユーザーネーム</div>
-                    <div class="created_at fn_cl"><p>更新日:2026-01-12 22:10</p></div>
-                </div>
-
-                <div class="post_coment">投稿内容</div>
-                <div class="deatline">期日：2026/7/20</div>
-
-                <div class="buttons">
-                    <div class="action_button1">
-                        <button class="reac_button" title="投稿者本人は押せません">頑張れ！：2</button>
-                        <button class="reac_button" title="投稿者本人は押せません">どうした？：6</button>
+       <!-- ===== 自分の投稿一覧の表示　===== -->
+        {% if myposts and myposts|length > 0 %}
+            {% for mypost in myposts %}
+            <div class="post_frame">
+                <div class="top_post">
+                    <div class="username">
+                        <div class="name_at">{{ mypost.user_name }}</div>
+                        <div class="created_at fn_cl"><p>{{ mypost.goal_created_at }}</p></div>
                     </div>
-                    <div class="sinchoku">
-                        <button onclick="" class="sinchoku_button">進捗</button>
+
+                    <div class="post_coment">
+                        {{ mypost.goal_message }}
+                    </div>
+                    <div class="deatline">期日：{{ mypost.goal_deadline }}</div>
+
+                    <div class="buttons">
+                        <div class="action_button1">
+                            <button class="reac_button" title="投稿者本人は押せません">頑張れ！：{{ mypost.ganba_count}}</button>
+                            <button class="reac_button" title="投稿者本人は押せません">どうした？：{{ mypost.doshita_count}}</button>
+                        </div>
+                        <a href="/goal-post/{{ mypost.id}}">
+                            <div class="sinchoku">
+                                <button type="button" class="sinchoku_button">進捗</button>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty">
+            <p>投稿がありません。</p >
         </div>
+        {% endif %}
 
-        <div class="post-card-tassei">
+        <!-- <div class="post-card-tassei">
             <div class="top_post">
                 <div class="username">
                     <div class="name_at">ユーザーネーム</div>
@@ -82,7 +100,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     <footer>
       2026©ハッカソン冬の陣 チームH 背水の陣制作委員会️
