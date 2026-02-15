@@ -24,6 +24,8 @@ button {
 .tagu {
     margin-bottom: 10px;
     width: 460px;
+    font-size: 12px;
+    font-weight:700;
 }
 
 .menu {
@@ -36,6 +38,7 @@ button {
 }
 
 a {
+    margin: 0;
     text-decoration: none;
 }
 
@@ -53,10 +56,11 @@ a {
     background-color: #708090;
     border-radius: 8px;
     height: 32px;
-    width: 110px;
     color: #FFFFFF;
     text-align: center;
-    line-height: 32px; 
+    line-height: 32px;
+    font-size: 12px;
+    padding: 0 10px 0 10px;
 }
 
 .return_top:hover {
@@ -77,6 +81,11 @@ a {
     margin-bottom: 10px;
 }
 
+.post_coment.deatline {
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .top_post {
     margin: 10px 0 10px 0; 
     width: 440px;
@@ -86,6 +95,9 @@ a {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+
 }
 
 .name_at {
@@ -95,14 +107,20 @@ a {
 .created_at {
     margin: 0 0 20px 0;
     color: #AFAFAF;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .post_coment {
     margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .deatline {
     margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .buttons {
@@ -126,6 +144,7 @@ a {
     border: 1px #00008B solid; 
     border-radius: 4px;
     height: 28px;
+    font-size: 12px;
 }
 
 .reac_button:hover::after {
@@ -140,14 +159,12 @@ a {
     left: 0;
 }
 
-
-
 .sinchoku_button {
     margin: 0;
     border: 1px solid #00008B;
     background: #FFFFFF;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 12px;
     height: 28px;
 } 
 
