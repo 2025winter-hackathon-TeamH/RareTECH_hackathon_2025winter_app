@@ -61,7 +61,7 @@ class Goal_post:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM goals ORDER BY goal_created_at DESC;" 
+                sql = "SELECT * FROM goals ORDER BY goal_created_at DESC;"
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts
@@ -87,6 +87,31 @@ class Goal_post:
             db_pool.release(conn)
 
     @classmethod
+    def sum_ganba(cls, goal_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT SUM(reaction_type_id = 1) AS sum_ganba FROM reactions WHERE goal_id = %s;" 
+                cur.execute(sql, (goal_id,))
+                row = cur.fetchone()
+                return row["sum_ganba"] or 0
+        finally:
+            db_pool.release(conn)
+            
+    @classmethod
+    def sum_dousita(cls, goal_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT SUM(reaction_type_id = 2) AS sum_dousita FROM reactions WHERE goal_id = %s;" 
+                cur.execute(sql, (goal_id,))
+                row = cur.fetchone()
+                return row["sum_dousita"] or 0
+        finally:
+            db_pool.release(conn)
+
+
+    @classmethod
     def sum_achievement(cls, user_id):
         conn = db_pool.get_conn()
         try:
@@ -94,7 +119,7 @@ class Goal_post:
                 sql = "SELECT SUM(achievement_status = 'achievement') AS achievement FROM goals WHERE user_id = %s;" 
                 cur.execute(sql, (user_id,))
                 row = cur.fetchone()
-                return {"achievement" : int(row["achievement"]) or 0}
+                return row["achievement"] or 0
         finally:
             db_pool.release(conn)
             
@@ -106,7 +131,7 @@ class Goal_post:
                 sql = "SELECT SUM(achievement_status = 'give_up') AS give_up FROM goals WHERE user_id = %s;" 
                 cur.execute(sql, (user_id,))
                 row = cur.fetchone()
-                return {"give_up" : int(row["give_up"]) or 0}
+                return row["give_up"] or 0
         finally:
             db_pool.release(conn)
 
