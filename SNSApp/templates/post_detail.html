@@ -13,7 +13,8 @@
           </div>
         </div>
         
-        <form method="GET" action="post_detail">
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="all">
             <div class="tagu"><a>投稿画面　>　進捗ページ</a></div>
             <div class="menu">
@@ -29,20 +30,20 @@
             <div class="total_action">
                 <div class="action1">
                     <img src="../static/ouen.png">
-                        <a1> <応援の合計を取得> </a1>
+                      <div>{{ goal_id }}</div>
                 </div>
                 <div =class="action2">
                     <img src="../static/gekirei.png">
-                        <a2> <激励の合計を取得> </a2>
+                        <div>{{progress_id}}</div>
                 </div>                
             </div>
 
             <div class="post-card-tassei">
                 <div class="username">
-                    <div>ユーザーname</div>
-                    <div>更新日 2026/1/1</div>
+                    <div>{{ post.user_name }}</div>
+                    <div>更新日 {{ post.goal_created_at }}</div>
                 </div>
-                    <div class="post_coment"><p>投稿内容</p></div>
+                    <div class="post_coment">{{ post.goal_message }}</div>
                     <div class="deatline">期日 2026/12/31</div>  
                 
                 <div class="buttons">    
@@ -59,7 +60,8 @@
 
             </div>
 
-            <form action="/form.python" method="post">
+            <form method="post">
+                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="new_progress">
                     <label for="progress_in">進捗入力</label>
                     <textarea id="message" placeholder="今の進み具合" name="message"></textarea>
