@@ -89,7 +89,6 @@ def signup_process():
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '')
     password_confirmation = request.form.get('password_confirmation', '')
-
     # 空チェック
     if not name or not email or not password or not password_confirmation:
         flash("&#9888;&#65039;空のフォームがあります", 'error')
@@ -114,7 +113,6 @@ def signup_process():
     hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
     user_id = User.create(name, email, hashed_password)
-
     session['user_id'] = user_id
 
     return redirect(url_for('goals_post_view'))
@@ -549,12 +547,13 @@ def my_page_view():
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
-    if myposts is None:
+    if not myposts:
         flash('投稿している目標はありません','notpost')
         return render_template('my-page.html')
     else:
         for mypost in myposts:
-            mypost['created_at'] = mypost['created_at'].strftime('%Y-%m-%d %H:%M')
+            mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
+            mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
             mypost['total_achievement'] = Goal_post.sum_achievement(['user_id'])
             mypost['total_give_up'] = Goal_post.sum_give_up(['user_id'])
