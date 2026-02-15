@@ -90,7 +90,6 @@ def signup_process():
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '')
     password_confirmation = request.form.get('password_confirmation', '')
-
     # 空チェック
     if not name or not email or not password or not password_confirmation:
         flash("&#9888;&#65039;空のフォームがあります", 'error')
@@ -115,7 +114,6 @@ def signup_process():
     hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
     user_id = User.create(name, email, hashed_password)
-
     session['user_id'] = user_id
 
     return redirect(url_for('goals_post_view'))
