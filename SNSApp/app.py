@@ -25,7 +25,6 @@ csrf = CSRFProtect(app)
 # def debug_goals():
 #     rows = Goal_post.get_all()
 #     return render_template('debug.html', rows=rows)
-
 @app.route('/debug')
 def debug_goals():
     rows = Goal_post.find_by_user_id(1)
@@ -122,8 +121,6 @@ def signup_process():
 @app.route('/goal-post', methods=['GET'])
 def goals_post_view():
     user_id = session.get('user_id')
-    total_ganba = Goal_post.sum_ganba
-    total_dousita = Goal_post.sum_dousita
 
     if user_id is None:
         return redirect(url_for('login_view'))
@@ -132,7 +129,11 @@ def goals_post_view():
         for goal in goals: 
             goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
-        return render_template('post.html', goals=goals, user_id = user_id, total_ganba = total_ganba, total_dousita = total_dousita)
+            goal_id = goal['id']
+            goal['total_ganba'] = Goal_post.sum_ganba(goal_id)
+            goal['total_dousita'] = Goal_post.sum_dousita(goal_id)
+            
+        return render_template('post.html', goals=goals, user_id = user_id,)
         
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
@@ -156,7 +157,7 @@ def create_goal_post():
     formatted_deadline = datetime.strptime(goal_deadline, '%Y-%m-%d')
     #HTMLからrequestで受け取った達成期限が文字列型なのでdatetime,nowのdatetime型に変換
     if datetime.now() > formatted_deadline:
-        flash('達成期日は現在時刻より後の時間を設定してください')
+        flash('達成期日は現在時刻より後の時間を設定してください', 'error')
         return redirect(url_for('goals_post_view'))
     
     Goal_post.create(user_id, goal_message, goal_deadline)
@@ -177,7 +178,8 @@ def reaction_ganba(goal_id):
         abort(404)
     
     if goal_post['user_id'] == user_id:
-        abort(403)
+        flash('自分の投稿にはリアクション出来ません', 'error')
+        return redirect(url_for('goals_post_view'))
 
     Reaction.create_reaction_ganba(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
@@ -542,8 +544,6 @@ def update_progress_post_reaction(goal_id, progress_id):
 @app.route('/my-page', methods=['GET'])
 def my_page_view():
     user_id = session.get('user_id')
-    total_achievement = Goal_post.sum_achievement
-    total_give_up = Goal_post.sum_give_up
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
@@ -555,7 +555,27 @@ def my_page_view():
             mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-        return render_template('my-page.html', myposts=myposts, user_id=user_id, total_achievement=total_achievement, total_give_up=total_give_up)
+            mypost['total_achievement'] = Goal_post.sum_achievement(['user_id'])
+            mypost['total_give_up'] = Goal_post.sum_give_up(['user_id'])
+        return render_template('my-page.html', myposts=myposts, user_id=user_id, tatal_achievement=total_achievement, total_give_up=total_give_up)
+
+# 頑張れ！ボタン押下処理_マイページ用
+@app.route('/my-page/reaction-ganba',methods=['POST'])
+def myr_ganba(goal_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    Reaction.create_reaction_ganba(user_id, goal_id)
+    return redirect(url_for('my_page_view'))
+
+# どうしたボタン押下処理_マイページ用
+@app.route('/my-page/reaction-dousita',methods=['POST'])
+def myr_dousita(goal_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    Reaction.create_reaction_dousita(user_id, goal_id)
+    return redirect(url_for('my_page_view'))
 
 """
 # コメント処理
