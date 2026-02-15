@@ -191,6 +191,10 @@ def reaction_dousita(goal_id):
     if user_id is None:
         return redirect(url_for('login_view'))
     
+    if goal_post['user_id'] == user_id:
+        flash('自分の投稿にはリアクション出来ません', 'error')
+        return redirect(url_for('goals_post_view'))
+    
     goal_post = Goal_post.find_by_id(goal_id)
     
     if goal_post is None: 
