@@ -555,9 +555,10 @@ def my_page_view():
             mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-            mypost['total_achievement'] = Goal_post.sum_achievement(['user_id'])
-            mypost['total_give_up'] = Goal_post.sum_give_up(['user_id'])
-        return render_template('my-page.html', myposts=myposts, user_id=user_id, tatal_achievement=total_achievement, total_give_up=total_give_up)
+            user_id = mypost['user_id']
+            mypost['total_achievement'] = Goal_post.sum_achievement(user_id)
+            mypost['total_give_up'] = Goal_post.sum_give_up(user_id)
+        return render_template('my-page.html', myposts=myposts, user_id=user_id)
 
 # 頑張れ！ボタン押下処理_マイページ用
 @app.route('/my-page/reaction-ganba',methods=['POST'])
