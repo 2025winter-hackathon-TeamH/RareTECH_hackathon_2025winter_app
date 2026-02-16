@@ -167,20 +167,30 @@
                     </div>
                 </div>
             </form>
-
+            
+            {% for progress_post in progress_posts %}
             <div class="progress_post">
-                <div class="update_day">更新日 2026/02/01</div>
-                <!-- 進捗　-->
-                 <div class="content">へのへのもへじ</div>
-                <div class="action_button2">
-                    <button class="subara_button">素晴らしい！＋99</button >
-                    <button class="oi_button">おい！＋99</button >
+                <div class="username">
+                     <!-- 進捗　-->
+                    <div>{{ progress_post.user_name }}</div>
+                    <div>更新日 {{ progress_post.progress_created_at }}</div>
                 </div>
+                    <!--
+                        <div class="content">へのへのもへじ</div>
+                    -->
+                        <div class="post_coment">{{ progress_post.progress_message }}</div>
+                        <div class="action_button2">
+                            <button class="subara_button">素晴らしい！＋99</button >
+                            <button class="oi_button">根性見せろ！＋99</button >
+                        </div>
             </div>
+            {% endfor %}
 
 
         </div>
         </form>
+
+        
     <footer>
       2026©ハッカソン冬の陣 チームH 背水の陣制作委員会️
     </footer>

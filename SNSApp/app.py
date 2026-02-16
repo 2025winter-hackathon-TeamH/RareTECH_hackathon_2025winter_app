@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from flask_wtf.csrf import CSRFProtect
-from datetime import timedelta, datetime
+from datetime import timedelta
 import hashlib
 import uuid
 import re
@@ -25,6 +25,7 @@ csrf = CSRFProtect(app)
 # def debug_goals():
 #     rows = Goal_post.get_all()
 #     return render_template('debug.html', rows=rows)
+
 @app.route('/debug')
 def debug_goals():
     rows = Goal_post.find_by_user_id(1)
@@ -89,6 +90,7 @@ def signup_process():
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '')
     password_confirmation = request.form.get('password_confirmation', '')
+
     # 空チェック
     if not name or not email or not password or not password_confirmation:
         flash("&#9888;&#65039;空のフォームがあります", 'error')
@@ -113,6 +115,7 @@ def signup_process():
     hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
     user_id = User.create(name, email, hashed_password)
+
     session['user_id'] = user_id
 
     return redirect(url_for('goals_post_view'))
@@ -121,7 +124,6 @@ def signup_process():
 @app.route('/goal-post', methods=['GET'])
 def goals_post_view():
     user_id = session.get('user_id')
-
     if user_id is None:
         return redirect(url_for('login_view'))
     else:
@@ -129,11 +131,7 @@ def goals_post_view():
         for goal in goals: 
             goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
-            goal_id = goal['id']
-            goal['total_ganba'] = Goal_post.sum_ganba(goal_id)
-            goal['total_dousita'] = Goal_post.sum_dousita(goal_id)
-            
-        return render_template('post.html', goals=goals, user_id = user_id,)
+        return render_template('post.html', goals=goals, user_id = user_id)
         
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
@@ -141,29 +139,14 @@ def create_goal_post():
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
-    
     goal_message = request.form.get('goal_message', '').strip()
-    goal_deadline = request.form.get('goal_deadline', '').strip()
-    
     if goal_message == '':
         flash('目標内容が空欄です','error')
-        return redirect(url_for('goals_post_view'))
-    
-    goal_deadline = request.form.get('goal_deadline', '').strip()
-    if goal_deadline == '':
-        flash('達成期日が未入力です', 'error')
-        return redirect(url_for('goals_post_view'))
-    
-    formatted_deadline = datetime.strptime(goal_deadline, '%Y-%m-%d')
-    #HTMLからrequestで受け取った達成期限が文字列型なのでdatetime,nowのdatetime型に変換
-    if datetime.now() > formatted_deadline:
-        flash('達成期日は現在時刻より後の時間を設定してください', 'error')
-        return redirect(url_for('goals_post_view'))
-    
+        return redirect(url_for('posts_view'))
+    goal_deadline = request.form.get('goal_deadline')
     Goal_post.create(user_id, goal_message, goal_deadline)
-    flash('目標の投稿が完了しました。', 'success')
+    flash('目標の投稿が完了しました。','success')
     return redirect(url_for('goals_post_view'))
-
 
 #頑張れ！ボタン押下処理
 @app.route('/goal-post/<int:goal_id>/reaction-ganba',methods=['POST'])
@@ -178,8 +161,7 @@ def reaction_ganba(goal_id):
         abort(404)
     
     if goal_post['user_id'] == user_id:
-        flash('自分の投稿にはリアクション出来ません', 'error')
-        return redirect(url_for('goals_post_view'))
+        abort(403)
 
     Reaction.create_reaction_ganba(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
@@ -190,10 +172,6 @@ def reaction_dousita(goal_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
-    
-    if goal_post['user_id'] == user_id:
-        flash('自分の投稿にはリアクション出来ません', 'error')
-        return redirect(url_for('goals_post_view'))
     
     goal_post = Goal_post.find_by_id(goal_id)
     
@@ -375,12 +353,12 @@ def post_progress_view(goal_id):
     print("goal_id =", goal_id) #----debug_print(OK )
 
     user_id = session.get('user_id')
-    if user_id is None:
-        return redirect(url_for('login_view'))
+    #if user_id is None:
+    #    return redirect(url_for('login_view'))
     
     #debug用user_id(決め打ち)
-    #if user_id is None:
-    #    user_id = 1
+    if user_id is None:
+        user_id = 1
     
     #目標表示(1種)
     post = Goal_post.find_by_id(goal_id)
@@ -549,21 +527,19 @@ def update_progress_post_reaction(goal_id, progress_id):
 @app.route('/my-page', methods=['GET'])
 def my_page_view():
     user_id = session.get('user_id')
+    total_achievement = Goal_post.sum_achievement
+    total_give_up = Goal_post.sum_give_up
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
-    if not myposts:
+    if myposts is None:
         flash('投稿している目標はありません','notpost')
         return render_template('my-page.html')
     else:
         for mypost in myposts:
-            mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
-            mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
+            mypost['created_at'] = mypost['created_at'].strftime('%Y-%m-%d %H:%M')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-            user_id = mypost['user_id']
-            mypost['total_achievement'] = Goal_post.sum_achievement(user_id)
-            mypost['total_give_up'] = Goal_post.sum_give_up(user_id)
-        return render_template('my-page.html', myposts=myposts, user_id=user_id)
+        return render_template('my-page.html', myposts=myposts, user_id=user_id, tatal_achievement=total_achievement, total_give_up=total_give_up)
 
 # 頑張れ！ボタン押下処理_マイページ用
 @app.route('/my-page/reaction-ganba',methods=['POST'])
@@ -602,10 +578,6 @@ def create_comment(post_id):
 @app.errorhandler(400)
 def bad_request(error):
     return render_template('400.html'), 400
-
-@app.errorhandler(403)
-def bad_request(error):
-    return render_template('403.html'), 403
 
 @app.errorhandler(404)
 def page_not_found(error):
