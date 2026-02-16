@@ -348,7 +348,34 @@ class Reaction:
         finally:
             db_pool.release(conn)
 
-    # 各Posts_reaction(goal_post+progress_post)集計用 @sai--開発中
+    # progress_post_reaction @sai
+    @classmethod
+    def count_progress_reactions(cls, progress_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT reaction_type_id, COUNT(*) as count FROM reactions WHERE progress_id=%s GROUP BY reaction_type_id ORDER BY reaction_type_id;"
+                cur.execute(sql, (progress_id,))
+                rows = cur.fetchall()
+            
+            #reaction値の初期化(reaction=0件対策)
+            reaction_counts = {3:0, 4:0}
+            
+            #DBから取得したreaction_type_id(3 or 4)＋カウント数をreaction_countsへ格納
+            #例：{"reaction_type_id": 1, "count": 5}
+            for row in rows:
+                reaction_counts[row["reaction_type_id"]] = row["count"]
+
+            return reaction_counts
+
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+    # 各Posts_reaction(goal_post+progress_post)集計用 @sai
     @classmethod
     def count_posts_reactions(cls, goal_id):
         conn = db_pool.get_conn()
@@ -370,6 +397,7 @@ class Reaction:
             sum_ouen    =  reaction_counts[1] + reaction_counts[3]
             sum_gekirei =  reaction_counts[2] + reaction_counts[4]
             return {
+
                     "sum_ouen"    : sum_ouen,
                     "sum_gekirei" : sum_gekirei
             }

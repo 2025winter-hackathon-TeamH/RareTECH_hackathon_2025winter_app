@@ -15,7 +15,7 @@ SESSION_DAYS = 30
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
-app.config['WTF_CSRF_ENABLED'] = False #--debug用。本番ではOFF(Flask-WTFのCSRF機能そのものをOFFのため)
+#app.config['WTF_CSRF_ENABLED'] = False #--debug用。本番ではOFF(Flask-WTFのCSRF機能そのものをOFFのため)
 app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
@@ -347,18 +347,18 @@ def post_detail_view(post_id):
 
 # 進捗ページの表示  --@sai
 #@app.route('/post/<int:post_id>', methods=['GET'])
-@app.route('/goal-post/<int:goal_id>', methods=['GET'])
+#@app.route('/goal-post/<int:goal_id>', methods=['GET'])
 @csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def post_progress_view(goal_id):
-    print("goal_id =", goal_id) #----debug_print(OK )
+    #print("goal_id =", goal_id) #----debug_print(OK )
 
     user_id = session.get('user_id')
-    #if user_id is None:
-    #    return redirect(url_for('login_view'))
+    if user_id is None:
+        return redirect(url_for('login_view'))
     
     #debug用user_id(決め打ち)
-    if user_id is None:
-        user_id = 1
+    #if user_id is None:
+    #    user_id = 1
     
     #目標表示(1種)
     post = Goal_post.find_by_id(goal_id)
@@ -384,13 +384,24 @@ def post_progress_view(goal_id):
 
     #forでdict（1レコード分）in list を回す
     for progress_post in progress_posts:
+        #print("----- progress_post -----")
+        #print(progress_post)
+
         #Pythonの辞書['辞書のキー（DBカラム名と同名）']=Pythonの辞書['辞書のキー（DBカラム名と同名）'].Pythonの日時変換
         progress_post['progress_created_at'] = progress_post['progress_created_at'].strftime('%Y-%m-%d %H:%M')
         progress_post['user_name'] = User.get_name_by_id(progress_post['user_id'])
-        #print("progress_post =", progress_post) #----debug_print(OK )
-        #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
-        #print(progress_post['progress_created_at']) #----debug_print(OK )
-        #print(progress_post['user_name']) #----debug_print(OK )
+            #print("progress_post =", progress_post) #----debug_print(OK )
+            #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
+            #print(progress_post['progress_created_at']) #----debug_print(OK )
+            #print(progress_post['user_name']) #----debug_print(OK )
+
+        #progress_reaction_count取得
+        progress_reaction_counts = Reaction.count_progress_reactions(progress_post['id'])
+        progress_post['subarasi_count'] = progress_reaction_counts[3]
+        progress_post['konzyo_misero_count'] = progress_reaction_counts[4]
+        #print("progress_post['subarasi_count']=", progress_post['subarasi_count']) #----debug_print(OK )
+        #print("progress_post['konzyo_misero_count']=", progress_post['konzyo_misero_count']) #----debug_print(OK )
+
     #print("reaction_summary =", reaction_summary) #----debug_print(OK )
     #print("type =", type(reaction_summary)) #----debug_print(OK )
     return render_template('post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id,reaction_summary=reaction_summary)
@@ -480,7 +491,6 @@ def update_progress_post_reaction(goal_id, progress_id):
         return redirect(url_for('login_view'))
         #print("debug: forcing user_id=2") #----debug_print
         #user_id = 2 #----debug_print
-
 
     #goal_idが無ければ404エラー表示
     post = Goal_post.find_by_id(goal_id)
