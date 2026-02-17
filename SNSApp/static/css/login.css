@@ -24,6 +24,7 @@
   height: 600px;  /*微調整*/
   margin: 0 auto;
   margin-top: 40px;
+ 
  }
 
  .login-desc {
@@ -88,6 +89,7 @@ header img {
   margin: 0 auto;
   margin-bottom: 25px;
   box-sizing: border-box;
+  padding: 10px;
 }
 
 
@@ -144,29 +146,35 @@ footer {
   margin: 0 auto;
 }
 
+.flash-custom {
+  text-align: center;
+}
+
 .flash {
   padding: 12px 16px;
   border-radius: 6px;
   margin-bottom: 16px;
   font-size: 14px;
   line-height: 1.4;
-  border-left: 6px solid #ccc;
+  display: inline-block;
   background: #f9f9f9;
   color: #333;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   margin: 16px 0;
   padding: 0;
+  text-align: center;
+  
 }
 
 .flash-success {
   background: #e9f7ec;
-  border-left-color: #27ae60;
+  
   color: #1e824c;
 }
 
 .flash-error {
   background: #fdecea;
-  border-left-color: #e74c3c;
+  
   color: #c0392b;
 }
 
