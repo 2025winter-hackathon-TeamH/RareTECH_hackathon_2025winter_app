@@ -346,9 +346,8 @@ def post_detail_view(post_id):
 """
 
 # 進捗ページの表示  --@sai
-#@app.route('/post/<int:post_id>', methods=['GET'])
-#@app.route('/goal-post/<int:goal_id>', methods=['GET'])
-@csrf.exempt #--debug用(このルートだけCSRFを無効化)
+@app.route('/goal-post/<int:goal_id>', methods=['GET'])
+#@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def post_progress_view(goal_id):
     #print("goal_id =", goal_id) #----debug_print(OK )
 
@@ -448,8 +447,7 @@ def update_goal_post_result(goal_id):
     return redirect(url_for('post_progress_view', goal_id=goal_id))
 
 
-# 進捗投稿処理  --@sai_debugほぼ完了
-#@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
+# 進捗投稿処理  --@sai_debug済
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
 #@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def create_progress_post(goal_id):
@@ -511,9 +509,12 @@ def update_progress_post_reaction(goal_id, progress_id):
     if progress_post['user_id'] == user_id:
         abort(403)
     
+    print("FORM DATA:", request.form)
+    print("reaction_type_id:", request.form.get('reaction_type_id'))
+
     #フロント側で押下されたreaction_type_idのprogress値( 3 or 4)を変数(reaction_type_id)に格納
     #reaction_type_id = 3 …素晴らしい！
-    #reaction_type_id = 4 …おい！
+    #reaction_type_id = 4 …根性見せろ！
     reaction_type_id = request.form.get('reaction_type_id')
     #print("reaction_type_id:", reaction_type_id) #----debug_print(OK)
 
