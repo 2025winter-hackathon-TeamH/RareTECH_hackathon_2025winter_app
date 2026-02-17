@@ -67,8 +67,30 @@ a {
     background-color: #346ba1;
 }
 
-.menu a {
-    color: #FFFFFF;
+.achievement {
+    display: grid;
+    grid-template-columns: 220px 220px;
+    justify-content: start;
+    gap: 20px;
+    width: 460px;
+    height: 24px;
+    margin-bottom: 10px;
+}
+
+.achievement_cnt > img {
+    height: 24px;
+    margin: 0;
+}
+
+.achievement_cnt {
+    display: flex;
+    margin: 0;
+    width: 220px;
+    height: 24px;
+}
+
+.achievement_cnt > p {
+    margin: 0;
 }
 
 .post_frame {
