@@ -28,7 +28,7 @@ csrf = CSRFProtect(app)
 
 @app.route('/debug')
 def debug_goals():
-    rows = Goal_post.find_by_user_id(1)
+    rows = Goal_post.sum_achievement(1)
     return render_template('debug.html', rows=rows)
 
 # debug用あとで消す↑ @ポテ吉
@@ -346,9 +346,8 @@ def post_detail_view(post_id):
 """
 
 # 進捗ページの表示  --@sai
-#@app.route('/post/<int:post_id>', methods=['GET'])
-#@app.route('/goal-post/<int:goal_id>', methods=['GET'])
-@csrf.exempt #--debug用(このルートだけCSRFを無効化)
+@app.route('/goal-post/<int:goal_id>', methods=['GET'])
+#@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def post_progress_view(goal_id):
     #print("goal_id =", goal_id) #----debug_print(OK )
 
@@ -448,8 +447,7 @@ def update_goal_post_result(goal_id):
     return redirect(url_for('post_progress_view', goal_id=goal_id))
 
 
-# 進捗投稿処理  --@sai_debugほぼ完了
-#@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
+# 進捗投稿処理  --@sai_debug済
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
 #@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def create_progress_post(goal_id):
@@ -511,9 +509,12 @@ def update_progress_post_reaction(goal_id, progress_id):
     if progress_post['user_id'] == user_id:
         abort(403)
     
+    print("FORM DATA:", request.form)
+    print("reaction_type_id:", request.form.get('reaction_type_id'))
+
     #フロント側で押下されたreaction_type_idのprogress値( 3 or 4)を変数(reaction_type_id)に格納
     #reaction_type_id = 3 …素晴らしい！
-    #reaction_type_id = 4 …おい！
+    #reaction_type_id = 4 …根性見せろ！
     reaction_type_id = request.form.get('reaction_type_id')
     #print("reaction_type_id:", reaction_type_id) #----debug_print(OK)
 
@@ -550,7 +551,7 @@ def my_page_view():
             mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-        return render_template('my-page.html', myposts=myposts, user_id=user_id, tatal_achievement=total_achievement, total_give_up=total_give_up)
+        return render_template('my-page.html', myposts=myposts, user_id=user_id, total_achievement=total_achievement, total_give_up=total_give_up)
 
 # 頑張れ！ボタン押下処理_マイページ用
 # @app.route('/my-page/reaction-ganba',methods=['POST'])

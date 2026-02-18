@@ -89,6 +89,7 @@
                                                         goal_id=post.id,
                                                         progress_id=progress_post.id) }}" 
                                   method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="reaction_type_id" value="3">
                                 <button type="submit" class="subara_button">素晴らしい！：{{ progress_post.subarasi_count }}</button >
                             </form>
@@ -98,6 +99,7 @@
                                                         goal_id=post.id,
                                                         progress_id=progress_post.id) }}" 
                                   method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="reaction_type_id" value="4">
                                 <button type="submit" class="oi_button">根性見せろ！：{{ progress_post.konzyo_misero_count }}</button >
                             </form>
@@ -106,6 +108,7 @@
             {% endfor %}
 
 
+        
         </div>
         </form>
 
