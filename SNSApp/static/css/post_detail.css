@@ -274,6 +274,7 @@ footer {
 
 .post-card-tassei {
   width: 440px;
+  height: auto;
   border: 1px solid #00008b;
   border-radius: 16px;
   margin: 5px 10px;

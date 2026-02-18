@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from flask_wtf.csrf import CSRFProtect
-from datetime import timedelta, datetime
+from datetime import timedelta
 import hashlib
 import uuid
 import re
@@ -25,9 +25,10 @@ csrf = CSRFProtect(app)
 # def debug_goals():
 #     rows = Goal_post.get_all()
 #     return render_template('debug.html', rows=rows)
+
 @app.route('/debug')
 def debug_goals():
-    rows = Goal_post.find_by_user_id(1)
+    rows = Goal_post.sum_achievement(1)
     return render_template('debug.html', rows=rows)
 
 # debug用あとで消す↑ @ポテ吉
@@ -89,6 +90,7 @@ def signup_process():
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '')
     password_confirmation = request.form.get('password_confirmation', '')
+
     # 空チェック
     if not name or not email or not password or not password_confirmation:
         flash("&#9888;&#65039;空のフォームがあります", 'error')
@@ -113,6 +115,7 @@ def signup_process():
     hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
     user_id = User.create(name, email, hashed_password)
+
     session['user_id'] = user_id
 
     return redirect(url_for('goals_post_view'))
@@ -121,7 +124,6 @@ def signup_process():
 @app.route('/goal-post', methods=['GET'])
 def goals_post_view():
     user_id = session.get('user_id')
-
     if user_id is None:
         return redirect(url_for('login_view'))
     else:
@@ -130,11 +132,7 @@ def goals_post_view():
             goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y/%m/%d %H:%M:%S')
             goal['goal_deadline'] = goal['goal_deadline'].strftime('%Y/%m/%d')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
-            goal_id = goal['id']
-            goal['total_ganba'] = Goal_post.sum_ganba(goal_id)
-            goal['total_dousita'] = Goal_post.sum_dousita(goal_id)
-            
-        return render_template('post.html', goals=goals, user_id = user_id,)
+        return render_template('post.html', goals=goals, user_id = user_id)
         
 #目標投稿処理
 @app.route('/goal-posts', methods=['POST'])
@@ -142,28 +140,15 @@ def create_goal_post():
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
-    
     goal_message = request.form.get('goal_message', '').strip()
     
     if goal_message == '':
         flash('目標内容が空欄です','error')
-        return redirect(url_for('goals_post_view'))
-    
-    goal_deadline = request.form.get('goal_deadline', '').strip()
-    if goal_deadline == '':
-        flash('達成期日が未入力です', 'error')
-        return redirect(url_for('goals_post_view'))
-    
-    formatted_deadline = datetime.strptime(goal_deadline, '%Y-%m-%d')
-    #HTMLからrequestで受け取った達成期限が文字列型なのでdatetime,nowのdatetime型に変換
-    if datetime.now() > formatted_deadline:
-        flash('達成期日は現在時刻より後の時間を設定してください', 'error')
-        return redirect(url_for('goals_post_view'))
-    
+        return redirect(url_for('posts_view'))
+    goal_deadline = request.form.get('goal_deadline')
     Goal_post.create(user_id, goal_message, goal_deadline)
-    flash('目標の投稿が完了しました。', 'success')
+    flash('目標の投稿が完了しました。','success')
     return redirect(url_for('goals_post_view'))
-
 
 #頑張れ！ボタン押下処理
 @app.route('/goal-post/<int:goal_id>/reaction-ganba',methods=['POST'])
@@ -178,8 +163,7 @@ def reaction_ganba(goal_id):
         abort(404)
     
     if goal_post['user_id'] == user_id:
-        flash('自分の投稿にはリアクション出来ません', 'error')
-        return redirect(url_for('goals_post_view'))
+        abort(403)
 
     Reaction.create_reaction_ganba(user_id, goal_id)
     return redirect(url_for('goals_post_view'))
@@ -190,10 +174,6 @@ def reaction_dousita(goal_id):
     user_id = session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
-    
-    if goal_post['user_id'] == user_id:
-        flash('自分の投稿にはリアクション出来ません', 'error')
-        return redirect(url_for('goals_post_view'))
     
     goal_post = Goal_post.find_by_id(goal_id)
     
@@ -368,10 +348,10 @@ def post_detail_view(post_id):
 """
 
 # 進捗ページの表示  --@sai
-#@app.route('/post/<int:post_id>', methods=['GET'])
 @app.route('/goal-post/<int:goal_id>', methods=['GET'])
+#@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def post_progress_view(goal_id):
-    #print(goal_id) #----debug_print(OK )
+    #print("goal_id =", goal_id) #----debug_print(OK )
 
     user_id = session.get('user_id')
     if user_id is None:
@@ -405,13 +385,24 @@ def post_progress_view(goal_id):
 
     #forでdict（1レコード分）in list を回す
     for progress_post in progress_posts:
+        #print("----- progress_post -----")
+        #print(progress_post)
+
         #Pythonの辞書['辞書のキー（DBカラム名と同名）']=Pythonの辞書['辞書のキー（DBカラム名と同名）'].Pythonの日時変換
         progress_post['progress_created_at'] = progress_post['progress_created_at'].strftime('%Y-%m-%d %H:%M')
         progress_post['user_name'] = User.get_name_by_id(progress_post['user_id'])
-        #print("progress_post =", progress_post) #----debug_print(OK )
-        #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
-        #print(progress_post['progress_created_at']) #----debug_print(OK )
-        #print(progress_post['user_name']) #----debug_print(OK )
+            #print("progress_post =", progress_post) #----debug_print(OK )
+            #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
+            #print(progress_post['progress_created_at']) #----debug_print(OK )
+            #print(progress_post['user_name']) #----debug_print(OK )
+
+        #progress_reaction_count取得
+        progress_reaction_counts = Reaction.count_progress_reactions(progress_post['id'])
+        progress_post['subarasi_count'] = progress_reaction_counts[3]
+        progress_post['konzyo_misero_count'] = progress_reaction_counts[4]
+        #print("progress_post['subarasi_count']=", progress_post['subarasi_count']) #----debug_print(OK )
+        #print("progress_post['konzyo_misero_count']=", progress_post['konzyo_misero_count']) #----debug_print(OK )
+
     #print("reaction_summary =", reaction_summary) #----debug_print(OK )
     #print("type =", type(reaction_summary)) #----debug_print(OK )
     return render_template('post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id,reaction_summary=reaction_summary)
@@ -458,8 +449,7 @@ def update_goal_post_result(goal_id):
     return redirect(url_for('post_progress_view', goal_id=goal_id))
 
 
-# 進捗投稿処理  --@sai_debugほぼ完了
-#@app.route('/posts/<int:post_id>/progress_posts', methods=['POST'])
+# 進捗投稿処理  --@sai_debug済
 @app.route('/goal-post/<int:goal_id>/progress-post', methods=['POST'])
 #@csrf.exempt #--debug用(このルートだけCSRFを無効化)
 def create_progress_post(goal_id):
@@ -502,7 +492,6 @@ def update_progress_post_reaction(goal_id, progress_id):
         #print("debug: forcing user_id=2") #----debug_print
         #user_id = 2 #----debug_print
 
-
     #goal_idが無ければ404エラー表示
     post = Goal_post.find_by_id(goal_id)
     #print(post) #----debug_print(OK)
@@ -522,9 +511,12 @@ def update_progress_post_reaction(goal_id, progress_id):
     if progress_post['user_id'] == user_id:
         abort(403)
     
+    print("FORM DATA:", request.form)
+    print("reaction_type_id:", request.form.get('reaction_type_id'))
+
     #フロント側で押下されたreaction_type_idのprogress値( 3 or 4)を変数(reaction_type_id)に格納
     #reaction_type_id = 3 …素晴らしい！
-    #reaction_type_id = 4 …おい！
+    #reaction_type_id = 4 …根性見せろ！
     reaction_type_id = request.form.get('reaction_type_id')
     #print("reaction_type_id:", reaction_type_id) #----debug_print(OK)
 
@@ -548,10 +540,12 @@ def update_progress_post_reaction(goal_id, progress_id):
 @app.route('/my-page', methods=['GET'])
 def my_page_view():
     user_id = session.get('user_id')
+    total_achievement = Goal_post.sum_achievement
+    total_give_up = Goal_post.sum_give_up
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
-    if not myposts:
+    if myposts is None:
         flash('投稿している目標はありません','notpost')
         return render_template('my-page.html')
     else:
@@ -559,28 +553,25 @@ def my_page_view():
             mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
             mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-            user_id = mypost['user_id']
-            mypost['total_achievement'] = Goal_post.sum_achievement(user_id)
-            mypost['total_give_up'] = Goal_post.sum_give_up(user_id)
-        return render_template('my-page.html', myposts=myposts, user_id=user_id)
+        return render_template('my-page.html', myposts=myposts, user_id=user_id, total_achievement=total_achievement, total_give_up=total_give_up)
 
 # 頑張れ！ボタン押下処理_マイページ用
-@app.route('/my-page/reaction-ganba',methods=['POST'])
-def myr_ganba(goal_id):
-    user_id = session.get('user_id')
-    if user_id is None:
-        return redirect(url_for('login_view'))
-    Reaction.create_reaction_ganba(user_id, goal_id)
-    return redirect(url_for('my_page_view'))
+# @app.route('/my-page/reaction-ganba',methods=['POST'])
+# def myr_ganba(goal_id):
+#     user_id = session.get('user_id')
+#     if user_id is None:
+#         return redirect(url_for('login_view'))
+#     Reaction.create_reaction_ganba(user_id, goal_id)
+#     return redirect(url_for('my_page_view'))
 
 # どうしたボタン押下処理_マイページ用
-@app.route('/my-page/reaction-dousita',methods=['POST'])
-def myr_dousita(goal_id):
-    user_id = session.get('user_id')
-    if user_id is None:
-        return redirect(url_for('login_view'))
-    Reaction.create_reaction_dousita(user_id, goal_id)
-    return redirect(url_for('my_page_view'))
+# @app.route('/my-page/reaction-dousita',methods=['POST'])
+# def myr_dousita(goal_id):
+#     user_id = session.get('user_id')
+#     if user_id is None:
+#         return redirect(url_for('login_view'))
+#     Reaction.create_reaction_dousita(user_id, goal_id)
+#     return redirect(url_for('my_page_view'))
 
 """
 # コメント処理
@@ -601,10 +592,6 @@ def create_comment(post_id):
 @app.errorhandler(400)
 def bad_request(error):
     return render_template('400.html'), 400
-
-@app.errorhandler(403)
-def bad_request(error):
-    return render_template('403.html'), 403
 
 @app.errorhandler(404)
 def page_not_found(error):

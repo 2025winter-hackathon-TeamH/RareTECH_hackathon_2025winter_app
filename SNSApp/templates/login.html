@@ -21,9 +21,11 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category,message in messages %}
+            <div class="flash-custom">
               <div class="flash flash-{{ category }}">
-                {{ message }}
+                {{ message|safe }}
               </div>
+            </div>
             {% endfor %}
           {% endif %}
         {% endwith %}

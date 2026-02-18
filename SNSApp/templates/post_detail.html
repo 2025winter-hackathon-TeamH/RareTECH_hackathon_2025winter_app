@@ -1,4 +1,4 @@
-{#
+<!--
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -73,7 +73,7 @@
 
             <div class="progress_post">
                 <div class="update_day">更新日 2026/02/01</div>
-                <!-- 進捗　-->
+                <!-- 進捗
                  <div class="content">へのへのもへじ</div>
                 <div class="action_button2">
                     <button class="subara_button">素晴らしい！＋99</button >
@@ -89,7 +89,7 @@
     </footer>
     </body>
 </html>
-#}
+-->
 
 
 
@@ -116,11 +116,11 @@
             <div class="tagu"><a>投稿画面　>　進捗ページ</a></div>
             <div class="menu">
                 <div class="menu1">
-                    <div class="my"><a href="my-page.html">自分の目標一覧</a></div>
-                    <div class="top"><a href="post.html">トップに戻る</a></div>
+                    <div class="my"><a href="my-page">自分の目標一覧</a></div>
+                    <div class="top"><a href="post">トップに戻る</a></div>
                 </div>
                     <div class="menu2">
-                        <div class="out"><a href="login.html">ログアウト</a></div>
+                        <div class="out"><a href="login">ログアウト</a></div>
                     </div>
             </div>
 
@@ -129,7 +129,7 @@
                     <img src="../static/ouen.png">
                       <div>{{ goal_id }}</div>
                 </div>
-                <div =class="action2">
+                <div class="action2">
                     <img src="../static/gekirei.png">
                         <div>{{progress_id}}</div>
                 </div>
@@ -140,21 +140,21 @@
                     <div>{{ post.user_name }}</div>
                     <div>更新日 {{ post.goal_created_at }}</div>
                 </div>
-                    <div class="post_coment">{{ post.progress_created_at }}</div>
+                    <div class="post_coment">{{ post.goal_message }}</div>
                     <div class="deatline">期日 2026/12/31</div>
 
-                <div class="buttons">
-                <div class="action_button1">
-                    <button class="ouen_button">頑張れ！：2</button>
-                    <button class="gekirei_button">どうした？：0</button>
+                <div class="buttons">                    
+                    <div class="action_button1">
+                        <button class="ouen_button">頑張れ！：2</button>
+                        <button class="gekirei_button">どうした？：0</button> 
+                    </div>
+                    <div class="action_achievement">
+                        {% if post.user_id == user_id %}
+                        <button class="tassei">達成！</button>
+                        <button class="dannnen">断念...</button>
+                        {% endif %}
+                    </div>                    
                 </div>
-
-                <div class="result_button">
-                    <button class="tassei">達成！</button>
-                    <button class="dannnen">断念...</button>
-                </div>
-                </div>
-
             </div>
 
             <form method="post">
@@ -167,22 +167,50 @@
                     </div>
                 </div>
             </form>
-
+            
+            {% for progress_post in progress_posts %}
             <div class="progress_post">
-                <div class="update_day">更新日 2026/02/01</div>
-                <!-- 進捗　-->
-                 <div class="content">へのへのもへじ</div>
-                <div class="action_button2">
-                    <button class="subara_button">素晴らしい！＋99</button >
-                    <button class="oi_button">おい！＋99</button >
+                <div class="username">
+                     <!-- 進捗　-->
+                    <div>{{ progress_post.user_name }}</div>
+                    <div>更新日 {{ progress_post.progress_created_at }}</div>
                 </div>
+                    <!--
+                        <div class="content">へのへのもへじ</div>
+                    -->
+                        <div class="post_coment">{{ progress_post.progress_message }}</div>
+                        <div class="action_button2">
+                            <!-- 素晴らしい -->
+                            <form action = "{{ url_for('update_progress_post_reaction',
+                                                        goal_id=post.id,
+                                                        progress_id=progress_post.id) }}" 
+                                  method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="reaction_type_id" value="3">
+                                <button type="submit" class="subara_button">素晴らしい！：{{ progress_post.subarasi_count }}</button >
+                            </form>
+
+                            <!-- 根性見せろ -->
+                            <form action = "{{ url_for('update_progress_post_reaction',
+                                                        goal_id=post.id,
+                                                        progress_id=progress_post.id) }}" 
+                                  method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="reaction_type_id" value="4">
+                                <button type="submit" class="oi_button">根性見せろ！：{{ progress_post.konzyo_misero_count }}</button >
+                            </form>
+                        </div>
             </div>
+            {% endfor %}
 
 
+        
         </div>
         </form>
+
+        
     <footer>
       2026©ハッカソン冬の陣 チームH 背水の陣制作委員会️
     </footer>
     </body>
-</html>
+</html> 
