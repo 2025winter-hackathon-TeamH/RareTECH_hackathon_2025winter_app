@@ -538,17 +538,19 @@ def update_progress_post_reaction(goal_id, progress_id):
 @app.route('/my-page', methods=['GET'])
 def my_page_view():
     user_id = session.get('user_id')
-    total_achievement = Goal_post.sum_achievement
-    total_give_up = Goal_post.sum_give_up
     if user_id is None:
         return redirect(url_for('login_view'))
     myposts = Goal_post.find_by_user_id(user_id)
+
+    total_achievement = Goal_post.sum_achievement(user_id)
+    total_give_up = Goal_post.sum_give_up(user_id)
+
     if myposts is None:
         flash('投稿している目標はありません','notpost')
         return render_template('my-page.html')
     else:
         for mypost in myposts:
-            mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y-%m-%d %H:%M')
+            mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y/%m/%d %H:%M')
             mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
         return render_template('my-page.html', myposts=myposts, user_id=user_id, total_achievement=total_achievement, total_give_up=total_give_up)
