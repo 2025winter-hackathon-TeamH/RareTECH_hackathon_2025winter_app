@@ -127,7 +127,8 @@ def goals_post_view():
     else:
         goals = Goal_post.get_all()
         for goal in goals: 
-            goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
+            goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y/%m/%d %H:%M:%S')
+            goal['goal_deadline'] = goal['goal_deadline'].strftime('%Y/%m/%d')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
             goal_id = goal['id']
             goal['total_ganba'] = Goal_post.sum_ganba(goal_id)
@@ -143,7 +144,6 @@ def create_goal_post():
         return redirect(url_for('login_view'))
     
     goal_message = request.form.get('goal_message', '').strip()
-    goal_deadline = request.form.get('goal_deadline', '').strip()
     
     if goal_message == '':
         flash('目標内容が空欄です','error')
