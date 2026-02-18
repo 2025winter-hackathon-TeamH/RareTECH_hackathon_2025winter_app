@@ -68,10 +68,9 @@ a {
 }
 
 .achievement {
-    display: grid;
-    grid-template-columns: 220px 220px;
-    justify-content: start;
-    gap: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
     width: 460px;
     height: 24px;
     margin-bottom: 10px;
@@ -84,14 +83,10 @@ a {
 
 .achievement_cnt {
     display: flex;
-    margin: 0;
-    width: 220px;
     height: 24px;
+    font-size: 18px;
 }
 
-.achievement_cnt > p {
-    margin: 0;
-}
 
 .post_frame {
     display: flex;
@@ -237,3 +232,8 @@ footer {
     margin-bottom: 10px;
 }
 
+.flash-error {
+  background: #fdecea;
+  border-left-color: #e74c3c;
+  color: #c0392b;
+}
