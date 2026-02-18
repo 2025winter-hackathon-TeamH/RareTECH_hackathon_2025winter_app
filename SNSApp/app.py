@@ -129,7 +129,8 @@ def goals_post_view():
     else:
         goals = Goal_post.get_all()
         for goal in goals: 
-            goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y-%m-%d %H:%M')
+            goal['goal_created_at'] = goal['goal_created_at'].strftime('%Y/%m/%d %H:%M:%S')
+            goal['goal_deadline'] = goal['goal_deadline'].strftime('%Y/%m/%d')
             goal['user_name'] = User.get_name_by_id(goal['user_id'])
         return render_template('post.html', goals=goals, user_id = user_id)
         
@@ -140,6 +141,7 @@ def create_goal_post():
     if user_id is None:
         return redirect(url_for('login_view'))
     goal_message = request.form.get('goal_message', '').strip()
+    
     if goal_message == '':
         flash('目標内容が空欄です','error')
         return redirect(url_for('posts_view'))
