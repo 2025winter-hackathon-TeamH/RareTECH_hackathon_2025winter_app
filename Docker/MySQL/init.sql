@@ -104,7 +104,7 @@ VALUES
   ('山田太郎', 'taro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
   ('鈴木二郎', 'jiro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
   ('田中一郎', 'ichiro@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
-  ('佐藤花子', 'hanaco@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244');
+  ('佐藤花子', 'hanaco@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244'),
   ('team_H', 'team_h@example.com', '937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244');
 
 INSERT INTO goals (goal_message, goal_created_at, goal_deadline, achievement_status, user_id)
@@ -113,7 +113,7 @@ VALUES
   ('１２月までに３キロやせる', '2025-10-10 16:11:08', '2025-12-31 00:00:00', NULL, 3),
   ('７月までに１つ資格を取る', '2026-01-01 07:34:29', '2026-06-30 00:00:00', NULL, 1),
   ('今月は早く寝る', '2026-01-01 23:59:00', '2026-01-31 00:00:00', 'give_up', 2),
-  ('いいサンプルデータが思いつきませんでした', '2026-01-01-00:00:00', '2026-01-31 00:00:00', 'achievement', 4);
+  ('いいサンプルデータが思いつきませんでした', '2026-01-01-00:00:00', '2026-01-31 00:00:00', 'achievement', 4),
   ('ハッカソン入門コース完走', '2026-01-06-00:00:00', '2026-02-28 00:00:00', NULL, 5);
 
 INSERT INTO progresses (progress_message, progress_created_at, goal_id, user_id)
@@ -122,8 +122,8 @@ VALUES
   ('今から出発', '2025-11-15 08:11:47', 1, 1),
   ('１キロ瘦せた', '2025-10-31 19:20:44', 2, 3),
   ('なぜかプラス５キロ…', '2025-10-31 19:20:45', 2, 3),
-  ('さっそく資格試験に申し込んだ！', '2026-01-04 21:06:09', 3, 1);
-  ('フロントエンドのhtmlページ作成完了', '2026-02-13 01:00:00', 6, 5);
+  ('さっそく資格試験に申し込んだ！', '2026-01-04 21:06:09', 3, 1),
+  ('フロントエンドのhtmlページ作成完了', '2026-02-13 01:00:00', 6, 5),
   ('バックエンド機能作成完了', '2026-02-15 02:00:00', 6, 5);
 
 INSERT INTO reactions (user_id, goal_id, progress_id, reaction_type_id)
