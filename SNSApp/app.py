@@ -147,7 +147,7 @@ def create_goal_post():
     
     if goal_message == '':
         flash('目標内容が空欄です','error')
-        return redirect(url_for('posts_view'))
+        return redirect(url_for('goals_post_view'))
     
     goal_deadline = request.form.get('goal_deadline', '').strip()
     if goal_deadline == '':
