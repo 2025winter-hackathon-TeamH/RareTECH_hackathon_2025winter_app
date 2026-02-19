@@ -20,18 +20,6 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
 
-# debug用あとで消す↓ @ポテ吉
-# @app.route('/debug')
-# def debug_goals():
-#     rows = Goal_post.get_all()
-#     return render_template('debug.html', rows=rows)
-
-@app.route('/debug')
-def debug_goals():
-    rows = Goal_post.sum_achievement(1)
-    return render_template('debug.html', rows=rows)
-
-# debug用あとで消す↑ @ポテ吉
 
 # ルートページのリダイレクト
 @app.route('/', methods=['GET'])
@@ -56,15 +44,15 @@ def login_prossece():
     password = request.form.get('password')
 
     if email =='' or password =='':
-        flash('&#9888;&#65039;メールアドレス or パスワードが空です','error')
+        flash('メールアドレス or パスワードが空です','error')
     else:
         user = User.find_by_email(email)
         if user is None:
-            flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
+            flash('メールアドレス or パスワードが違います','error')
         else:
             hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
             if hashPassword != user['password']:
-                flash('&#9888;&#65039;メールアドレス or パスワードが違います','error')
+                flash('メールアドレス or パスワードが違います','error')
             else:
                 session['user_id'] = user["id"]
                 return redirect(url_for('goals_post_view'))
@@ -93,23 +81,23 @@ def signup_process():
 
     # 空チェック
     if not name or not email or not password or not password_confirmation:
-        flash("&#9888;&#65039;空のフォームがあります", 'error')
+        flash("空のフォームがあります", 'error')
         return redirect(url_for('signup_view'))
     
     # パスワード一致チェック
     if password != password_confirmation:
-        flash("&#9888;&#65039;パスワードが一致しません", "error")
+        flash("パスワードが一致しません", "error")
         return redirect(url_for('signup_view'))
     
     # メール形式チェック
     if re.match(EMAIL_PATTERN, email) is None:
-        flash("&#9888;&#65039;正しいメールアドレスの形式ではありません", 'error')
+        flash("正しいメールアドレスの形式ではありません", 'error')
         return redirect(url_for('signup_view'))
     
     # 既存ユーザーチェック
     registered_user = User.find_by_email(email)
     if registered_user is not None:
-        flash("&#9888;&#65039;既に登録済みのメールアドレスです", 'error')
+        flash("既に登録済みのメールアドレスです", 'error')
         return redirect(url_for('signup_view'))
     
     hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
@@ -572,27 +560,9 @@ def my_page_view():
             mypost['goal_created_at'] = mypost['goal_created_at'].strftime('%Y/%m/%d %H:%M')
             mypost['goal_deadline'] = mypost['goal_deadline'].strftime('%Y/%m/%d')
             mypost['user_name'] = User.get_name_by_id(mypost['user_id'])
-            mypost['total_achievement'] = Goal_post.sum_achievement
-            mypost['total_give_up'] = Goal_post.sum_give_up
         return render_template('my-page.html', myposts=myposts, user_id=user_id, total_achievement=total_achievement, total_give_up=total_give_up)
 
-# 頑張れ！ボタン押下処理_マイページ用
-# @app.route('/my-page/reaction-ganba',methods=['POST'])
-# def myr_ganba(goal_id):
-#     user_id = session.get('user_id')
-#     if user_id is None:
-#         return redirect(url_for('login_view'))
-#     Reaction.create_reaction_ganba(user_id, goal_id)
-#     return redirect(url_for('my_page_view'))
 
-# どうしたボタン押下処理_マイページ用
-# @app.route('/my-page/reaction-dousita',methods=['POST'])
-# def myr_dousita(goal_id):
-#     user_id = session.get('user_id')
-#     if user_id is None:
-#         return redirect(url_for('login_view'))
-#     Reaction.create_reaction_dousita(user_id, goal_id)
-#     return redirect(url_for('my_page_view'))
 
 """
 # コメント処理

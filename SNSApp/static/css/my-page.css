@@ -68,12 +68,12 @@ a {
 }
 
 .achievement {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    width: 460px;
+    display: grid;
     height: 24px;
-    margin-bottom: 10px;
+    grid-template-columns: 230px 230px;
+    justify-content: space-evenly;
+    text-align: center;
+    margin-bottom: 10px;    
 }
 
 .achievement_cnt > img {
@@ -86,7 +86,6 @@ a {
     height: 24px;
     font-size: 18px;
 }
-
 
 .post_frame {
     display: flex;
@@ -164,18 +163,6 @@ a {
     font-size: 12px;
 }
 
-.reac_button:hover::after {
-    content: "投稿者本人は押せません";
-    position: absolute;
-    background-color: #fff;
-    color: red;
-    font-size: 10px;
-    padding: 5px;
-    border-radius: 4px;
-    top: -10px;
-    left: 0;
-}
-
 .sinchoku_button {
     margin: 0;
     border: 1px solid #00008B;
@@ -233,7 +220,15 @@ footer {
 }
 
 .flash-error {
-  background: #fdecea;
-  border-left-color: #e74c3c;
-  color: #c0392b;
+    background: #fdecea;
+    border-radius: 8px;
+    border-left: 10px #e74c3c solid;
+    color: #c0392b;
+    margin: 10px;
 }
+
+.flash-error > p {
+    padding: 5px 0;
+    text-align: center;
+}
+
