@@ -73,17 +73,23 @@
                     </div>                    
                 </div>
             </div>
+            
+        <form class="post-detail-form"
+            action="{{ url_for('create_progress_post', goal_id=goal_id) }}"
+            method="post" 
+            id="progress">
 
-            <form method="post">
-                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="new_progress">
-                    <label for="progress_in">進捗入力</label>
-                    <textarea id="message" placeholder="今の進み具合" name="message"></textarea>
-                    <div class="toukou_button">
-                        <button class="post_button">投稿</button>
-                    </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="new_progress">
+                <label for="progress-input">進捗入力</label>
+                <textarea id="progress-input" name="content" placeholder="今の進み具合"></textarea>
+
+                <div>
+                    <button class="btn-progress" type="submit">投稿</button>
                 </div>
-            </form>
+            </div>
+        </form>
             
             {% for progress_post in progress_posts %}
             <div class="progress_post">
