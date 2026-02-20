@@ -6,8 +6,7 @@ import uuid
 import re
 import os
 
-from models import User , Goal_post, Comment, ProgressPost, Reaction
-
+from models import User , Goal_post, ProgressPost, Reaction
 
 # 定数定義
 EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
@@ -410,7 +409,7 @@ def post_progress_view(goal_id):
 
     #print("reaction_summary =", reaction_summary) #----debug_print(OK )
     #print("type =", type(reaction_summary)) #----debug_print(OK )
-    return render_template('post_detail.html', post=post, progress_posts=progress_posts, user_id=user_id,reaction_summary=reaction_summary)
+    return render_template('post_detail.html', post=post, goal_id=goal_id, progress_posts=progress_posts, user_id=user_id,reaction_summary=reaction_summary)
 
 
 #goal-postに対しての達成or断念ボタン押下処理  --@sai_debug済
