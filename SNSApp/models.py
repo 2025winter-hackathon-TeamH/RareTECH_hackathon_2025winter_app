@@ -151,13 +151,24 @@ class Goal_post:
         finally:
             db_pool.release(conn)
     """
-    
+    #goal_postの達成/断念ボタン押下時のDB更新処理 @sai_debugほぼ完了
     @classmethod
     def find_by_id(cls, post_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM goals WHERE id=%s;"
+                #SUM=0でエラーになるのを回避
+                # SUM(...) → NULL
+                # COALESCE(NULL, 0) → 0
+                sql = """
+                    SELECT g.*, 
+                    COALESCE(SUM(CASE WHEN r.reaction_type_id=1 THEN 1 ELSE 0 END),0) AS ganba_count,
+                    COALESCE(SUM(CASE WHEN r.reaction_type_id=2 THEN 1 ELSE 0 END),0) AS doshita_count 
+                    FROM goals g 
+                    LEFT JOIN reactions r ON g.id = r.goal_id
+                    WHERE g.id=%s 
+                    GROUP BY g.id;
+                """
                 cur.execute(sql, (post_id,))
                 post = cur.fetchone()
             return post
