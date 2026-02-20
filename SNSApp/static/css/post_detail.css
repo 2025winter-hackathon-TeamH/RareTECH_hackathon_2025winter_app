@@ -14,6 +14,8 @@ body {
 .all a {
     margin-left: 0px;
     text-decoration: none;
+    font-size: 12px;
+    font-weight: 700px;
 }
 
 .tagu {
@@ -23,7 +25,7 @@ body {
 }
 
 .menu{ /*menuを2つに分割して両端揃え*/
-    font-size: 17px;
+    font-size: 12px;
     display: flex;
     justify-content: space-between;
     margin: auto;
@@ -33,6 +35,7 @@ body {
 /*｢自分の目標一覧｣と｢トップに戻る｣を横並びにする*/
 .menu1 { 
     display: flex;
+    font-size: 12px;
 }
 .menu2{
     justify-content: flex-end;
@@ -44,10 +47,10 @@ body {
     background-color: #708090; 
     border-radius: 8px; /*枠を丸く*/
     border-width: 20px; /*以下3つ意味ない*/
-    justify-content: center;
     height: 32px;
-    width: 140px; /*背景の幅*/
+    width: 110px; /*背景の幅*/
     text-align: center; /*文字をセンターに*/
+    line-height: 32px;
 }
 
 /*トップに戻るボタンの設定*/
@@ -56,9 +59,11 @@ body {
     border-radius: 8px;
     border-width: 20px;
     height: 32px;
-    width: 130px;
+    line-height: 32px;
+    font-size: 12px;
     text-align: center;
     margin: 0 0 0 3px; /*leftで指定するべき*/
+    padding: 0 10px;
 }
 
 /*ログアウトボタンの設定*/
@@ -67,8 +72,11 @@ body {
     border: none;
     border-radius: 8px;
     height: 32px;
-    width: 110px;
+    font-size: 12px;
     text-align: center;
+    color: #fff;
+    line-height: 32px;
+    padding: 0 10px;
 }
 
 /*ボタンの色設定*/
@@ -80,9 +88,8 @@ body {
 .total_action {
     text-align: center;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 10px;
-    
 }
 
 /*項目を囲む箱を作成　太さ、色などの設定*/
@@ -100,6 +107,20 @@ body {
     padding: 0px 0px 10px 0px;
 }
 
+.name {
+    font-weight: 600;
+}
+
+.post_coment {
+    font-weight: 600;
+}
+
+.hi {
+    color: #AFAFAF;
+    font-size: 14px;
+    font-weight: 600;
+}
+
 p {
     padding: 0;
     margin: 0;
@@ -108,6 +129,7 @@ p {
 /*期日の位置調整*/
 .deatline {
     padding: 9px 0 5px 0;
+    font-weight: 600;
 }
 
 /*｢頑張れ･どうした？｣と｢達成！･断念｣の2つに分けて両端に分割*/
@@ -125,16 +147,18 @@ p {
 
 /*応援と激励ボタンの設定*/
 .ouen_button {
-    margin: 0 3px 3px 2px;
+    margin: 0 5px 3px 2px;
     background-color: #B0C4DE;
     border-radius: 5px;
     height: 28px;
+    border: 1px #00008B solid;
 }
 .gekirei_button {
     margin: 0 0 3px 0;
     background-color: #B0C4DE;
     border-radius: 5px;
     height: 28px;
+    border: 1px #00008B solid;
 }
 
 /*ほぼ意味のない記述　間隔をあけるだけ*/
@@ -142,6 +166,11 @@ p {
     display: flex;
     justify-content: flex-end;
     padding: 0 3px 3px 0;
+}
+
+.action1, .action2 {
+    display: flex;
+    font-size: 20px;
 }
 .tassei {
    margin-right: 7px;
@@ -234,17 +263,19 @@ textarea {
 }
 
 .subara_button {
-    margin: 0 3px 3px 2px;
+    margin: 0 5px 3px 2px;
     background-color: #B0C4DE;
     border-radius: 5px;
     height: 28px;
+    border: 1px #00008B solid;
 }
 
-.oi_button {
+.konjou_button {
     margin: 0 0 3px 0;
     background-color: #B0C4DE;
     border-radius: 5px;
     height: 28px;
+    border: 1px #00008B solid;
 }
 
 /*自分の投稿一覧のCSS
