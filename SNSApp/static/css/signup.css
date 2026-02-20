@@ -74,6 +74,7 @@ button {
     margin-top: 10px;
     border: none;
     cursor: pointer;
+    
 }
 
 footer {
@@ -106,10 +107,11 @@ a {
     justify-content: center;
     background-color: #FFE4E1;
     width: 420px;
-    border-radius: 12px;
+    border-radius: 8px;
+    border-left: 10px solid;
     height: 35px;
     margin-top: 0;
-    color: red;
+    color:  #c0392b;
     align-items: center;
     margin: auto;
 }

@@ -150,7 +150,7 @@ def create_goal_post():
     
     goal_deadline = request.form.get('goal_deadline')
     Goal_post.create(user_id, goal_message, goal_deadline)
-    flash('目標の投稿が完了しました。','success')
+    flash('目標の投稿が完了しました','success')
     return redirect(url_for('goals_post_view'))
 
 #頑張れ！ボタン押下処理
