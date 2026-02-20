@@ -1,99 +1,3 @@
-<!--
-<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <title>post_detail</title>
-        <link rel="stylesheet" href="../static/css/post_detail.css">
-    </head>
-
-    <body>
-        <div class="post_detail">
-          <div class="img_logo">
-            <img src="../static/site_logo.png" alt="site_logo"title="site_logo" width="480px" height="140px">
-          </div>
-        </div>
-        
-        <form method="post">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <div class="all">
-            <div class="tagu"><a>投稿画面　>　進捗ページ</a></div>
-            <div class="menu">
-                <div class="menu1">
-                    <div class="my"><a href="my-page.html">自分の目標一覧</a></div>
-                    <div class="top"><a href="post.html">トップに戻る</a></div>
-                </div>
-                    <div class="menu2">
-                        <div class="out"><a href="login.html">ログアウト</a></div>
-                    </div>
-            </div>
-
-            <div class="total_action">
-                <div class="action1">
-                    <img src="../static/ouen.png">
-                      <div>{{ goal_id }}</div>
-                </div>
-                <div =class="action2">
-                    <img src="../static/gekirei.png">
-                        <div>{{progress_id}}</div>
-                </div>                
-            </div>
-
-            <div class="post-card-tassei">
-                <div class="username">
-                    <div>{{ post.user_name }}</div>
-                    <div>更新日 {{ post.goal_created_at }}</div>
-                </div>
-                    <div class="post_coment">{{ post.goal_message }}</div>
-                    <div class="deatline">期日 2026/12/31</div>  
-                
-                <div class="buttons">    
-                <div class="action_button1">
-                    <button class="ouen_button">頑張れ！：2</button>
-                    <button class="gekirei_button">どうした？：0</button>
-                </div>
-
-                <div class="result_button">
-                    <button class="tassei">達成！</button>
-                    <button class="dannnen">断念...</button>
-                </div>
-                </div>
-
-            </div>
-
-            <form method="post">
-                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="new_progress">
-                    <label for="progress_in">進捗入力</label>
-                    <textarea id="message" placeholder="今の進み具合" name="message"></textarea>
-                    <div class="toukou_button">
-                        <button class="post_button">投稿</button>
-                    </div>
-                </div>
-            </form>
-
-            <div class="progress_post">
-                <div class="update_day">更新日 2026/02/01</div>
-                <!-- 進捗
-                 <div class="content">へのへのもへじ</div>
-                <div class="action_button2">
-                    <button class="subara_button">素晴らしい！＋99</button >
-                    <button class="oi_button">おい！＋99</button >
-                </div>
-            </div>
-
-
-        </div>
-        </form>
-    <footer>
-      2026©ハッカソン冬の陣 チームH 背水の陣制作委員会️
-    </footer>
-    </body>
-</html>
--->
-
-
-
-
 
 <!DOCTYPE html>
 
@@ -116,42 +20,55 @@
             <div class="tagu"><a>投稿画面　>　進捗ページ</a></div>
             <div class="menu">
                 <div class="menu1">
-                    <div class="my"><a href="my-page">自分の目標一覧</a></div>
-                    <div class="top"><a href="post">トップに戻る</a></div>
+                    <div class="my"><a href="/my-page">自分の目標一覧</a></div>
+                    <a href="{{ url_for('goals_post_view')}}">
+                        <div class="top">トップに戻る</div>
+                    </a>
                 </div>
                     <div class="menu2">
-                        <div class="out"><a href="login">ログアウト</a></div>
+                        <a href="{{ url_for('logout')}}">
+                        <div class="out">ログアウト</div>
+                        </a>
                     </div>
             </div>
 
             <div class="total_action">
                 <div class="action1">
-                    <img src="../static/ouen.png">
-                      <div>{{ goal_id }}</div>
+                    <img src="../static/ouen.png" width="80.3px" height="26.4px">
+                      <div>：{{ reaction_summary.sum_ouen }}</div>
                 </div>
                 <div class="action2">
-                    <img src="../static/gekirei.png">
-                        <div>{{progress_id}}</div>
+                    <img src="../static/gekirei.png" width="80.3px" height="26.4px">
+                    <div>：{{reaction_summary.sum_gekirei}}</div>
                 </div>
             </div>
 
             <div class="post-card-tassei">
                 <div class="username">
-                    <div>{{ post.user_name }}</div>
-                    <div>更新日 {{ post.goal_created_at }}</div>
+                    <div class="name">{{ post.user_name }}</div>
+                    <div class="hi">更新日 {{ post.goal_created_at }}</div>
                 </div>
-                    <div class="post_coment">{{ post.goal_message }}</div>
-                    <div class="deatline">期日 2026/12/31</div>
-
-                <div class="buttons">                    
-                    <div class="action_button1">
-                        <button class="ouen_button">頑張れ！：2</button>
-                        <button class="gekirei_button">どうした？：0</button> 
+                    <div class="post_coment">
+                        <div>{{ post.goal_message }}</div>
                     </div>
+                    <div class="deatline">期日 {{ post.goal_deadline }}</div>
+
+                <div class="buttons">
+                    <form action="
+                        method="post" style="display:inline;" >   
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="reaction_type_id" value="1">
+                        <div class="action_button1">
+                            <button type="submit" class="ouen_button">頑張れ！:</button>
+                    </form> 
+                            <button class="gekirei_button">どうした？：0</button> 
+                        </div>
+                    </form>
+
                     <div class="action_achievement">
                         {% if post.user_id == user_id %}
-                        <button class="tassei">達成！</button>
-                        <button class="dannnen">断念...</button>
+                            <button class="tassei">達成！</button>
+                            <button class="dannnen">断念...</button>
                         {% endif %}
                     </div>                    
                 </div>
@@ -197,7 +114,7 @@
                                   method="POST" style="display:inline;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="reaction_type_id" value="4">
-                                <button type="submit" class="oi_button">根性見せろ！：{{ progress_post.konzyo_misero_count }}</button >
+                                <button type="submit" class="konjou_button">根性見せろ！：{{ progress_post.konzyo_misero_count }}</button >
                             </form>
                         </div>
             </div>
