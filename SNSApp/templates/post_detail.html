@@ -33,18 +33,6 @@
                     </div>
             </div>
 
-      <!--====== フラッシュメッセージ表示 ======-->
-      {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-        <div class="flash flash-{{ category }}">
-          {{ message }}
-        </div>
-        {% endfor %}
-      {% endif %}
-      {% endwith %}
-
-
             <div class="total_action">
                 <div class="action1">
                     <img src="../static/ouen.png" width="80.3px" height="26.4px">
@@ -56,10 +44,21 @@
                 </div>
             </div>
 
+                  <!--====== フラッシュメッセージ表示 ======-->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
+      {% endwith %}
+
             <div class="post-card-tassei">
                 <div class="username">
                     <div class="name">{{ post.user_name }}</div>
-                    <div class="hi">更新日 {{ post.goal_created_at }}</div>
+                    <div class="hi">更新日：{{ post.goal_created_at }}</div>
                 </div>
                     <div class="post_coment">
                         <div>{{ post.goal_message }}</div>
@@ -67,6 +66,7 @@
                     <div class="deatline">期日 {{ post.goal_deadline }}</div>
 
                 <div class="buttons">
+                    <div class = "span">
                             <!-- 頑張れ！ -->
                             <form action = "{{ url_for('reaction_ganba',
                                                         goal_id=post.id) }}" 
@@ -86,6 +86,7 @@
                                 <input type="hidden" name="next" value="{{ url_for('post_progress_view', goal_id=post.id) }}">
                                 <button type="submit" class="dousita_button">どうした？ ：{{ post.total_dousita }}</button >
                             </form>
+                    </div>
                     <!--
                     <form action="
                         method="post" style="display:inline;" >   
@@ -130,8 +131,8 @@
             <div class="progress_post">
                 <div class="username">
                      <!-- 進捗　-->
-                    <div>{{ progress_post.user_name }}</div>
-                    <div>更新日 {{ progress_post.progress_created_at }}</div>
+                    <div class="name">{{ progress_post.user_name }}</div>
+                    <div class="hi">更新日:{{ progress_post.progress_created_at }}</div>
                 </div>
                     <!--
                         <div class="content">へのへのもへじ</div>
