@@ -110,10 +110,13 @@ body {
 
 .name {
     font-weight: 600;
+    font-size: 14px;
 }
 
 .post_coment {
     font-weight: 600;
+    margin: 20px auto;
+    font-size: 16px;
 }
 
 .hi {
@@ -136,25 +139,24 @@ p {
 /*｢頑張れ･どうした？｣と｢達成！･断念｣の2つに分けて両端に分割*/
 .buttons {
     display: flex;
-    align-items: flex-end;
     justify-content: space-between;
 }
 
 /*意味ないかも*/
-.action_button1 {
+.span {
     display: flex;
     align-items: flex-end;
 }
 
 /*応援と激励ボタンの設定*/
-.ouen_button {
+.ganba_button {
     margin: 0 5px 3px 2px;
     background-color: #B0C4DE;
     border-radius: 5px;
     height: 28px;
     border: 1px #00008B solid;
 }
-.gekirei_button {
+.dousita_button {
     margin: 0 0 3px 0;
     background-color: #B0C4DE;
     border-radius: 5px;
@@ -233,7 +235,6 @@ textarea {
 .post_button{
     background-color: #00008B;
     color: #FFFFFF;
-  
     width: 82px;
     height: 40px;
     text-align: center;
@@ -282,6 +283,32 @@ textarea {
     border: 1px #00008B solid;
 }
 
+.btn-progress {
+    width: 82px;
+    height: 40px;
+    color: white;
+    background-color: #00008b;
+    border-radius: 8px;
+    margin: 10px 0 0 0;
+    border: none;
+    align-items: end;
+    margin-left: 352px;
+}
+
+.flash {
+    display: flex;
+    justify-content: center;
+    background: #fdecea;
+    width: 420px;
+    border-radius: 8px;
+    border-left: 10px #e74c3c solid;
+    height: 35px;
+    margin-top: 0;
+    color:  #c0392b;
+    align-items: center;
+    margin: auto;
+ }
+
 /*自分の投稿一覧のCSS
 ほぼ同じなのでこのファイルを適用しても大丈夫なように
 進捗の設定を記述　post_detailには関係ない*/
@@ -319,7 +346,6 @@ footer {
 .post-card-tassei {
   width: 440px;
   height: auto;
-  border: 1px solid #00008b;
   border-radius: 16px;
   margin: 5px 10px;
   padding: 10px;
