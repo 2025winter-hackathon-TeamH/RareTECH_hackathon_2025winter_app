@@ -43,7 +43,15 @@
                 </div>
             </div>
 
-            <div class="post-card-tassei">
+            <div class="post-card
+                {% if post.achievement_status == 'achievement' %}
+                    post-card-tassei
+                {% elif post.achievement_status == 'give_up' %}
+                    post-card-dannen
+                {% else %}
+                    post-card
+                {% endif %}
+                ">
                 <div class="username">
                     <div class="name">{{ post.user_name }}</div>
                     <div class="hi">更新日 {{ post.goal_created_at }}</div>
@@ -54,7 +62,7 @@
                     <div class="deatline">期日 {{ post.goal_deadline }}</div>
 
                 <div class="buttons">
-                    <form action="
+                    <form action
                         method="post" style="display:inline;" >   
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="reaction_type_id" value="1">
@@ -67,8 +75,18 @@
 
                     <div class="action_achievement">
                         {% if post.user_id == user_id %}
-                            <button class="tassei">達成！</button>
-                            <button class="dannnen">断念...</button>
+                            {% if post.achievement_status is none %}
+                                <form action="{{url_for('update_goal_post_result',goal_id=goal_id )}}"
+                                    method="post">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" name="result" value="achievement" class="tassei">
+                                        達成！
+                                    </button>
+                                    <button type="submit" name="result" value="give_up" class="dannnen">
+                                        断念...
+                                    </button>
+                                </form>
+                            {% endif %}
                         {% endif %}
                     </div>                    
                 </div>

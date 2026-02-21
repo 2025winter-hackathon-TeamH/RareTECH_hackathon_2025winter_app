@@ -307,6 +307,15 @@ footer {
     background-color: #00008B;
 }
 
+.post-card {
+  width: 440px;
+  height: 150px;
+  border: 1px solid #00008b;
+  border-radius: 16px;
+  margin: 5px auto;
+  padding: 10px;
+}
+
 .post-card-tassei {
   width: 440px;
   height: auto;
