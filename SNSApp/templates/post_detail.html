@@ -44,15 +44,6 @@
                 </div>
             </div>
 
-            <div class="post-card
-                {% if post.achievement_status == 'achievement' %}
-                    post-card-tassei
-                {% elif post.achievement_status == 'give_up' %}
-                    post-card-dannen
-                {% else %}
-                    post-card
-                {% endif %}
-                ">
                   <!--====== フラッシュメッセージ表示 ======-->
       {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -64,10 +55,18 @@
       {% endif %}
       {% endwith %}
 
-            <div class="post-card-tassei">
+             <div class="post-card
+                {% if post.achievement_status == 'achievement' %}
+                    post-card-tassei
+                {% elif post.achievement_status == 'give_up' %}
+                    post-card-dannen
+                {% else %}
+                    post-card
+                {% endif %}
+                ">
                 <div class="username">
                     <div class="name">{{ post.user_name }}</div>
-                    <div class="hi">更新日：{{ post.goal_created_at }}</div>
+                    <div class="hi">更新日 {{ post.goal_created_at }}</div>
                 </div>
                     <div class="post_coment">
                         <div>{{ post.goal_message }}</div>
