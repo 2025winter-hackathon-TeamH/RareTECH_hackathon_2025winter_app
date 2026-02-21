@@ -309,6 +309,18 @@ textarea {
     margin: auto;
  }
 
+ .flash-success {
+  background: #e9f7ec;
+  border-left-color: #27ae60;
+  color: #1e824c;
+}
+
+.flash-error {
+  background: #fdecea;
+  border-left-color: #e74c3c;
+  color: #c0392b;
+}
+
 /*自分の投稿一覧のCSS
 ほぼ同じなのでこのファイルを適用しても大丈夫なように
 進捗の設定を記述　post_detailには関係ない*/
