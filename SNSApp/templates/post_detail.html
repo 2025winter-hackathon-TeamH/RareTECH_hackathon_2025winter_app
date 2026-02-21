@@ -13,10 +13,11 @@
             <img src="../static/site_logo.png" alt="site_logo"title="site_logo" width="480px" height="140px">
           </div>
         </div>
-        
+        <!--
         <form method="post">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <div class="all">
+        -->
+            <div class="all">
             <div class="tagu"><a>投稿画面　>　進捗ページ</a></div>
             <div class="menu">
                 <div class="menu1">
@@ -31,6 +32,18 @@
                         </a>
                     </div>
             </div>
+
+      <!--====== フラッシュメッセージ表示 ======-->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
+      {% endwith %}
+
 
             <div class="total_action">
                 <div class="action1">
@@ -54,17 +67,39 @@
                     <div class="deatline">期日 {{ post.goal_deadline }}</div>
 
                 <div class="buttons">
+                            <!-- 頑張れ！ -->
+                            <form action = "{{ url_for('reaction_ganba',
+                                                        goal_id=post.id) }}" 
+                                  method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="reaction_type_id" value="1">
+                                <input type="hidden" name="next" value="{{ url_for('post_progress_view', goal_id=post.id) }}">
+                                <button type="submit" class="ganba_button">頑張れ！：{{ post.total_ganba }}</button >
+                            </form>
+
+                            <!-- どうした？ -->
+                            <form action = "{{ url_for('reaction_dousita',
+                                                        goal_id=post.id) }}" 
+                                  method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="reaction_type_id" value="2">
+                                <input type="hidden" name="next" value="{{ url_for('post_progress_view', goal_id=post.id) }}">
+                                <button type="submit" class="dousita_button">どうした？ ：{{ post.total_dousita }}</button >
+                            </form>
+                    <!--
                     <form action="
                         method="post" style="display:inline;" >   
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="reaction_type_id" value="1">
                         <div class="action_button1">
+
                             <button type="submit" class="ouen_button">頑張れ！:</button>
                     </form> 
                             <button class="gekirei_button">どうした？：0</button> 
                         </div>
                     </form>
-
+                    -->
+                    
                     <div class="action_achievement">
                         {% if post.user_id == user_id %}
                             <button class="tassei">達成！</button>
@@ -129,8 +164,9 @@
 
         
         </div>
+        <!--
         </form>
-
+-->
         
     <footer>
       2026©ハッカソン冬の陣 チームH 背水の陣制作委員会️

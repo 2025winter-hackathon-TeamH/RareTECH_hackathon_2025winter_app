@@ -166,10 +166,14 @@ def reaction_ganba(goal_id):
     
     if goal_post['user_id'] == user_id:
         flash('自分の投稿にはリアクション出来ません', 'error')
-        return redirect(url_for('goals_post_view'))
+        #return redirect(url_for('goals_post_view'))
+        #progress側からの呼び出しにも対応 --sai
+        return redirect(request.form.get("next") or url_for('goals_post_view'))
 
     Reaction.create_reaction_ganba(user_id, goal_id)
-    return redirect(url_for('goals_post_view'))
+    #return redirect(url_for('goals_post_view'))
+    #progress側からの呼び出しにも対応 --sai
+    return redirect(request.form.get("next") or url_for('goals_post_view'))
 
 #どうしたボタン押下処理
 @app.route('/goal-post/<int:goal_id>/reaction-dousita',methods=['POST'])
@@ -185,10 +189,14 @@ def reaction_dousita(goal_id):
     
     if goal_post['user_id'] == user_id:
         flash('自分の投稿にはリアクション出来ません', 'error')
-        return redirect(url_for('goals_post_view'))
+        #return redirect(url_for('goals_post_view'))
+        #progress側からの呼び出しにも対応 --sai
+        return redirect(request.form.get("next") or url_for('goals_post_view'))
         
     Reaction.create_reaction_dousita(user_id, goal_id)
-    return redirect(url_for('goals_post_view'))
+    #return redirect(url_for('goals_post_view'))
+    #progress側からの呼び出しにも対応 --sai
+    return redirect(request.form.get("next") or url_for('goals_post_view'))
 
 """
 # ルートページのリダイレクト処理
@@ -378,6 +386,9 @@ def post_progress_view(goal_id):
     #print("type(post) =", type(post)) #----debug_print(OK )
     #print(post['goal_created_at']) #----debug_print(OK )
     #print(post['user_name']) #----debug_print(OK )
+    # 目標ポストのリアクション数
+    post['total_ganba'] = Goal_post.sum_ganba(goal_id)
+    post['total_dousita'] = Goal_post.sum_dousita(goal_id)
 
     #目標ポストのリアクション数(2種)表示
     reaction_summary = Reaction.count_posts_reactions(goal_id)
@@ -513,7 +524,9 @@ def update_progress_post_reaction(goal_id, progress_id):
 
     #progress投稿者本人はリアクション不可
     if progress_post['user_id'] == user_id:
-        abort(403)
+        flash('自分の投稿にはリアクション出来ません', 'error')
+        return redirect(url_for('post_progress_view', goal_id=goal_id))
+        #abort(403)
     
     print("FORM DATA:", request.form)
     print("reaction_type_id:", request.form.get('reaction_type_id'))
