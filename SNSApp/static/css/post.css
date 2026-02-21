@@ -214,10 +214,11 @@ footer {
 
 /*----- 達成、断念済の　目標カード-----*/
 
+
 .post-card-tassei {
   width: 440px;
   height: 150px;
-  border: 1px solid #00008b;
+  border: 0px solid #FF0000;
   border-radius: 16px;
   margin: 5px auto;
   padding: 10px;
@@ -232,7 +233,7 @@ footer {
 .post-card-dannen {
    width: 440px;
   height: 150px;
-  border: 1px solid #00008b;
+  border: 0px solid #808080;
   border-radius: 16px;
   margin: 5px auto;
   padding: 10px;
