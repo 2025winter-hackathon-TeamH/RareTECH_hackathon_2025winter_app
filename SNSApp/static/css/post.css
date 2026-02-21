@@ -31,6 +31,7 @@ main {
   text-align: left;
   font-size: 12px;
   font-weight:700;
+  margin: -2px;
 }
 
 .btn-area {
@@ -43,7 +44,7 @@ main {
 .btn-mypage-link {
   display: inline-block;
   width: 110px;
-  height: 30px;
+  height: 32px;
   line-height: 30px;
   text-align: center;
   background-color: #708090;
@@ -69,7 +70,7 @@ main {
 /*----- 目標　投稿フォーム -----*/
 .post-form {
   width: 440px;
-  height: 160px;
+  height: 150px;
   border: 1px solid #00008b;
   border-radius: 16px;
   margin-bottom: 5px;
@@ -77,6 +78,7 @@ main {
   flex-direction: column;
   padding: 10px;
   background-color: #EAF4FF;
+  position: relative; 
 }
 
 label {
@@ -104,6 +106,12 @@ textarea {
   border: 1px solid #808080;
 }
 
+.btn-wrapper {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
 .btn-goal {
   width: 82px;
   height: 40px;
@@ -116,7 +124,7 @@ textarea {
 /*----- 投稿一覧 ------*/
 .post-card {
   width: 440px;
-  height: 150px;
+  height: 147px;
   border: 1px solid #00008b;
   border-radius: 16px;
   margin: 5px auto;
@@ -176,7 +184,7 @@ textarea {
 
 .btn-progress {
   width: 40px;
-  height: 30px;
+  height: 28px;
   text-decoration: none;
   border: 1px solid #00008b;
   border-radius: 4px;
@@ -187,13 +195,21 @@ textarea {
   background-color: white;
 }
 
-footer {
-  background-color: #00008b;
+.footer-wrapper {
   width: 480px;
+  margin: 0 auto;
   height: 24px;
+  background-color: #00008b;
   text-align: center;
   color: white;
-  margin: 0 auto;
+  font-size: 13px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 
 /*----- 達成、断念済の　目標カード-----*/
