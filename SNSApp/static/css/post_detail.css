@@ -182,6 +182,9 @@ p {
    background-color: #FF6969;
    border-radius: 5px;
    border: none;
+   border: 1px solid #00008B ;
+   color: #FFFFFF;
+   padding-left: 11px;
 }
 
 .dannnen {
@@ -189,6 +192,8 @@ p {
     background-color: #848484;
     border-radius: 5px;
     border: none;
+    border: 1px solid #00008B ;
+    color: #FFFFFF;
 }
 
 /*進捗入力を箱で囲う*/
@@ -204,6 +209,7 @@ p {
 
 label {
     font-weight: bold;
+    font-size: 14px;
 }
 
 /*メッセージボックスの設定*/
@@ -268,7 +274,7 @@ textarea {
 }
 
 .subara_button {
-    margin: 0 5px 3px 2px;
+    margin: 0 10px 3px 2px;
     background-color: #B0C4DE;
     border-radius: 5px;
     height: 28px;
@@ -359,7 +365,8 @@ footer {
 }
 
 .post-card-tassei {
-  width: 440px;
+  box-sizing: border-box;  
+  width: 460px;
   height: auto;
   border-radius: 16px;
   margin: 5px 10px;
@@ -373,7 +380,8 @@ footer {
 }
 
 .post-card-dannen {
-  width: 440px;
+  box-sizing: border-box;
+  width: 460px;
   border-radius: 16px;
   margin: 5px auto;
   padding: 10px;
