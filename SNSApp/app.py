@@ -406,7 +406,7 @@ def post_progress_view(goal_id):
         #print(progress_post)
 
         #Pythonの辞書['辞書のキー（DBカラム名と同名）']=Pythonの辞書['辞書のキー（DBカラム名と同名）'].Pythonの日時変換
-        progress_post['progress_created_at'] = progress_post['progress_created_at'].strftime('%Y-%m-%d %H:%M')
+        progress_post['progress_created_at'] = progress_post['progress_created_at'].strftime('%Y/%m/%d %H:%M')
         progress_post['user_name'] = User.get_name_by_id(progress_post['user_id'])
             #print("progress_post =", progress_post) #----debug_print(OK )
             #print("type(progress_post) =", type(progress_post)) #----debug_print(OK )
