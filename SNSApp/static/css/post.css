@@ -70,7 +70,7 @@ main {
 /*----- 目標　投稿フォーム -----*/
 .post-form {
   width: 440px;
-  height: 150px;
+  height: px;
   border: 1px solid #00008b;
   border-radius: 16px;
   margin-bottom: 5px;
@@ -86,7 +86,7 @@ label {
   margin-bottom: 5px;
   font-size: 14px;
   font-weight: 600;
-  margin-left: 13px;
+  
 }
 
 textarea {
@@ -124,7 +124,6 @@ textarea {
 /*----- 投稿一覧 ------*/
 .post-card {
   width: 440px;
-  height: 147px;
   border: 1px solid #00008b;
   border-radius: 16px;
   margin: 5px auto;
