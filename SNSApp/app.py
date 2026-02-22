@@ -380,8 +380,10 @@ def post_progress_view(goal_id):
     if post is None: #----debug_print(OK)
         abort(404)
 
-    post['goal_created_at'] = post['goal_created_at'].strftime('%Y-%m-%d %H:%M') #created_atから投稿日時を返す
     post['user_name'] = User.get_name_by_id(post['user_id']) #user_idから名前を返す
+    #post['goal_created_at'] = post['goal_created_at'].strftime('%Y-%m-%d %H:%M') #created_atから投稿日時を返す
+    post['goal_created_at'] = post['goal_created_at'].strftime('%Y/%m/%d %H:%M') #created_atから投稿日時を返す
+    post['goal_deadline'] = post['goal_deadline'].strftime('%Y/%m/%d')
     #print("post =", post) #----debug_print(OK )
     #print("type(post) =", type(post)) #----debug_print(OK )
     #print(post['goal_created_at']) #----debug_print(OK )
