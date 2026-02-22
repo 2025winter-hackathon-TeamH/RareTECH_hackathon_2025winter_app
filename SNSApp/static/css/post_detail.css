@@ -151,7 +151,7 @@ p {
 
 /*応援と激励ボタンの設定*/
 .ganba_button {
-    margin: 0 5px 3px 2px;
+    margin: 0 10px 3px 2px;
     background-color: #B0C4DE;
     border-radius: 5px;
     height: 28px;
@@ -204,7 +204,6 @@ p {
 
 label {
     font-weight: bold;
-    margin-left: 13px;
 }
 
 /*メッセージボックスの設定*/
@@ -284,6 +283,10 @@ textarea {
     border: 1px #00008B solid;
 }
 
+progress-input{
+    margin: auto;
+}
+
 .btn-progress {
     width: 82px;
     height: 40px;
@@ -300,7 +303,7 @@ textarea {
     display: flex;
     justify-content: center;
     background: #fdecea;
-    width: 420px;
+    width: 450px;
     border-radius: 8px;
     border-left: 10px #e74c3c solid;
     height: 35px;
