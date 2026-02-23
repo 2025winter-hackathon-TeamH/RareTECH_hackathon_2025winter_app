@@ -144,7 +144,7 @@ def create_goal_post():
     formatted_deadline = datetime.strptime(goal_deadline, '%Y-%m-%d')
     #HTMLからrequestで受け取った達成期限が文字列型なのでdatetime,nowのdatetime型に変換
     if datetime.now() > formatted_deadline:
-        flash('達成期日は現在時刻より後の時間を設定してください', 'error')
+        flash('達成期日は現在時刻より後の日付を設定してください', 'error')
         return redirect(url_for('goals_post_view'))
     
     goal_deadline = request.form.get('goal_deadline')
