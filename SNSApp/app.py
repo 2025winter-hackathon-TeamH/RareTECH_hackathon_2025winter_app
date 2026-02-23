@@ -480,6 +480,18 @@ def create_progress_post(goal_id):
         #user_id = 1  #debug_仮ユーザー(DBに存在するID)
         return redirect(url_for('login_view'))
 
+    post = Goal_post.find_by_id(goal_id)
+    #print(post) #----debug_print(OK)
+    
+    if post is None: 
+        abort(404)
+
+    #goal_post投稿者本人以外は投稿不可
+    if post['user_id'] != user_id:
+        flash('他者の目標には投稿出来ません', 'error')
+        return redirect(url_for('post_progress_view', goal_id=goal_id))
+        #abort(403)
+
     content = request.form.get('content', '').strip()
     #print('content =', repr(content)) #----debug_print
     
