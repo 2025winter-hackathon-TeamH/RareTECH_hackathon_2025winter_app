@@ -95,7 +95,6 @@ textarea {
   border-radius: 12px;
   padding-top: 10px;
   padding-left: 10px;
-  
 }
 
 .deadline {
@@ -152,6 +151,7 @@ textarea {
   margin: 20px auto;
   font-size: 16px;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .post-deadline {

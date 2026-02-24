@@ -117,6 +117,7 @@ body {
     font-weight: 600;
     margin: 10px 0 20px 0;
     font-size: 16px;
+    overflow-wrap: anywhere;
 }
 
 .hi {
