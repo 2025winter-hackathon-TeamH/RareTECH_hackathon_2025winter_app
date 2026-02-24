@@ -216,7 +216,6 @@ footer {
 
 .post-card-tassei {
   width: 440px;
-  height: 150px;
   border: 0px solid #FF0000;
   border-radius: 16px;
   margin: 5px auto;
@@ -231,7 +230,6 @@ footer {
 
 .post-card-dannen {
    width: 440px;
-  height: 150px;
   border: 0px solid #808080;
   border-radius: 16px;
   margin: 5px auto;
