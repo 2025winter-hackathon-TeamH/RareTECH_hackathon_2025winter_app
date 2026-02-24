@@ -97,7 +97,7 @@ body {
 .top_post {
     border: 1.5px solid #00008B;
     padding: 7px 9px 9px 15px;
-    border-radius: 10px;
+    border-radius: 16px;
     margin: 5px 0 5px 0;
 }
 
@@ -251,11 +251,17 @@ textarea {
 }
 
 .progress_post {
-    border: 1.5px solid #00008B;
-    border-radius: 10px;
+    box-sizing: border-box;
+    border: 1px solid #00008B;
+    border-radius: 16px;
     margin: 10px auto;
-    padding: 10px 6px 10px 6px;
-    width: 450px;
+    /* padding: 10px 6px 10px 6px; */
+    width: 460px;
+}
+
+.progress_post_frame {
+        width: 440px;
+        margin: 10px 0 10px 10px;
 }
 
 .update_day {
@@ -358,7 +364,8 @@ footer {
 }
 
 .post-card {
-  width: 440px;
+  box-sizing: border-box;
+  width: 460px;
   border: 1px solid #00008b;
   border-radius: 16px;
   margin: 10px auto;
