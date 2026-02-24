@@ -1,35 +1,34 @@
-
-
 <!DOCTYPE html>
- <html lang="ja">
-<head>
-    <link rel="stylesheet" href="../static/css/404.css">
-</head>
+<html lang="ja">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>400エラーページ</title>
+      <link rel="stylesheet" href="../static/css/404.css">
+    </head>
 
-<body>
- <div class="img_logo">
+    <body>
+      <header>
         <img src="../static/site_logo.png" alt="背水の陣ロゴ">
- </div>
+      </header>
 
- <div class="wrapper">
-    <div class="centering_parent">
- <h2>400 Bad Request</h2>
+      <main class="error-page">
+        <h1 class="error-title">400 Bad Request</h1>
 
- <p>リクエストを処理できませんでした</p>
- <p>セッションが切れている可能性があります。</p>
- <p>ブラウザの更新やキャッシュ、Cookieを削除すると</p>
- <p>解消される場合があります。</p>
- <br>
- <br>
- <br>
- <br>
-   <a href="{{ url_for('goals_post_view')}}">
-    <div class="conteiner">
-       <button class="button" type="button">戻る</button>
-    </div>
-   </a>
-<footer>
-   2026©ハッカソン冬の陣 チームH 背水の陣制作委員会️
-</footer>
-</body>
+        <div class="error-message">
+           <p>リクエストを処理できませんでした</p>
+           <p>セッションが切れている可能性があります。</p>
+           <p>ブラウザの更新やキャッシュ、Cookieを削除すると</p>
+           <p>解消される場合があります。</p>
+        </div>
+        
+        <div class="btn-wrap">
+          <a class="btn-post-link" href="{{ url_for('goals_post_view')}}">戻る</a>
+        </div>
+      
+       
+      </main>
+
+      <footer>2026&copyハッカソン冬の陣 チームH 背水の陣制作委員会</footer>
+    </body>
 </html>
