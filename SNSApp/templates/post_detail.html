@@ -150,11 +150,12 @@
             
             {% for progress_post in progress_posts %}
             <div class="progress_post">
-                <div class="username">
-                     <!-- 進捗　-->
-                    <div class="name">{{ progress_post.user_name }}</div>
-                    <div class="hi">更新日：{{ progress_post.progress_created_at }}</div>
-                </div>
+                <div class="progress_post_frame">
+                    <div class="username">
+                    <!-- 進捗　-->
+                        <div class="name">{{ progress_post.user_name }}</div>
+                        <div class="hi">更新日：{{ progress_post.progress_created_at }}</div>
+                    </div>
                     <!--
                         <div class="content">へのへのもへじ</div>
                     -->
@@ -164,7 +165,7 @@
                             <form action = "{{ url_for('update_progress_post_reaction',
                                                         goal_id=post.id,
                                                         progress_id=progress_post.id) }}" 
-                                  method="POST" style="display:inline;">
+                                method="POST" style="display:inline;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="reaction_type_id" value="3">
                                 <button type="submit" class="subara_button">素晴らしい！：{{ progress_post.subarasi_count }}</button >
@@ -174,13 +175,14 @@
                             <form action = "{{ url_for('update_progress_post_reaction',
                                                         goal_id=post.id,
                                                         progress_id=progress_post.id) }}" 
-                                  method="POST" style="display:inline;">
+                                method="POST" style="display:inline;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="reaction_type_id" value="4">
                                 <button type="submit" class="konjou_button">根性見せろ！：{{ progress_post.konzyo_misero_count }}</button >
                             </form>
                         </div>
-            </div>
+                </div>
+            </div>            
             {% endfor %}
 
 
