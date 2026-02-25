@@ -153,17 +153,19 @@ p {
 /*応援と激励ボタンの設定*/
 .ganba_button {
     margin: 0 10px 3px 2px;
-    background-color: #B0C4DE;
+    background-color: #d6eaff;
     border-radius: 5px;
     height: 28px;
     border: 1px #00008B solid;
+    font-size: 12px;
 }
 .dousita_button {
     margin: 0 0 3px 0;
-    background-color: #B0C4DE;
+    background-color: #d6eaff;
     border-radius: 5px;
     height: 28px;
     border: 1px #00008B solid;
+    font-size: 12px;
 }
 
 /*ほぼ意味のない記述　間隔をあけるだけ*/
@@ -257,6 +259,7 @@ textarea {
     margin: 10px auto;
     /* padding: 10px 6px 10px 6px; */
     width: 460px;
+    background-color: #f8f8ff;
 }
 
 .progress_post_frame {
@@ -282,18 +285,20 @@ textarea {
 
 .subara_button {
     margin: 0 10px 3px 2px;
-    background-color: #B0C4DE;
+    background-color: #d6eaff;
     border-radius: 5px;
     height: 28px;
     border: 1px #00008B solid;
+    font-size: 12px;
 }
 
 .konjou_button {
     margin: 0 0 3px 0;
-    background-color: #B0C4DE;
+    background-color: #d6eaff;
     border-radius: 5px;
     height: 28px;
     border: 1px #00008B solid;
+    font-size: 12px;
 }
 
 progress-input{

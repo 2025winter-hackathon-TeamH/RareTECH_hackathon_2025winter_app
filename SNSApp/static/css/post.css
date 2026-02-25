@@ -169,8 +169,9 @@ textarea {
 .ganbare,.dousita {
   border: 1px solid #00008b;
   border-radius: 4px;
-  background-color: #B0C4DE;
-  height: 30px;
+  background-color: #d6eaff;
+  height: 28px;
+  font-size: 12px;
 }
 
 /* .ganbare {
@@ -192,6 +193,7 @@ textarea {
   text-align: center;
   line-height: 30px;
   background-color: white;
+  font-size: 12px;
 }
 
 .footer-wrapper {
